@@ -21,7 +21,7 @@ const Subscription: React.FC = () => {
         // Fetch email subscriptions from the backend
         const jwtToken = localStorage.getItem('jwtToken');
         if (email) {
-            axios.get(`http://localhost:8080/api/subscriptions/${email}`, {
+            axios.get(`${process.env.REACT_APP_API_URL}/api/subscriptions/${email}`, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }
@@ -49,7 +49,7 @@ const Subscription: React.FC = () => {
     const handleSubscribe = async (team: string) => {
         try {
             const jwtToken = localStorage.getItem('jwtToken');
-            await axios.post('http://localhost:8080/api/subscribe', { email, team }, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/subscribe`, { email, team }, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }
@@ -65,7 +65,7 @@ const Subscription: React.FC = () => {
     const handleUnsubscribe = async (team: string) => {
         try {
             const jwtToken = localStorage.getItem('jwtToken');
-            await axios.post('http://localhost:8080/api/unsubscribe', { email, team }, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/unsubscribe`, { email, team }, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }

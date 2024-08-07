@@ -12,7 +12,7 @@ const Login: React.FC = () => {
 
   const handleLogin = async () => {
     // Call your backend API for login
-    const response = await axios.post('http://localhost:8080/api/login', { email, password });
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`, { email, password });
     if (response.data.success) {
       dispatch(login(email));
         localStorage.setItem('jwtToken', response.data.token);

@@ -15,7 +15,7 @@ const AuthRouter: React.FC = () => {
     useEffect(() => {
         const jwtToken = localStorage.getItem('jwtToken');
         if (jwtToken) {
-            axios.get('http://localhost:8080/verifytoken', {
+            axios.get(`${process.env.REACT_APP_API_URL}/verifytoken`, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }
