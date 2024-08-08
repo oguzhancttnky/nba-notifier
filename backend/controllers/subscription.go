@@ -99,12 +99,12 @@ func Unsubscribe(c *gin.Context) {
 
 // GetSubscriptions handles fetching the user's subscriptions
 func GetSubscriptions(c *gin.Context) {
-	userid := c.Param("userid")
+	userID := c.Param("userID")
 
 	db := utils.GetDB()
 
 	var subscriptions []models.Subscription
-	if err := db.Where("user_id = ?", userid).Find(&subscriptions).Error; err != nil {
+	if err := db.Where("userID = ?", userID).Find(&subscriptions).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

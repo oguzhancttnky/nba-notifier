@@ -10,12 +10,12 @@ import (
 )
 
 // GenerateJWT generates a JWT token
-func GenerateJWT(userid uint) (string, error) {
+func GenerateJWT(userID uint) (string, error) {
 	jwtSecretKey := []byte(os.Getenv("SECRET_KEY"))
 
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &models.Claim{
-		UserID: userid,
+		UserID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},

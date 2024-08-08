@@ -11,14 +11,14 @@ const teams = ["Lakers", "Warriors", "Bulls", "Celtics", "Heat", "Nets", "Knicks
 
 const Home: React.FC = () => {
     const subscriptions = useSelector((state: RootState) => state.subscriptions.subscribedTeams);
-    const userid = useSelector((state: RootState) => state.auth.userid);
+    const userID = useSelector((state: RootState) => state.auth.userID);
     const dispatch = useDispatch();
 
     useEffect(() => {
         // Fetch email subscriptions from the backend
         const jwtToken = localStorage.getItem('jwtToken');
-        if (userid) {
-            axios.get(`${process.env.REACT_APP_API_URL}/api/subscriptions/${userid}`, {
+        if (userID) {
+            axios.get(`${process.env.REACT_APP_API_URL}/api/subscriptions/${userID}`, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }
@@ -35,12 +35,12 @@ const Home: React.FC = () => {
                 })
                 .catch(error => console.error('Error fetching subscriptions:', error));
         }
-    }, [subscriptions, userid, dispatch]);
+    }, [subscriptions, userID, dispatch]);
 
     const handleSubscribe = async (team: string) => {
         try {
             const jwtToken = localStorage.getItem('jwtToken');
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/subscribe`, { userid, team }, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/subscribe`, { userID, team }, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }
@@ -55,7 +55,7 @@ const Home: React.FC = () => {
     const handleUnsubscribe = async (team: string) => {
         try {
             const jwtToken = localStorage.getItem('jwtToken');
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/unsubscribe`, { userid, team }, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/unsubscribe`, { userID, team }, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }

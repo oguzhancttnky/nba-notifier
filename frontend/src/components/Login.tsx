@@ -31,7 +31,7 @@ const Login: React.FC = () => {
                 });
 
                 if (response.data.success) {
-                    dispatch(login(response.data.userid));
+                    dispatch(login(response.data.userID));
                     localStorage.setItem('jwtToken', response.data.token);
                     navigate('/subscription');
                 }

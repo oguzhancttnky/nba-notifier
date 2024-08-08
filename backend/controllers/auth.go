@@ -28,11 +28,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	userid := dbUser.ID
+	userID := dbUser.ID
 
-	token, _ := utils.GenerateJWT(userid)
+	token, _ := utils.GenerateJWT(userID)
 
-	c.JSON(http.StatusOK, gin.H{"success": true, "userid": userid, "token": token})
+	c.JSON(http.StatusOK, gin.H{"success": true, "userID": userID, "token": token})
 }
 
 func Register(c *gin.Context) {
@@ -83,5 +83,5 @@ func VerifyToken(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"success": true, "userid": verified})
+	c.JSON(http.StatusOK, gin.H{"success": true, "userID": verified})
 }

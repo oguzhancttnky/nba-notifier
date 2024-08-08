@@ -8,13 +8,13 @@ import Navbar from './Navbar';
 const Profile: React.FC = () => {
     const subscriptions = useSelector((state: RootState) => state.subscriptions.subscribedTeams);
     const [chatID, setChatID] = useState('');
-    const userid = useSelector((state: RootState) => state.auth.userid);
+    const userID = useSelector((state: RootState) => state.auth.userID);
     const dispatch = useDispatch();
 
     const handleUnsubscribe = async (team: string) => {
         try {
             const jwtToken = localStorage.getItem('jwtToken');
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/unsubscribe`, { userid, team }, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/unsubscribe`, { userID, team }, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }
@@ -24,6 +24,33 @@ const Profile: React.FC = () => {
             console.error('Unsubscription failed:', err);
         }
     };
+
+    const handleChatID = async () => {
+        try {
+            const jwtToken = localStorage.getItem('jwtToken');
+            const converted_chatID = parseInt(chatID, 10);
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/chatID`, { userID, chatID: converted_chatID }, {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            });
+        } catch (err) {
+            console.error('Failed to set chat ID:', err);
+        }
+    }
+
+    const sendTestMessage = async () => {
+        try {
+            const jwtToken = localStorage.getItem('jwtToken');
+            await axios.post(`${process.env.REACT_APP_API_URL}/telegram/message/send`, { chatID: 7068318636, text: 'Test message' }, {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            });
+        } catch (err) {
+            console.error('Failed to send test message:', err);
+        }
+    }
 
     return (
         <div className="max-w-md mx-auto mt-5">
@@ -43,7 +70,8 @@ const Profile: React.FC = () => {
                 <h2 className="text-2xl font-bold mt-5">Chat ID</h2>
                 <div className="mt-3">
                     <input type="text" value={chatID} onChange={(e) => setChatID(e.target.value)} className="border border-gray-300 px-3 py-1" />
-                    <button className="px-3 py-1 bg-green-500 text-white ml-2">Set Chat ID</button>
+                    <button onClick={() => handleChatID()} className="px-3 py-1 bg-green-500 text-white ml-2">Set Chat ID</button>
+                    <button onClick={() => sendTestMessage()} className="px-3 py-1 bg-blue-500 text-white ml-2">Send Test Message</button>
                 </div>
             </div>
         </div>

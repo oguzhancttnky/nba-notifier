@@ -15,13 +15,13 @@ const AuthRouter: React.FC = () => {
     useEffect(() => {
         const jwtToken = localStorage.getItem('jwtToken');
         if (jwtToken) {
-            axios.get(`${process.env.REACT_APP_API_URL}/verifytoken`, {
+            axios.get(`${process.env.REACT_APP_API_URL}/api/verifytoken`, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }
             })
                 .then(response => {
-                    dispatch(login(response.data.userid));
+                    dispatch(login(response.data.userID));
                 })
                 .catch(error => console.error('Error authenticating:', error));
         }

@@ -21,9 +21,9 @@ func GiveUserIDByEmail(c *gin.Context) {
 
 func GiveEmailByUserID(c *gin.Context) {
 	var user models.User
-	userid := c.Param("userid")
+	userID := c.Param("userID")
 	db := utils.GetDB()
-	if err := db.Where("id = ?", userid).First(&user).Error; err != nil {
+	if err := db.Where("id = ?", userID).First(&user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
 		return
 	}

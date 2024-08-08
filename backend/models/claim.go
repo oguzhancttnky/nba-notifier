@@ -7,6 +7,6 @@ import (
 
 type Claim struct {
 	gorm.Model
-	UserID uint `json:"userid"`
+	UserID uint `json:"userID"`
 	jwt.RegisteredClaims
 }
