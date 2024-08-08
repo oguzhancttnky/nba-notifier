@@ -1,7 +1,9 @@
 // utils/hash.go
 package utils
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"golang.org/x/crypto/bcrypt"
+)
 
 // HashPassword hashes a plain text password
 func HashPassword(password string) (string, error) {
@@ -15,5 +17,8 @@ func HashPassword(password string) (string, error) {
 // CheckPasswordHash compares a plain text password with a hash
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
+	if err != nil {
+		return false
+	}
+	return true
 }

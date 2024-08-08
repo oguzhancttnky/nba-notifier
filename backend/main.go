@@ -41,7 +41,7 @@ func main() {
 	protected.Use(middleware.JWTMiddleware())
 	protected.POST("/api/subscribe", controllers.Subscribe)
 	protected.POST("/api/unsubscribe", controllers.Unsubscribe)
-	protected.GET("/api/subscriptions/:email", controllers.GetSubscriptions)
+	protected.GET("/api/subscriptions/:userid", controllers.GetSubscriptions)
 
 	corsHandler := handlers.CORS(
 		handlers.AllowedOrigins([]string{"*"}),

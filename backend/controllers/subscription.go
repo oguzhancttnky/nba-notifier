@@ -25,19 +25,19 @@ func Subscribe(c *gin.Context) {
 
 	db := utils.GetDB()
 	var user models.User
-	if err := db.Where("email = ?", subscription.Email).First(&user).Error; err != nil {
+	if err := db.Where("id = ?", subscription.UserID).First(&user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
 		return
 	}
 
 	var existingSubscription models.Subscription
-	if err := db.Where("email = ? AND team = ?", subscription.Email, subscription.Team).First(&existingSubscription).Error; err == nil {
+	if err := db.Where("user_id = ? AND team = ?", subscription.UserID, subscription.Team).First(&existingSubscription).Error; err == nil {
 		c.JSON(http.StatusConflict, gin.H{"error": "Already subscribed to this team"})
 		return
 	}
 
 	var subscriptions []models.Subscription
-	if err := db.Where("email = ?", subscription.Email).Find(&subscriptions).Error; err != nil {
+	if err := db.Where("user_id = ?", subscription.UserID).Find(&subscriptions).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -71,12 +71,12 @@ func Unsubscribe(c *gin.Context) {
 
 	db := utils.GetDB()
 	var user models.User
-	if err := db.Where("email = ?", subscription.Email).First(&user).Error; err != nil {
+	if err := db.Where("id = ?", subscription.UserID).First(&user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
 		return
 	}
 
-	if err := db.Where("email = ? AND team = ?", subscription.Email, subscription.Team).Unscoped().Delete(&models.Subscription{}).Error; err != nil {
+	if err := db.Where("user_id = ? AND team = ?", subscription.UserID, subscription.Team).Unscoped().Delete(&models.Subscription{}).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -99,17 +99,12 @@ func Unsubscribe(c *gin.Context) {
 
 // GetSubscriptions handles fetching the user's subscriptions
 func GetSubscriptions(c *gin.Context) {
-	email := c.Param("email")
+	userid := c.Param("userid")
 
 	db := utils.GetDB()
-	var user models.User
-	if err := db.Where("email = ?", email).First(&user).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
-		return
-	}
 
 	var subscriptions []models.Subscription
-	if err := db.Where("email = ?", email).Find(&subscriptions).Error; err != nil {
+	if err := db.Where("user_id = ?", userid).Find(&subscriptions).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

@@ -28,9 +28,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, _ := utils.GenerateJWT(user.Email)
+	userid := dbUser.ID
 
-	c.JSON(http.StatusOK, gin.H{"success": true, "token": token})
+	token, _ := utils.GenerateJWT(userid)
+
+	c.JSON(http.StatusOK, gin.H{"success": true, "userid": userid, "token": token})
 }
 
 func Register(c *gin.Context) {
@@ -76,10 +78,10 @@ func VerifyToken(c *gin.Context) {
 		return
 	}
 
-	if verified == "" {
+	if verified == 0 {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"success": true, "email": verified})
+	c.JSON(http.StatusOK, gin.H{"success": true, "userid": verified})
 }

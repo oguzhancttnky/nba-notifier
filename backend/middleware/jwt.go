@@ -20,13 +20,13 @@ func JWTMiddleware() gin.HandlerFunc {
 
 		tokenString := strings.Split(authHeader, " ")[1]
 		claims, err := utils.VerifyJWT(tokenString)
-		if err != nil || claims == "" {
+		if err != nil || claims == 0 {
 			c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden"})
 			c.Abort()
 			return
 		}
 
-		c.Set("email", claims)
+		c.Set("userid", claims)
 		c.Next()
 	}
 }

@@ -10,12 +10,12 @@ import (
 )
 
 // GenerateJWT generates a JWT token
-func GenerateJWT(email string) (string, error) {
+func GenerateJWT(userid uint) (string, error) {
 	jwtSecretKey := []byte(os.Getenv("SECRET_KEY"))
 
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &models.Claim{
-		Email: email,
+		UserID: userid,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
@@ -26,7 +26,7 @@ func GenerateJWT(email string) (string, error) {
 }
 
 // VerifyJWT verifies a JWT token
-func VerifyJWT(tokenString string) (string, error) {
+func VerifyJWT(tokenString string) (uint, error) {
 	jwtSecretKey := []byte(os.Getenv("SECRET_KEY"))
 
 	claims := &models.Claim{}
@@ -36,12 +36,12 @@ func VerifyJWT(tokenString string) (string, error) {
 	})
 
 	if err != nil || !token.Valid {
-		return "", err
+		return 0, err
 	}
 
 	if claims.ExpiresAt.Time.Before(time.Now()) {
-		return "", nil
+		return 0, nil
 	}
 
-	return claims.Email, nil
+	return claims.UserID, nil
 }
