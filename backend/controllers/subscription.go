@@ -104,7 +104,7 @@ func GetSubscriptions(c *gin.Context) {
 	db := utils.GetDB()
 
 	var subscriptions []models.Subscription
-	if err := db.Where("userID = ?", userID).Find(&subscriptions).Error; err != nil {
+	if err := db.Where("user_id = ?", userID).Find(&subscriptions).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
