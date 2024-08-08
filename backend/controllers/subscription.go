@@ -52,6 +52,11 @@ func Subscribe(c *gin.Context) {
 		return
 	}
 
+	if err := db.Model(&subscription).Where("user_id = ? AND team = ?", subscription.UserID, subscription.Team).Update("chat_id", user.ChatID).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	user.Subscriptions = append(user.Subscriptions, subscription)
 	if err := db.Save(&user).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
