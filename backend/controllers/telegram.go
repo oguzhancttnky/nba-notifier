@@ -74,9 +74,9 @@ func TelegramMessageReceived(c *gin.Context) {
 	case "/help":
 		msg := "Welcome to NBA Notifier Bot!\n\n" + "Available commands:\n" +
 			"/help - Show this help message\n" +
-			"/chatID - Get your chat ID\n"
+			"/chatid - Get your chat ID\n"
 		SendTelegramMessage(update.Message.Chat.ID, msg)
-	case "/chatID":
+	case "/chatid":
 		chatID := update.Message.Chat.ID
 		msg := fmt.Sprintf("Your chat ID is: %d", chatID)
 		SendTelegramMessage(update.Message.Chat.ID, msg)

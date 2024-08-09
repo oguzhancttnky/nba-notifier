@@ -43,16 +43,17 @@ func main() {
 	router.GET("/api/verifytoken", controllers.VerifyToken)
 	router.POST("telegram/message/send", controllers.TelegramMessageSend)
 	router.POST("/telegram/message/received", controllers.TelegramMessageReceived)
+	router.GET("/api/user/:userID", controllers.GetUserByID)
 
 	// Protected routes
 	protected := router.Group("/")
 	protected.Use(middleware.JWTMiddleware())
-	protected.POST("/api/chatID", controllers.SaveChatID)
 	protected.POST("/api/subscribe", controllers.Subscribe)
 	protected.POST("/api/unsubscribe", controllers.Unsubscribe)
 	protected.GET("/api/subscriptions/:userID", controllers.GetSubscriptions)
+	protected.PUT("/api/update/user/:userID", controllers.UpdateUserByID)
 
-	go controllers.ScheduleApiRequest(1*time.Minute, controllers.FetchTodayGames)
+	go controllers.ScheduleApiRequest(5*time.Second, controllers.FetchTodayGames)
 
 	router.Run(":8080")
 }
