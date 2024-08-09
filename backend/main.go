@@ -53,7 +53,7 @@ func main() {
 	protected.GET("/api/subscriptions/:userID", controllers.GetSubscriptions)
 	protected.PUT("/api/update/user/:userID", controllers.UpdateUserByID)
 
-	go controllers.ScheduleApiRequest(5*time.Second, controllers.FetchTodayGames)
+	go controllers.ScheduleApiRequest(1*time.Minute, controllers.FetchTodayGames)
 
 	router.Run(":8080")
 }

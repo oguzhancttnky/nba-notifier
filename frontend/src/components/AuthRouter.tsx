@@ -10,6 +10,7 @@ import { login } from '../features/auth/authSlice';
 import axios from 'axios';
 import SubscribedTeams from './SubscribedTeams';
 import { subscribe } from '../features/subscriptions/subscriptionsSlice';
+import Loading from './Loading';
 
 
 const AuthRouter: React.FC = () => {
@@ -49,22 +50,19 @@ const AuthRouter: React.FC = () => {
                 .catch(error => console.error('Error authenticating:', error))
                 .finally(() => setLoading(false));
         } else {
-            setLoading(false);  // No token, so stop loading
+            setLoading(false);
         }
     }, [dispatch, subscriptions]);
-
-    if (loading) {
-        return <div>Loading...</div>;  // Or return null for no UI feedback
-    }
+    
 
     return (
         <Routes>
-            <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
-            <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <Login />} />
-            <Route path="/register" element={isAuthenticated ? <Navigate to="/home" /> : <Register />} />
-            <Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
-            <Route path="/account" element={isAuthenticated ? <Account /> : <Navigate to="/" />} />
-            <Route path="/account/subscribed" element={isAuthenticated ? <SubscribedTeams /> : <Navigate to="/" />} />
+            <Route path="/" element={!loading ? (isAuthenticated ? <Navigate to="/home" /> : <Login />) : <Loading/>} />
+            <Route path="/login" element={!loading ? (isAuthenticated ? <Navigate to="/home" /> : <Login />) : <Loading/>} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/home" element={!loading ? (isAuthenticated ? <Home /> : <Navigate to="/login" />) : <Loading/>} />
+            <Route path="/account" element={!loading ? (isAuthenticated ? <Account /> : <Login />) : <Loading/>} />
+            <Route path="/account/subscribed" element={!loading ? (isAuthenticated ? <SubscribedTeams /> : <Login />) : <Loading/>} />
             <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     );
