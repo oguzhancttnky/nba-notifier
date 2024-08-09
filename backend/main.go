@@ -6,6 +6,7 @@ import (
 	"nba-backend/middleware"
 	"nba-backend/models"
 	"nba-backend/utils"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -26,7 +27,7 @@ func main() {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 	defer db.Close()
-	db.AutoMigrate(&models.User{}, &models.Subscription{})
+	db.AutoMigrate(&models.User{}, &models.Subscription{}, &models.Match{})
 
 	// CORS configuration
 	router.Use(cors.New(cors.Config{
@@ -50,6 +51,8 @@ func main() {
 	protected.POST("/api/subscribe", controllers.Subscribe)
 	protected.POST("/api/unsubscribe", controllers.Unsubscribe)
 	protected.GET("/api/subscriptions/:userID", controllers.GetSubscriptions)
+
+	go controllers.ScheduleApiRequest(1*time.Minute, controllers.FetchTodayGames)
 
 	router.Run(":8080")
 }

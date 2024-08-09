@@ -40,7 +40,7 @@ const Home: React.FC = () => {
     const handleSubscribe = async (team: string) => {
         try {
             const jwtToken = localStorage.getItem('jwtToken');
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/subscribe`, { userID, team }, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/subscribe`, { user_id: userID, team }, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }
@@ -55,7 +55,7 @@ const Home: React.FC = () => {
     const handleUnsubscribe = async (team: string) => {
         try {
             const jwtToken = localStorage.getItem('jwtToken');
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/unsubscribe`, { userID, team }, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/unsubscribe`, { user_id: userID, team }, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }

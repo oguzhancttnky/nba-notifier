@@ -14,7 +14,7 @@ const Profile: React.FC = () => {
     const handleUnsubscribe = async (team: string) => {
         try {
             const jwtToken = localStorage.getItem('jwtToken');
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/unsubscribe`, { userID, team }, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/unsubscribe`, { user_id: userID, team }, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }
@@ -29,7 +29,7 @@ const Profile: React.FC = () => {
         try {
             const jwtToken = localStorage.getItem('jwtToken');
             const converted_chatID = parseInt(chatID, 10);
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/chatID`, { userID, chatID: converted_chatID }, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/chatID`, { user_id: userID, chat_id: converted_chatID }, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }
@@ -42,7 +42,7 @@ const Profile: React.FC = () => {
     const sendTestMessage = async () => {
         try {
             const jwtToken = localStorage.getItem('jwtToken');
-            await axios.post(`${process.env.REACT_APP_API_URL}/telegram/message/send`, { chatID: 7068318636, text: 'Test message' }, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/telegram/message/send`, { chat_id: 7068318636, text: 'Test message' }, {
                 headers: {
                     Authorization: `Bearer ${jwtToken}`
                 }

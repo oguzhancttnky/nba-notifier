@@ -17,8 +17,8 @@ import (
 
 func SaveChatID(c *gin.Context) {
 	var telegramChat struct {
-		UserID uint  `json:"userID"`
-		ChatID int64 `json:"chatID"`
+		UserID uint  `json:"user_id"`
+		ChatID int64 `json:"chat_id"`
 	}
 	if err := c.ShouldBindJSON(&telegramChat); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -26,6 +26,12 @@ func SaveChatID(c *gin.Context) {
 	}
 
 	db := utils.GetDB()
+
+	var user models.User
+	if err := db.Where("chat_id = ?", telegramChat.ChatID).First(&user).Error; err == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Chat ID already exists"})
+		return
+	}
 
 	if err := db.Model(&models.User{}).Where("id = ?", telegramChat.UserID).Update("chat_id", telegramChat.ChatID).Error; err != nil {
 		fmt.Printf("Error updating User: %s\n", err.Error())
@@ -83,7 +89,7 @@ func TelegramMessageReceived(c *gin.Context) {
 
 func TelegramMessageSend(c *gin.Context) {
 	type Message struct {
-		ChatID int64  `json:"chatID"`
+		ChatID int64  `json:"chat_id"`
 		Text   string `json:"text"`
 	}
 	var message Message

@@ -121,3 +121,15 @@ func GetSubscriptions(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"subscriptions": teamList})
 }
+
+func GetAllSubscriptions(c *gin.Context) {
+	db := utils.GetDB()
+
+	var subscriptions []models.Subscription
+	if err := db.Find(&subscriptions).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"subscriptions": subscriptions})
+}
