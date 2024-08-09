@@ -1,5 +1,6 @@
 services:
   backend:
+    container_name: backend-container
     restart: always
     build:
       context: ./backend
@@ -14,6 +15,7 @@ services:
       - /app/node_modules
       
   frontend:
+    container_name: frontend-container
     restart: always
     build:
       context: ./frontend
@@ -26,6 +28,7 @@ services:
 
   db:
     image: postgres:15-alpine
+    container_name: db-container
     restart: always
     environment:
       POSTGRES_DB: nba_notifier
@@ -34,8 +37,12 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+      - ./create-db.sql:/docker-entrypoint-initdb.d/create_database.sql
+
     ports:
       - "5432:5432"
-
+      
 volumes:
-  db_data:
+    db_data:
+        
