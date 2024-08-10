@@ -45,9 +45,9 @@ docker compose up --build
 ### Frontend
 
 1. Navigate to frontend directory:
-    ```console
-    cd nba-notifier/frontend
-    ```
+```console
+cd nba-notifier/frontend
+```
 2. Install dependencies:
 ```console
 npm install
@@ -92,15 +92,16 @@ Frontend running at `http://localhost:3000` and backend api running at `http://l
 
 ## Screenshots
 
+Login Page
 ![Login Page](https://github.com/user-attachments/assets/541d3031-0118-4bdb-82e4-ccb3df15d947)
 
-
+Home Page
 ![Home Page](https://github.com/user-attachments/assets/dcde5e6c-5949-49a5-b689-1c76233b6257)
 
-
+Account Page
 ![Account Page](https://github.com/user-attachments/assets/947302f6-151e-4f7c-ac7c-e524e8e1002d)
 
-
+Telegram Bot(@nbanotifier_bot)
 ![Telegram Bot](https://github.com/user-attachments/assets/b899fd85-3ecf-4316-9c32-1942f11bc2fd)
 
 
