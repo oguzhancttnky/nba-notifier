@@ -3,6 +3,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import axios from 'axios';
 import Navbar from './Navbar';
+import TelegramIcon from '../assets/icons/telegram-icon.svg'
+import EmailIcon from '../assets/icons/email-icon.svg'
+import PasswordIcon from '../assets/icons/password-icon.svg'
 
 const Account: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -57,9 +60,7 @@ const Account: React.FC = () => {
                         <div className="relative">
                             <div className="flex items-center">
                                 <span className="absolute left-0 flex items-center pl-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-300 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                    </svg>
+                                    <img src={TelegramIcon.toString()} alt="Telegram Icon" className="w-6 h-6" />
                                 </span>
                                 <input
                                     type="text"
@@ -75,9 +76,7 @@ const Account: React.FC = () => {
                         <div className="relative mt-6">
                             <div className="flex items-center">
                                 <span className="absolute left-0 flex items-center pl-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-300 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                    </svg>
+                                    <img src={EmailIcon.toString()} alt="Email Icon" className="w-6 h-6" />
                                 </span>
                                 <input
                                     type="email"
@@ -93,10 +92,8 @@ const Account: React.FC = () => {
 
                         <div className="relative mt-6">
                             <div className="flex items-center">
-                                <span className="absolute left-0 flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                    </svg>
+                                <span className="absolute left-0 flex items-center pl-3">
+                                    <img src={PasswordIcon.toString()} alt="Password Icon" className="w-6 h-6" />
                                 </span>
                                 <input
                                     type="password"
