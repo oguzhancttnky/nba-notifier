@@ -99,7 +99,7 @@ Home Page
 ![Home Page](https://github.com/user-attachments/assets/c085b797-884d-474d-b295-d208aeb25a0f)
 
 Account Page
-![Account Page](hhttps://github.com/user-attachments/assets/9672629c-72ed-4d78-a452-fedc0a8cd663)
+![Account Page](https://github.com/user-attachments/assets/9672629c-72ed-4d78-a452-fedc0a8cd663)
 
 Telegram Bot(@nbanotifier_bot)
 ![Telegram Bot](https://github.com/user-attachments/assets/92a93e4c-b7e7-455e-b996-c9342aa401e4)
