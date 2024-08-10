@@ -3,6 +3,7 @@ package utils
 
 import (
 	"fmt"
+	"nba-backend/models"
 	"os"
 
 	"github.com/jinzhu/gorm"
@@ -26,6 +27,47 @@ func InitDB() (*gorm.DB, error) {
 	}
 
 	return db, nil
+}
+
+func UpdateUserChatID(db *gorm.DB, userID uint, chatID int64) error {
+	return db.Model(&models.User{}).Where("id = ?", userID).Update("chat_id", chatID).Error
+}
+
+func UpdateSubscriptionChatID(db *gorm.DB, userID uint, chatID int64) error {
+	return db.Model(&models.Subscription{}).Where("user_id = ?", userID).Update("chat_id", chatID).Error
+}
+
+func IsSubscribedToTeam(db *gorm.DB, userID uint, teamID int) bool {
+	var subscription models.Subscription
+	if err := db.Where("user_id = ? AND team_id = ?", userID, teamID).First(&subscription).Error; err != nil {
+		return false
+	}
+	return true
+}
+
+func AddSubscription(db *gorm.DB, userID uint, teamID int) error {
+	subscription := models.Subscription{
+		UserID: userID,
+		TeamID: teamID,
+	}
+	return db.Create(&subscription).Error
+}
+
+func HandleSubscriptionLimit(db *gorm.DB, userID uint) error {
+	var subscriptions []models.Subscription
+	if err := db.Where("user_id = ?", userID).Find(&subscriptions).Error; err != nil {
+		return fmt.Errorf("failed to fetch subscriptions")
+	}
+
+	if len(subscriptions) >= 5 {
+		return fmt.Errorf("maximum subscription limit reached")
+	}
+
+	return nil
+}
+
+func RemoveSubscription(db *gorm.DB, userID uint, teamID int) error {
+	return db.Where("user_id = ? AND team_id = ?", userID, teamID).Delete(&models.Subscription{}).Error
 }
 
 // GetDB returns the database connection

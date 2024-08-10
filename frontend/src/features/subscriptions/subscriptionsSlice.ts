@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface SubscriptionsState {
-  subscribedTeams: string[];
+  subscribedTeams: number[];
 }
 
 const initialState: SubscriptionsState = {
@@ -12,15 +12,15 @@ const subscriptionsSlice = createSlice({
   name: 'subscriptions',
   initialState,
   reducers: {
-    subscribe: (state, action: PayloadAction<string>) => {
+    subscribe: (state, action: PayloadAction<number>) => {
         if (state.subscribedTeams.length > 5) {
             console.log('Maximum subscriptions reached');
             return;
         }
         state.subscribedTeams = [...state.subscribedTeams, action.payload];
     },
-    unsubscribe: (state, action: PayloadAction<string>) => {
-      state.subscribedTeams = state.subscribedTeams.filter(subscribedTeams => subscribedTeams !== action.payload);
+    unsubscribe: (state, action: PayloadAction<number>) => {
+      state.subscribedTeams = state.subscribedTeams.filter(subscribedTeamID => subscribedTeamID !== action.payload);
     },
   },
 });

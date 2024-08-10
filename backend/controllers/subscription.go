@@ -10,16 +10,47 @@ import (
 
 func Subscribe(c *gin.Context) {
 	var subscription models.Subscription
-	var teams = [30]string{"Lakers", "Warriors", "Bulls", "Celtics", "Heat", "Nets", "Knicks", "Raptors", "76ers", "Mavericks",
-		"Rockets", "Spurs", "Suns", "Jazz", "Nuggets", "Clippers", "Kings", "Grizzlies", "Pelicans", "Blazers", "Timberwolves",
-		"Thunder", "Hornets", "Hawks", "Cavaliers", "Pistons", "Pacers", "Bucks", "Wizards", "Magic"}
+	var teams = map[int][2]string{
+		1:  {"ATL", "Atlanta Hawks"},
+		2:  {"BOS", "Boston Celtics"},
+		3:  {"BKN", "Brooklyn Nets"},
+		4:  {"CHA", "Charlotte Hornets"},
+		5:  {"CHI", "Chicago Bulls"},
+		6:  {"CLE", "Cleveland Cavaliers"},
+		7:  {"DAL", "Dallas Mavericks"},
+		8:  {"DEN", "Denver Nuggets"},
+		9:  {"DET", "Detroit Pistons"},
+		10: {"GSW", "Golden State Warriors"},
+		11: {"HOU", "Houston Rockets"},
+		12: {"IND", "Indiana Pacers"},
+		13: {"LAC", "LA Clippers"},
+		14: {"LAL", "Los Angeles Lakers"},
+		15: {"MEM", "Memphis Grizzlies"},
+		16: {"MIA", "Miami Heat"},
+		17: {"MIL", "Milwaukee Bucks"},
+		18: {"MIN", "Minnesota Timberwolves"},
+		19: {"NOP", "New Orleans Pelicans"},
+		20: {"NYK", "New York Knicks"},
+		21: {"OKC", "Oklahoma City Thunder"},
+		22: {"ORL", "Orlando Magic"},
+		23: {"PHI", "Philadelphia 76ers"},
+		24: {"PHX", "Phoenix Suns"},
+		25: {"POR", "Portland Trail Blazers"},
+		26: {"SAC", "Sacramento Kings"},
+		27: {"SAS", "San Antonio Spurs"},
+		28: {"TOR", "Toronto Raptors"},
+		29: {"UTA", "Utah Jazz"},
+		30: {"WAS", "Washington Wizards"},
+	}
+
 	if err := c.ShouldBindJSON(&subscription); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if !utils.Contains(teams, subscription.Team) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid team"})
+	_, valid := teams[subscription.TeamID]
+	if !valid {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid team ID"})
 		return
 	}
 
@@ -31,7 +62,7 @@ func Subscribe(c *gin.Context) {
 	}
 
 	var existingSubscription models.Subscription
-	if err := db.Where("user_id = ? AND team = ?", subscription.UserID, subscription.Team).First(&existingSubscription).Error; err == nil {
+	if err := db.Where("user_id = ? AND team_id = ?", subscription.UserID, subscription.TeamID).First(&existingSubscription).Error; err == nil {
 		c.JSON(http.StatusConflict, gin.H{"error": "Already subscribed to this team"})
 		return
 	}
@@ -52,7 +83,7 @@ func Subscribe(c *gin.Context) {
 		return
 	}
 
-	if err := db.Model(&subscription).Where("user_id = ? AND team = ?", subscription.UserID, subscription.Team).Update("chat_id", user.ChatID).Error; err != nil {
+	if err := db.Model(&subscription).Where("user_id = ? AND team_id = ?", subscription.UserID, subscription.TeamID).Update("chat_id", user.ChatID).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -81,14 +112,14 @@ func Unsubscribe(c *gin.Context) {
 		return
 	}
 
-	if err := db.Where("user_id = ? AND team = ?", subscription.UserID, subscription.Team).Unscoped().Delete(&models.Subscription{}).Error; err != nil {
+	if err := db.Where("user_id = ? AND team_id = ?", subscription.UserID, subscription.TeamID).Unscoped().Delete(&models.Subscription{}).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	var newSubscriptions []models.Subscription
 	for _, sub := range user.Subscriptions {
-		if sub.Team != subscription.Team {
+		if sub.TeamID != subscription.TeamID {
 			newSubscriptions = append(newSubscriptions, sub)
 		}
 	}
@@ -102,7 +133,7 @@ func Unsubscribe(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": true})
 }
 
-// GetSubscriptions handles fetching the user's subscriptions
+// GetSubscriptions handles fetching the users subscriptions
 func GetSubscriptions(c *gin.Context) {
 	userID := c.Param("userID")
 
@@ -114,9 +145,9 @@ func GetSubscriptions(c *gin.Context) {
 		return
 	}
 
-	var teamList []string
+	var teamList []int
 	for _, sub := range subscriptions {
-		teamList = append(teamList, sub.Team)
+		teamList = append(teamList, sub.TeamID)
 	}
 
 	c.JSON(http.StatusOK, gin.H{"subscriptions": teamList})

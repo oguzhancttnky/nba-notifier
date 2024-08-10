@@ -41,7 +41,7 @@ func main() {
 	router.POST("/api/login", controllers.Login)
 	router.POST("/api/register", controllers.Register)
 	router.GET("/api/verifytoken", controllers.VerifyToken)
-	router.POST("telegram/message/send", controllers.TelegramMessageSend)
+	router.POST("/telegram/message/send", controllers.TelegramMessageSend)
 	router.POST("/telegram/message/received", controllers.TelegramMessageReceived)
 	router.GET("/api/user/:userID", controllers.GetUserByID)
 
@@ -53,7 +53,7 @@ func main() {
 	protected.GET("/api/subscriptions/:userID", controllers.GetSubscriptions)
 	protected.PUT("/api/update/user/:userID", controllers.UpdateUserByID)
 
-	go controllers.ScheduleApiRequest(1*time.Minute, controllers.FetchTodayGames)
+	go controllers.ScheduleApiRequest(1*time.Hour, controllers.FetchTodayGames)
 
 	router.Run(":8080")
 }
