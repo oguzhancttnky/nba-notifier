@@ -1,7 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 body {
-    @apply bg-gray-100; /* Example: Light gray background */
+    background-color: #f7fafc; /* Example: Light gray background */
+}
+
+@layer base {
+    @font-face {
+      font-family: "Poppins";
+      src: url(../src/fonts/Poppins-Light.ttf) format("ttf");
+    }
 }

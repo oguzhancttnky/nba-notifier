@@ -93,15 +93,15 @@ Frontend running at `http://localhost:3000` and backend api running at `http://l
 ## Screenshots
 
 Login Page
-![Login Page](https://github.com/user-attachments/assets/541d3031-0118-4bdb-82e4-ccb3df15d947)
+![Login Page](https://github.com/user-attachments/assets/d1499118-9a1d-4902-b63b-db11586184ad)
 
 Home Page
-![Home Page](https://github.com/user-attachments/assets/dcde5e6c-5949-49a5-b689-1c76233b6257)
+![Home Page](https://github.com/user-attachments/assets/c085b797-884d-474d-b295-d208aeb25a0f)
 
 Account Page
-![Account Page](https://github.com/user-attachments/assets/947302f6-151e-4f7c-ac7c-e524e8e1002d)
+![Account Page](https://github.com/user-attachments/assets/11d6781c-737f-470c-a1e0-9c4d80de66ae)
 
 Telegram Bot(@nbanotifier_bot)
-![Telegram Bot](https://github.com/user-attachments/assets/b899fd85-3ecf-4316-9c32-1942f11bc2fd)
+![Telegram Bot](https://github.com/user-attachments/assets/92a93e4c-b7e7-455e-b996-c9342aa401e4)
 
 

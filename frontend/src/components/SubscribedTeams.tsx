@@ -10,15 +10,15 @@ const SubscribedTeams: React.FC = () => {
     return (
         <div className="mx-auto mt-5">
             <Navbar />
-            <div>
-                <h2 className="flex justify-center text-2xl font-bold">Subscribed NBA Teams</h2>
-                <div className="flex flex-wrap justify-center gap-4 p-4">
-                    {subscriptions.map((team, index) => (
-                        <div key={index} className='flex-none'>
-                            <TeamCard teamName={team} subscriptions={subscriptions} />
-                        </div>
-                    ))}
-                </div>
+            <div className='flex items-center justify-center my-8'>
+                <span className="text-gray-900 text-3xl font-semibold">Subscribed NBA Teams</span>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4 p-4">
+                {subscriptions.map((team, index) => (
+                    <div key={index} className='flex-none'>
+                        <TeamCard teamName={team} subscriptions={subscriptions} />
+                    </div>
+                ))}
             </div>
         </div>
     );

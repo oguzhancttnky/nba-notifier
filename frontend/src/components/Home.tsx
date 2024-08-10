@@ -15,7 +15,9 @@ const Home: React.FC = () => {
     return (
         <div className="mx-auto mt-5">
             <Navbar />
-            <h2 className="flex justify-center mx-10 text-2xl font-bold">Subscribe to NBA Teams</h2>
+            <div className='flex items-center justify-center my-8'>
+                <span className="text-gray-900 text-3xl font-semibold">Subscribe to NBA Teams</span>
+            </div>
             <div className="flex flex-wrap justify-center gap-4 p-4">
                 {teams.map((team, index) => (
                     <div key={index} className='flex-none'>

@@ -48,48 +48,77 @@ const Account: React.FC = () => {
     return (
         <div className="mx-auto mt-5">
             <Navbar />
-            <div>
-                <h2 className="flex justify-center text-2xl font-bold">Account Settings</h2>
-                <div className="flex flex-col items-center gap-4 p-4">
-                    <div className="w-full max-w-xs">
-                        <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="chatID"
-                            type="text"
-                            placeholder={userChatID === 0 ? 'Please enter Telegram Chat ID' : userChatID.toString()}
-                            value={chatID}
-                            onChange={(e) => setChatID(e.target.value)}
-                        />
-                    </div>
-                    <div className="w-full max-w-xs">
-                        <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="email"
-                            type="text"
-                            placeholder={userEmail}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div className="w-full max-w-xs">
-                        <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="password"
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-
-                    <button
-                        onClick={handleUpdate}
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    >
-                        Save Changes
-                    </button>
+            <section>
+                <div className='flex items-center justify-center my-8'>
+                    <span className="text-gray-900 text-3xl font-semibold">Account Settings</span>
                 </div>
-            </div>
+                <div className="container flex items-center justify-center my-16 px-6 mx-auto">
+                    <form onSubmit={handleUpdate} className="w-full max-w-md">
+                        <div className="relative">
+                            <div className="flex items-center">
+                                <span className="absolute left-0 flex items-center pl-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-300 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                </span>
+                                <input
+                                    type="text"
+                                    className="
+            block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
+            focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                                    placeholder={userChatID === 0 ? 'Please enter Telegram Chat ID' : userChatID.toString()}
+                                    value={chatID}
+                                    onChange={(e) => setChatID(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <div className="relative mt-6">
+                            <div className="flex items-center">
+                                <span className="absolute left-0 flex items-center pl-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-300 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                </span>
+                                <input
+                                    type="email"
+                                    className="
+            block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
+            focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                                    placeholder={userEmail}
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="relative mt-6">
+                            <div className="flex items-center">
+                                <span className="absolute left-0 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                    </svg>
+                                </span>
+                                <input
+                                    type="password"
+                                    className="
+            block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
+            focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
+                        </div>
+
+
+                        <div className="mt-6">
+                            <button type='submit' className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
         </div>
     );
 }
