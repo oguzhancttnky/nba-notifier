@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -11,7 +11,7 @@ const initialState: AuthState = {
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     login: (state, action: PayloadAction<number>) => {
@@ -19,10 +19,10 @@ const authSlice = createSlice({
       state.userID = action.payload;
     },
     authenticate: (state) => {
-        state.isAuthenticated = true;
+      state.isAuthenticated = true;
     },
     revokeAuthenticate: (state) => {
-        state.isAuthenticated = false
+      state.isAuthenticated = false;
     },
     logout: (state) => {
       state.isAuthenticated = false;
@@ -31,5 +31,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout, authenticate, revokeAuthenticate } = authSlice.actions;
+export const { login, logout, authenticate, revokeAuthenticate } =
+  authSlice.actions;
 export default authSlice.reducer;

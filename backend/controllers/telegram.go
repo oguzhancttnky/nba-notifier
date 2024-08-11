@@ -283,6 +283,12 @@ func SendPlayerStats(chatID int64, text string) {
 		return
 	}
 
+	game, err := utils.GetGame(strconv.Itoa(gameID))
+	if err != nil {
+		SendTelegramMessage(chatID, "Failed to fetch game.")
+		return
+	}
+
 	stats, err := utils.GetPlayerStats(strconv.Itoa(gameID))
 	if err != nil {
 		SendTelegramMessage(chatID, "Failed to fetch player stats.")
@@ -290,7 +296,11 @@ func SendPlayerStats(chatID int64, text string) {
 	}
 
 	var message strings.Builder
-	message.WriteString("Player stats:\n")
+	message.WriteString(fmt.Sprintf("%s\n%s-%d\n%s-%d\n",
+		game["date"],
+		game["home_team_name"], int(game["home_team_score"].(float64)),
+		game["visitor_team_name"], int(game["visitor_team_score"].(float64))))
+	message.WriteString("\nPlayer stats:")
 	for _, stat := range stats {
 		field_goal_percentage := stat["fg_pct"].(float64) * 100
 

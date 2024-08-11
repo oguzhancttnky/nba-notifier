@@ -52,7 +52,43 @@ func GetGames(teamID string) ([]map[string]interface{}, error) {
 	return games, nil
 }
 
-// GetGameInfo retrieves detailed information for a specific game ID
+func GetGame(gameID string) (map[string]interface{}, error) {
+	apiURL := fmt.Sprintf("https://api.balldontlie.io/v1/games/%s", gameID)
+	req, err := http.NewRequest("GET", apiURL, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Authorization", os.Getenv("NBA_API_TOKEN"))
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("Failed to fetch game info: %s", resp.Status)
+	}
+
+	var result struct {
+		Data map[string]interface{} `json:"data"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return nil, err
+	}
+
+	gameInfo := map[string]interface{}{
+		"date":               result.Data["date"],
+		"home_team_name":     result.Data["home_team"].(map[string]interface{})["full_name"],
+		"visitor_team_name":  result.Data["visitor_team"].(map[string]interface{})["full_name"],
+		"home_team_score":    result.Data["home_team_score"],
+		"visitor_team_score": result.Data["visitor_team_score"],
+	}
+
+	return gameInfo, nil
+}
+
 func GetPlayerStats(gameID string) ([]map[string]interface{}, error) {
 	apiURL := fmt.Sprintf("https://api.balldontlie.io/v1/stats?game_ids[]=%s", gameID)
 	req, err := http.NewRequest("GET", apiURL, nil)

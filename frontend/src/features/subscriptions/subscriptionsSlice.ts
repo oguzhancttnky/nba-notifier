@@ -1,25 +1,27 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SubscriptionsState {
   subscribedTeams: number[];
 }
 
 const initialState: SubscriptionsState = {
-    subscribedTeams: [],
+  subscribedTeams: [],
 };
 
 const subscriptionsSlice = createSlice({
-  name: 'subscriptions',
+  name: "subscriptions",
   initialState,
   reducers: {
     subscribe: (state, action: PayloadAction<number>) => {
-        state.subscribedTeams = [...state.subscribedTeams, action.payload];
+      state.subscribedTeams = [...state.subscribedTeams, action.payload];
     },
     unsubscribe: (state, action: PayloadAction<number>) => {
-      state.subscribedTeams = state.subscribedTeams.filter(subscribedTeamID => subscribedTeamID !== action.payload);
+      state.subscribedTeams = state.subscribedTeams.filter(
+        (subscribedTeamID) => subscribedTeamID !== action.payload,
+      );
     },
     toInital: (state) => {
-        state.subscribedTeams = [];
+      state.subscribedTeams = [];
     },
   },
 });
