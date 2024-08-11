@@ -14,7 +14,7 @@ const App: React.FC = () => {
                     <AuthRouter />
                 </div>
             </Router>
-            <ToastContainer />
+            <ToastContainer autoClose={1500} pauseOnHover={false} closeOnClick={true} />
         </Provider>
     );
 };

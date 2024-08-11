@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../app/store';
-import { subscribe } from '../features/subscriptions/subscriptionsSlice';
+import { useDispatch } from 'react-redux';
+import { subscribe, toInital } from '../features/subscriptions/subscriptionsSlice';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { login } from '../features/auth/authSlice';
@@ -16,7 +15,6 @@ import { toast } from "react-toastify";
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const subscriptions = useSelector((state: RootState) => state.subscriptions.subscribedTeams);
     const [loading, setLoading] = useState(false);
 
     const formik = useFormik({
@@ -35,6 +33,7 @@ const Login: React.FC = () => {
         onSubmit: async (values) => {
             toast.dismiss();
             setLoading(true);
+            dispatch(toInital());
             try {
                 const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`, {
                     email: values.email,
@@ -44,8 +43,8 @@ const Login: React.FC = () => {
                 if (response.data.success) {
                     const userID = response.data.userID;
                     const jwtToken = response.data.token;
-                    dispatch(login(userID));
                     localStorage.setItem('jwtToken', jwtToken);
+                    dispatch(login(userID));
                     axios.get(`${process.env.REACT_APP_API_URL}/api/subscriptions/${userID}`, {
                         headers: {
                             Authorization: `Bearer ${jwtToken}`
@@ -55,8 +54,7 @@ const Login: React.FC = () => {
                         if (dbsubs !== null) {
                             for (let i = 0; i < dbsubs.length; i++) {
                                 const team = dbsubs[i];
-                                if (!subscriptions.includes(team))
-                                    dispatch(subscribe(team));
+                                dispatch(subscribe(team));
                             }
                         }
                     }).catch(error => console.error('Error fetching subscriptions:', error));

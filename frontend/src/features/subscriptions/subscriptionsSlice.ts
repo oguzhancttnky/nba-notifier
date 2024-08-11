@@ -22,8 +22,11 @@ const subscriptionsSlice = createSlice({
     unsubscribe: (state, action: PayloadAction<number>) => {
       state.subscribedTeams = state.subscribedTeams.filter(subscribedTeamID => subscribedTeamID !== action.payload);
     },
+    toInital: (state) => {
+        state.subscribedTeams = [];
+    },
   },
 });
 
-export const { subscribe, unsubscribe } = subscriptionsSlice.actions;
+export const { subscribe, unsubscribe, toInital } = subscriptionsSlice.actions;
 export default subscriptionsSlice.reducer;
