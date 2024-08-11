@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -135,4 +136,13 @@ func ExtractTeamID(text string) (int, error) {
 	}
 
 	return teamID, nil
+}
+
+func SchedulerJob(interval time.Duration, job func()) {
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
+
+	for range ticker.C {
+		job()
+	}
 }

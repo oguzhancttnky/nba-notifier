@@ -10,6 +10,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -67,8 +68,29 @@ func TelegramMessageReceived(c *gin.Context) {
 		return
 	}
 
+	db := utils.GetDB()
 	chatID := update.Message.Chat.ID
 	text := update.Message.Text
+
+	// Log the command
+	err := utils.LogCommand(db, chatID, text)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to log command"})
+		return
+	}
+
+	// Check if the user is banned
+	isBanned, err := utils.IsChatBanned(db, chatID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check ban status"})
+		return
+	}
+
+	if isBanned {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You are banned for spamming commands"})
+		SendBannedMessage(chatID)
+		return
+	}
 
 	switch {
 	case text == "/help":
@@ -287,6 +309,10 @@ func SendUnknownCommandMessage(chatID int64) {
 	SendTelegramMessage(chatID, "Unknown command. Type /help for a list of available commands.")
 }
 
+func SendBannedMessage(chatID int64) {
+	SendTelegramMessage(chatID, "You are banned 24 hours for spamming commands.")
+}
+
 func TelegramMessageSend(c *gin.Context) {
 	type Message struct {
 		ChatID int64  `json:"chat_id"`
@@ -323,4 +349,10 @@ func SendTelegramMessage(chatID int64, text string) error {
 	}
 
 	return nil
+}
+
+func ClearOldCommandLogs() {
+	db := utils.GetDB()
+	threshold := time.Now().Add(-5 * time.Minute)
+	db.Where("timestamp < ?", threshold).Unscoped().Delete(&models.CommandLog{})
 }

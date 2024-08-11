@@ -9,7 +9,7 @@ import (
 
 // GetGames retrieves games for a specific team ID for the current season
 func GetGames(teamID string) ([]map[string]interface{}, error) {
-	apiURL := fmt.Sprintf("https://api.balldontlie.io/v1/games?team_ids[]=%s&seasons[]=2023", teamID)
+	apiURL := fmt.Sprintf("https://api.balldontlie.io/v1/games?team_ids[]=%s&seasons[]=2023&seasons[]=2024", teamID)
 	req, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
 		return nil, err

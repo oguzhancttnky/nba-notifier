@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"nba-backend/models"
 	"os"
+	"time"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -68,6 +69,61 @@ func HandleSubscriptionLimit(db *gorm.DB, userID uint) error {
 
 func RemoveSubscription(db *gorm.DB, userID uint, teamID int) error {
 	return db.Where("user_id = ? AND team_id = ?", userID, teamID).Delete(&models.Subscription{}).Error
+}
+
+func LogCommand(db *gorm.DB, chatID int64, command string) error {
+	cmdLog := models.CommandLog{
+		ChatID:    chatID,
+		Command:   command,
+		Timestamp: time.Now(),
+	}
+	return db.Create(&cmdLog).Error
+}
+
+func IsChatBanned(db *gorm.DB, chatID int64) (bool, error) {
+	var ban models.ChatBan
+	if err := db.Where("chat_id = ?", chatID).First(&ban).Error; err == nil && ban.IsBanned {
+		if time.Now().After(ban.ExpiresAt) {
+			// Unban the user after the ban duration expire
+			return false, db.Model(&ban).Update("is_banned", false).Error
+		}
+		return true, nil
+	}
+	// Check if the user should be banned
+	return ShouldBanChat(db, chatID)
+}
+
+func ShouldBanChat(db *gorm.DB, chatID int64) (bool, error) {
+	var logs []models.CommandLog
+	if err := db.Where("chat_id = ?", chatID).Order("timestamp desc").Limit(20).Find(&logs).Error; err != nil {
+		return false, err
+	}
+
+	if len(logs) < 20 {
+		return false, nil
+	}
+
+	timeDiff := logs[0].Timestamp.Sub(logs[19].Timestamp)
+	if timeDiff <= time.Minute {
+		var ban models.ChatBan
+		if err := db.Where("chat_id = ?", chatID).First(&ban).Error; err != nil {
+			ban = models.ChatBan{
+				ChatID:    chatID,
+				IsBanned:  true,
+				BannedAt:  time.Now(),
+				ExpiresAt: time.Now().Add(24 * time.Hour),
+			}
+			return true, db.Create(&ban).Error
+		}
+		updateBan := models.ChatBan{
+			IsBanned:  true,
+			BannedAt:  time.Now(),
+			ExpiresAt: time.Now().Add(24 * time.Hour),
+		}
+		return true, db.Model(&ban).Update(updateBan).Error
+	}
+
+	return false, nil
 }
 
 // GetDB returns the database connection

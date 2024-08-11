@@ -27,7 +27,7 @@ func main() {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 	defer db.Close()
-	db.AutoMigrate(&models.User{}, &models.Subscription{}, &models.Match{})
+	db.AutoMigrate(&models.User{}, &models.Subscription{}, &models.Match{}, &models.CommandLog{}, &models.ChatBan{})
 
 	// CORS configuration
 	router.Use(cors.New(cors.Config{
@@ -53,7 +53,8 @@ func main() {
 	protected.GET("/api/subscriptions/:userID", controllers.GetSubscriptions)
 	protected.PUT("/api/update/user/:userID", controllers.UpdateUserByID)
 
-	go controllers.ScheduleApiRequest(1*time.Hour, controllers.FetchTodayGames)
+	go utils.SchedulerJob(1*time.Hour, controllers.FetchTodayGames)
+	go utils.SchedulerJob(5*time.Minute, controllers.ClearOldCommandLogs)
 
 	router.Run(":8080")
 }

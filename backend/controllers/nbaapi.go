@@ -8,7 +8,6 @@ import (
 	"nba-backend/utils"
 	"net/http"
 	"os"
-	"time"
 )
 
 type ApiResponse struct {
@@ -16,15 +15,6 @@ type ApiResponse struct {
 	Meta struct {
 		PerPage int `json:"per_page"`
 	} `json:"meta"`
-}
-
-func ScheduleApiRequest(interval time.Duration, job func()) {
-	ticker := time.NewTicker(interval)
-	defer ticker.Stop()
-
-	for range ticker.C {
-		job()
-	}
 }
 
 func FetchTodayGames() {
