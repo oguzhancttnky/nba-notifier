@@ -68,7 +68,7 @@ func HandleSubscriptionLimit(db *gorm.DB, userID uint) error {
 }
 
 func RemoveSubscription(db *gorm.DB, userID uint, teamID int) error {
-	return db.Where("user_id = ? AND team_id = ?", userID, teamID).Delete(&models.Subscription{}).Error
+	return db.Where("user_id = ? AND team_id = ?", userID, teamID).Unscoped().Delete(&models.Subscription{}).Error
 }
 
 func LogCommand(db *gorm.DB, chatID int64, command string) error {

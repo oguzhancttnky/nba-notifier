@@ -180,6 +180,11 @@ func SubscribeToTeam(chatID int64, text string) {
 		return
 	}
 
+	if utils.IsSubscribedToTeam(db, user.ID, teamID) {
+		SendTelegramMessage(chatID, "You are already subscribed to this team.")
+		return
+	}
+
 	if err := utils.HandleSubscriptionLimit(db, user.ID); err != nil {
 		SendTelegramMessage(chatID, err.Error())
 		return
@@ -205,6 +210,11 @@ func UnsubscribeFromTeam(chatID int64, text string) {
 	var user models.User
 	if err := db.Where("chat_id = ?", chatID).First(&user).Error; err != nil {
 		SendTelegramMessage(chatID, "You are not subscribed to any teams.")
+		return
+	}
+
+	if !utils.IsSubscribedToTeam(db, user.ID, teamID) {
+		SendTelegramMessage(chatID, "You are not subscribed to this team.")
 		return
 	}
 

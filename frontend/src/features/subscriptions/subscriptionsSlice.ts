@@ -13,10 +13,6 @@ const subscriptionsSlice = createSlice({
   initialState,
   reducers: {
     subscribe: (state, action: PayloadAction<number>) => {
-        if (state.subscribedTeams.length > 5) {
-            console.log('Maximum subscriptions reached');
-            return;
-        }
         state.subscribedTeams = [...state.subscribedTeams, action.payload];
     },
     unsubscribe: (state, action: PayloadAction<number>) => {
