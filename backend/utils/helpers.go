@@ -99,21 +99,21 @@ func ParseJSON(c *gin.Context, v interface{}) error {
 func ExtractTeamAndGameID(text string) (int, int, error) {
 	parts := strings.Split(text, " ")
 	if len(parts) != 3 {
-		return 0, 0, fmt.Errorf("invalid number of arguments")
+		return 0, 0, fmt.Errorf("Invalid number of arguments")
 	}
 
 	teamID, err := strconv.Atoi(parts[1])
 	if err != nil {
-		return 0, 0, fmt.Errorf("invalid team ID")
+		return 0, 0, fmt.Errorf("Invalid team ID")
 	}
 
 	if teamID < 1 || teamID > 30 {
-		return 0, 0, fmt.Errorf("invalid team ID")
+		return 0, 0, fmt.Errorf("Invalid team ID")
 	}
 
 	gameID, err := strconv.Atoi(parts[2])
 	if err != nil {
-		return 0, 0, fmt.Errorf("invalid game ID")
+		return 0, 0, fmt.Errorf("Invalid game ID")
 	}
 
 	return teamID, gameID, nil
@@ -122,16 +122,16 @@ func ExtractTeamAndGameID(text string) (int, int, error) {
 func ExtractTeamID(text string) (int, error) {
 	parts := strings.Split(text, " ")
 	if len(parts) != 2 {
-		return 0, fmt.Errorf("invalid number of arguments")
+		return 0, fmt.Errorf("Invalid number of arguments")
 	}
 
 	teamID, err := strconv.Atoi(parts[1])
 	if err != nil {
-		return 0, fmt.Errorf("invalid team ID")
+		return 0, fmt.Errorf("Invalid team ID")
 	}
 
 	if teamID < 1 || teamID > 30 {
-		return 0, fmt.Errorf("invalid team ID")
+		return 0, fmt.Errorf("Invalid team ID")
 	}
 
 	return teamID, nil

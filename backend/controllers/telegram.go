@@ -311,15 +311,15 @@ func SendTelegramMessage(chatID int64, text string) error {
 	}
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
-		return fmt.Errorf("failed to marshal payload: %v", err)
+		return fmt.Errorf("Failed to marshal payload: %v", err)
 	}
 	resp, err := http.Post(messageURL, "application/json", bytes.NewReader(payloadBytes))
 	if err != nil {
-		return fmt.Errorf("failed to send message: %v", err)
+		return fmt.Errorf("Failed to send message: %v", err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("telegram API returned status %v", resp.Status)
+		return fmt.Errorf("Telegram API returned status %v", resp.Status)
 	}
 
 	return nil

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -6,9 +6,12 @@ import axios from 'axios';
 import Logo from '../assets/icons/basketball-ball.svg';
 import EmailIcon from '../assets/icons/email-icon.svg';
 import PasswordIcon from '../assets/icons/password-icon.svg';
+import { toast } from "react-toastify";
+import Spinner from './Spinner';
 
 const Register: React.FC = () => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -28,6 +31,7 @@ const Register: React.FC = () => {
                 .required('Confirm Password is required'),
         }),
         onSubmit: async (values) => {
+            setLoading(true);
             try {
                 const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/register`, {
                     email: values.email,
@@ -35,11 +39,14 @@ const Register: React.FC = () => {
                 });
 
                 if (response.data.success) {
+                    setLoading(false);
                     navigate('/login');
+                    toast.success("Registration successful");
                 }
-            } catch (error) {
+            } catch (error: any) {
                 console.error('Registration failed', error);
-                // Handle registration failure (e.g., show an error message)
+                setLoading(false);
+                toast.error("Registration failed " + error.response.data.error);
             }
         },
     });
@@ -123,6 +130,7 @@ const Register: React.FC = () => {
                     <div className="mt-6">
                         <button type='submit' className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                             Sign Up
+                            {loading && <Spinner />}
                         </button>
 
                         <div className="mt-6 text-center ">

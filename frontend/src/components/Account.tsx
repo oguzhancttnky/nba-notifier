@@ -6,6 +6,8 @@ import Navbar from './Navbar';
 import TelegramIcon from '../assets/icons/telegram-icon.svg'
 import EmailIcon from '../assets/icons/email-icon.svg'
 import PasswordIcon from '../assets/icons/password-icon.svg'
+import { toast } from "react-toastify";
+import Spinner from './Spinner';
 
 const Account: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -14,6 +16,7 @@ const Account: React.FC = () => {
     const userID = useSelector((state: RootState) => state.auth.userID);
     const [userEmail, setUserEmail] = useState('');
     const [userChatID, setUserChatID] = useState(0);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const getUserData = async () => {
@@ -33,7 +36,9 @@ const Account: React.FC = () => {
         getUserData();
     }, [userID]);
 
-    const handleUpdate = async () => {
+    const handleUpdate = async (event: React.FormEvent) => {
+        event.preventDefault();
+        setLoading(true);
         try {
             const jwtToken = localStorage.getItem('jwtToken');
             await axios.put(`${process.env.REACT_APP_API_URL}/api/update/user/${userID}`, { email, password, chat_id: chatID }, {
@@ -41,10 +46,12 @@ const Account: React.FC = () => {
                     Authorization: `Bearer ${jwtToken}`
                 }
             });
-            alert('Account settings updated successfully');
-            window.location.reload();
-        } catch (err) {
+            setLoading(false);
+            toast.success("Account updated successfully");
+        } catch (err: any) {
             console.error('Update failed:', err);
+            setLoading(false);
+            toast.error("Update failed " + err.response.data.error);
         }
     }
 
@@ -109,8 +116,11 @@ const Account: React.FC = () => {
 
 
                         <div className="mt-6">
-                            <button type='submit' className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                            <button type='submit' className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 flex items-center justify-center">
                                 Save Changes
+                                {loading && (
+                                    <Spinner />
+                                )}
                             </button>
                         </div>
                     </form>

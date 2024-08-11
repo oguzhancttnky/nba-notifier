@@ -24,7 +24,7 @@ func GetGames(teamID string) ([]map[string]interface{}, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch games: %s", resp.Status)
+		return nil, fmt.Errorf("Failed to fetch games: %s", resp.Status)
 	}
 
 	var result struct {
@@ -67,7 +67,7 @@ func GetPlayerStats(gameID string) ([]map[string]interface{}, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch game info: %s", resp.Status)
+		return nil, fmt.Errorf("Failed to fetch game info: %s", resp.Status)
 	}
 
 	var result struct {

@@ -53,16 +53,16 @@ const AuthRouter: React.FC = () => {
             setLoading(false);
         }
     }, [dispatch, subscriptions]);
-    
+
 
     return (
         <Routes>
-            <Route path="/" element={!loading ? (isAuthenticated ? <Navigate to="/home" /> : <Login />) : <Loading/>} />
-            <Route path="/login" element={!loading ? (isAuthenticated ? <Navigate to="/home" /> : <Login />) : <Loading/>} />
+            <Route path="/" element={!loading ? (isAuthenticated ? <Navigate to="/home" /> : <Login />) : <Loading />} />
+            <Route path="/login" element={!loading ? (isAuthenticated ? <Navigate to="/home" /> : <Login />) : <Loading />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/home" element={!loading ? (isAuthenticated ? <Home /> : <Navigate to="/login" />) : <Loading/>} />
-            <Route path="/account" element={!loading ? (isAuthenticated ? <Account /> : <Login />) : <Loading/>} />
-            <Route path="/account/subscribed" element={!loading ? (isAuthenticated ? <SubscribedTeams /> : <Login />) : <Loading/>} />
+            <Route path="/home" element={!loading ? (isAuthenticated ? <Home /> : <Navigate to="/login" />) : <Loading />} />
+            <Route path="/account" element={!loading ? (isAuthenticated ? <Account /> : <Login />) : <Loading />} />
+            <Route path="/account/subscribed" element={!loading ? (isAuthenticated ? <SubscribedTeams /> : <Login />) : <Loading />} />
             <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     );

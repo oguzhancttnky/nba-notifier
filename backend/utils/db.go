@@ -56,11 +56,11 @@ func AddSubscription(db *gorm.DB, userID uint, teamID int) error {
 func HandleSubscriptionLimit(db *gorm.DB, userID uint) error {
 	var subscriptions []models.Subscription
 	if err := db.Where("user_id = ?", userID).Find(&subscriptions).Error; err != nil {
-		return fmt.Errorf("failed to fetch subscriptions")
+		return fmt.Errorf("Failed to fetch subscriptions")
 	}
 
 	if len(subscriptions) >= 5 {
-		return fmt.Errorf("maximum subscription limit reached")
+		return fmt.Errorf("Maximum subscription limit reached")
 	}
 
 	return nil

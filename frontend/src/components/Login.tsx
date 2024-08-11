@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../app/store';
+import { subscribe } from '../features/subscriptions/subscriptionsSlice';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { login } from '../features/auth/authSlice';
@@ -8,10 +10,14 @@ import axios from 'axios';
 import Logo from '../assets/icons/basketball-ball.svg';
 import EmailIcon from '../assets/icons/email-icon.svg';
 import PasswordIcon from '../assets/icons/password-icon.svg';
+import Spinner from './Spinner';
+import { toast } from "react-toastify";
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const subscriptions = useSelector((state: RootState) => state.subscriptions.subscribedTeams);
+    const [loading, setLoading] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -27,6 +33,7 @@ const Login: React.FC = () => {
                 .required('Password is required'),
         }),
         onSubmit: async (values) => {
+            setLoading(true);
             try {
                 const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`, {
                     email: values.email,
@@ -34,14 +41,32 @@ const Login: React.FC = () => {
                 });
 
                 if (response.data.success) {
-                    dispatch(login(response.data.userID));
-                    localStorage.setItem('jwtToken', response.data.token);
+                    const userID = response.data.userID;
+                    const jwtToken = response.data.token;
+                    dispatch(login(userID));
+                    localStorage.setItem('jwtToken', jwtToken);
+                    axios.get(`${process.env.REACT_APP_API_URL}/api/subscriptions/${userID}`, {
+                        headers: {
+                            Authorization: `Bearer ${jwtToken}`
+                        }
+                    }).then(response => {
+                        const dbsubs = response.data.subscriptions;
+                        if (dbsubs !== null) {
+                            for (let i = 0; i < dbsubs.length; i++) {
+                                const team = dbsubs[i];
+                                if (!subscriptions.includes(team))
+                                    dispatch(subscribe(team));
+                            }
+                        }
+                    }).catch(error => console.error('Error fetching subscriptions:', error));
+                    setLoading(false);
                     navigate('/home');
-                    window.location.reload();
+                    toast.success("Login successful");
                 }
             } catch (error) {
                 console.error('Login failed', error);
-                // Handle login failure (e.g., show an error message)
+                setLoading(false);
+                toast.error("Login failed");
             }
         },
     });
@@ -106,6 +131,7 @@ const Login: React.FC = () => {
                     <div className="mt-6">
                         <button type='submit' className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                             Sign In
+                            {loading && <Spinner />}
                         </button>
 
                         <div className="mt-6 text-center ">
