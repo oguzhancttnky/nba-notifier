@@ -111,7 +111,7 @@ func UpdateUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": true})
 }
 
-func ResetPassword(c *gin.Context) {
+func SendResetPasswordEmail(c *gin.Context) {
 	type ResetPasswordInput struct {
 		Email string `json:"email"`
 	}
@@ -126,11 +126,20 @@ func ResetPassword(c *gin.Context) {
 
 	var user models.User
 	if err := db.Where("email = ?", reset.Email).First(&user).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You are not registered with this email"})
 		return
 	}
 
-	// generate token for reset password link
+	var resetDb models.PasswordReset
+	if err := db.Where("email = ?", reset.Email).First(&resetDb).Error; err == nil {
+		expired := time.Now().After(resetDb.ExpiresAt)
+		if !expired {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "We have already sent you an email. Please check your inbox, or try again later"})
+			return
+		}
+	}
+
+	// Generate token for reset password link
 	length := 12
 	token := utils.GenerateToken(length)
 
@@ -143,7 +152,7 @@ func ResetPassword(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": true})
 }
 
-func ResetPasswordWithToken(c *gin.Context) {
+func ResetPassword(c *gin.Context) {
 	token := c.Param("token")
 	type ResetPasswordInput struct {
 		NewPassword string `json:"new_password"`
@@ -182,33 +191,4 @@ func ResetPasswordWithToken(c *gin.Context) {
 	db.Unscoped().Delete(&reset)
 
 	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Password updated successfully"})
-}
-
-// get token info by email in payload
-func GetTokenInfo(c *gin.Context) {
-	type TokenInfo struct {
-		Email string `json:"email"`
-	}
-
-	var tokenInfo TokenInfo
-	db := utils.GetDB()
-
-	if err := c.ShouldBindJSON(&tokenInfo); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	var reset models.PasswordReset
-	if err := db.Where("email = ?", tokenInfo.Email).First(&reset).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Token not found"})
-		return
-	}
-
-	expired := time.Now().After(reset.ExpiresAt)
-	if expired {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Token expired"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"success": true})
 }

@@ -44,9 +44,8 @@ func main() {
 	router.POST("/telegram/message/send", controllers.TelegramMessageSend)
 	router.POST("/telegram/message/received", controllers.TelegramMessageReceived)
 	router.GET("/api/user/:userID", controllers.GetUserByID)
-	router.POST("/resetpassword", controllers.ResetPassword)
-	router.POST("/resetpassword/:token", controllers.ResetPasswordWithToken)
-	router.POST("/resetpassword/gettokeninfo", controllers.GetTokenInfo)
+	router.POST("/resetpassword/sendemail", controllers.SendResetPasswordEmail)
+	router.POST("/resetpassword/:token", controllers.ResetPassword)
 
 	// Protected routes
 	protected := router.Group("/")

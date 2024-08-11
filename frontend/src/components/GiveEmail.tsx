@@ -21,33 +21,18 @@ const GiveEmail: React.FC = () => {
       setLoading(true);
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/resetpassword/gettokeninfo`,
+          `${process.env.REACT_APP_API_URL}/resetpassword/sendemail`,
           {
             email: values.email,
           }
         );
         if (response.data.success) {
           setLoading(false);
-          toast.error(
-            "We have sent you a password reset link. Please check your email."
-          );
+          toast.success("Password reset link sent to your email.");
         }
-      } catch (error) {
-        try {
-          const response = await axios.post(
-            `${process.env.REACT_APP_API_URL}/resetpassword`,
-            {
-              email: values.email,
-            }
-          );
-          if (response.data.success) {
-            setLoading(false);
-            toast.success("Password reset link sent to your email.");
-          }
-        } catch (error: any) {
-          setLoading(false);
-          toast.error("You have not registered with this email.");
-        }
+      } catch (error: any) {
+        setLoading(false);
+        toast.error(error.response.data.error);
       }
     },
   });
