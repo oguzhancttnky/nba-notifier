@@ -53,7 +53,7 @@ func main() {
 	protected.GET("/api/subscriptions/:userID", controllers.GetSubscriptions)
 	protected.PUT("/api/update/user/:userID", controllers.UpdateUserByID)
 
-	go utils.SchedulerJob(1*time.Hour, controllers.FetchTodayGames)
+	go utils.SchedulerJob(10*time.Second, controllers.FetchTodayGames)
 	go utils.SchedulerJob(5*time.Minute, controllers.ClearOldCommandLogs)
 
 	router.Run(":8080")
