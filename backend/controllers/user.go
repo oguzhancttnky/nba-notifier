@@ -5,6 +5,7 @@ import (
 	"nba-backend/utils"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -104,6 +105,108 @@ func UpdateUserByID(c *gin.Context) {
 	// Update the user's information
 	if err := db.Model(&user).Updates(models.User{Email: updates.Email, Password: updates.Password, ChatID: chatID}).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true})
+}
+
+func ResetPassword(c *gin.Context) {
+	type ResetPasswordInput struct {
+		Email string `json:"email"`
+	}
+
+	var reset ResetPasswordInput
+	db := utils.GetDB()
+
+	if err := c.ShouldBindJSON(&reset); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var user models.User
+	if err := db.Where("email = ?", reset.Email).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
+		return
+	}
+
+	// generate token for reset password link
+	length := 12
+	token := utils.GenerateToken(length)
+
+	// send email with reset password link
+	if err := utils.SendResetPasswordEmail(reset.Email, token); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send email"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true})
+}
+
+func ResetPasswordWithToken(c *gin.Context) {
+	token := c.Param("token")
+	type ResetPasswordInput struct {
+		NewPassword string `json:"new_password"`
+	}
+
+	var input ResetPasswordInput
+
+	db := utils.GetDB()
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Check if the token is valid and not expired
+	var reset models.PasswordReset
+	if err := db.Where("token = ? AND expires_at > ?", token, time.Now()).First(&reset).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid or expired token"})
+		return
+	}
+
+	// Update user's password (hashing it before saving)
+	var user models.User
+	if err := db.Where("email = ?", reset.Email).First(&user).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "User not found"})
+		return
+	}
+
+	// Hash the new password and update the user's password in the database
+	hashedPassword, _ := utils.HashPassword(input.NewPassword)
+	if err := db.Model(&user).Update("password", hashedPassword).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update password"})
+		return
+	}
+
+	db.Unscoped().Delete(&reset)
+
+	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Password updated successfully"})
+}
+
+// get token info by email in payload
+func GetTokenInfo(c *gin.Context) {
+	type TokenInfo struct {
+		Email string `json:"email"`
+	}
+
+	var tokenInfo TokenInfo
+	db := utils.GetDB()
+
+	if err := c.ShouldBindJSON(&tokenInfo); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var reset models.PasswordReset
+	if err := db.Where("email = ?", tokenInfo.Email).First(&reset).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Token not found"})
+		return
+	}
+
+	expired := time.Now().After(reset.ExpiresAt)
+	if expired {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Token expired"})
 		return
 	}
 

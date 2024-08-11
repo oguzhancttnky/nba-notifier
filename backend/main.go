@@ -27,7 +27,7 @@ func main() {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 	defer db.Close()
-	db.AutoMigrate(&models.User{}, &models.Subscription{}, &models.Match{}, &models.CommandLog{}, &models.ChatBan{})
+	db.AutoMigrate(&models.User{}, &models.Subscription{}, &models.Match{}, &models.CommandLog{}, &models.ChatBan{}, &models.PasswordReset{})
 
 	// CORS configuration
 	router.Use(cors.New(cors.Config{
@@ -44,6 +44,9 @@ func main() {
 	router.POST("/telegram/message/send", controllers.TelegramMessageSend)
 	router.POST("/telegram/message/received", controllers.TelegramMessageReceived)
 	router.GET("/api/user/:userID", controllers.GetUserByID)
+	router.POST("/resetpassword", controllers.ResetPassword)
+	router.POST("/resetpassword/:token", controllers.ResetPasswordWithToken)
+	router.POST("/resetpassword/gettokeninfo", controllers.GetTokenInfo)
 
 	// Protected routes
 	protected := router.Group("/")
@@ -55,6 +58,7 @@ func main() {
 
 	go utils.SchedulerJob(10*time.Minute, controllers.FetchTodayGames)
 	go utils.SchedulerJob(5*time.Minute, controllers.ClearOldCommandLogs)
+	go utils.SchedulerJob(1*time.Hour, controllers.ClearOldTokens)
 
 	router.Run(":8080")
 }

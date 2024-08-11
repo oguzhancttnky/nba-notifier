@@ -5,6 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
+	"nba-backend/models"
+	"net/smtp"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -145,4 +149,58 @@ func SchedulerJob(interval time.Duration, job func()) {
 	for range ticker.C {
 		job()
 	}
+}
+
+func GenerateToken(length int) string {
+	charset := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	seededRand := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	token := make([]byte, length)
+	for i := range token {
+		token[i] = charset[seededRand.Intn(len(charset))]
+	}
+	return string(token)
+}
+
+func SendResetPasswordEmail(email, token string) error {
+	// Set up authentication information.
+	auth := smtp.PlainAuth(
+		"",
+		os.Getenv("SMTP_EMAIL"),
+		os.Getenv("SMTP_PASSWORD"),
+		os.Getenv("SMTP_HOST"),
+	)
+
+	// Compose the email content
+	from := os.Getenv("SMTP_EMAIL")
+	to := []string{email}
+	subject := "Password Reset Request"
+	host := os.Getenv("HOST")
+	resetLink := fmt.Sprintf("%s/resetpassword?token=%s", host, token)
+	body := fmt.Sprintf("Hi,\n\nYou requested to reset your password. Please click the link below to reset your password:\n\n%s\n\nIf you didn't request this, please ignore this email.\n\nThanks.", resetLink)
+
+	// Combine headers and body
+	message := []byte(fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s", from, email, subject, body))
+
+	// Send the email
+	err := smtp.SendMail(
+		fmt.Sprintf("%s:%s", os.Getenv("SMTP_HOST"), os.Getenv("SMTP_PORT")),
+		auth,
+		from,
+		to,
+		message,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to send email: %w", err)
+	}
+
+	// Save the reset token to the database
+	db := GetDB()
+	var reset models.PasswordReset
+	reset.Email = email
+	reset.Token = token
+	reset.ExpiresAt = time.Now().Add(1 * time.Hour)
+	db.Create(&reset)
+
+	return nil
 }

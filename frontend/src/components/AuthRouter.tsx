@@ -11,6 +11,7 @@ import axios from "axios";
 import SubscribedTeams from "./SubscribedTeams";
 import { subscribe } from "../features/subscriptions/subscriptionsSlice";
 import Loading from "./Loading";
+import ResetPassword from "./ResetPassword";
 
 const AuthRouter: React.FC = () => {
   const dispatch = useDispatch();
@@ -128,6 +129,7 @@ const AuthRouter: React.FC = () => {
           )
         }
       />
+      <Route path="/resetpassword" element={<ResetPassword />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

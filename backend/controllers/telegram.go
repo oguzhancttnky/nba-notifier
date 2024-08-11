@@ -376,3 +376,9 @@ func ClearOldCommandLogs() {
 	threshold := time.Now().Add(-5 * time.Minute)
 	db.Where("timestamp < ?", threshold).Unscoped().Delete(&models.CommandLog{})
 }
+
+func ClearOldTokens() {
+	db := utils.GetDB()
+	threshold := time.Now().Add(-1 * time.Hour)
+	db.Where("expires_at < ?", threshold).Unscoped().Delete(&models.PasswordReset{})
+}

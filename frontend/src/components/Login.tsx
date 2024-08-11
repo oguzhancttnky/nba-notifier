@@ -43,7 +43,7 @@ const Login: React.FC = () => {
           {
             email: values.email,
             password: values.password,
-          },
+          }
         );
 
         if (response.data.success) {
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
                 headers: {
                   Authorization: `Bearer ${jwtToken}`,
                 },
-              },
+              }
             )
             .then((response) => {
               const dbsubs = response.data.subscriptions;
@@ -70,7 +70,7 @@ const Login: React.FC = () => {
               }
             })
             .catch((error) =>
-              console.error("Error fetching subscriptions:", error),
+              console.error("Error fetching subscriptions:", error)
             );
           setLoading(false);
           navigate("/home");
@@ -126,7 +126,11 @@ const Login: React.FC = () => {
               <input
                 {...formik.getFieldProps("email")}
                 type="email"
-                className={`${formik.touched.email && formik.errors.email ? "border-red-500" : ""} 
+                className={`${
+                  formik.touched.email && formik.errors.email
+                    ? "border-red-500"
+                    : ""
+                } 
             block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
             focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
                 placeholder="Email address"
@@ -151,7 +155,11 @@ const Login: React.FC = () => {
               <input
                 {...formik.getFieldProps("password")}
                 type="password"
-                className={`${formik.touched.password && formik.errors.password ? "border-red-500" : ""} 
+                className={`${
+                  formik.touched.password && formik.errors.password
+                    ? "border-red-500"
+                    : ""
+                } 
             block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
             focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
                 placeholder="Password"
@@ -163,7 +171,12 @@ const Login: React.FC = () => {
               </div>
             ) : null}
           </div>
-
+          <a
+            href="/resetpassword"
+            className="flex justify-end text-sm text-blue-500 hover:underline dark:text-blue-400 mt-4"
+          >
+            Forgot password?
+          </a>
           <div className="mt-6">
             <button
               type="submit"
