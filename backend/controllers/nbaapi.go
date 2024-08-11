@@ -8,6 +8,7 @@ import (
 	"nba-backend/utils"
 	"net/http"
 	"os"
+	"time"
 )
 
 type ApiResponse struct {
@@ -18,7 +19,7 @@ type ApiResponse struct {
 }
 
 func FetchTodayGames() {
-	date := "2024-01-01"
+	date := time.Now().Format("YYYY-MM-DD")
 	db := utils.GetDB()
 	url := fmt.Sprintf("https://api.balldontlie.io/v1/games?dates[]=%s", date)
 	fmt.Println("Fetching data from:", url)

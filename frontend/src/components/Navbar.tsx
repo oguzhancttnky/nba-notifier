@@ -10,6 +10,7 @@ const Navbar: React.FC = () => {
     const handleLogout = () => {
         dispatch(logout());
         localStorage.removeItem('jwtToken');
+        toast.dismiss();
         toast.success("Logged out successfully");
     };
 

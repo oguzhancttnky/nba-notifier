@@ -38,8 +38,29 @@ const Account: React.FC = () => {
 
     const handleUpdate = async (event: React.FormEvent) => {
         event.preventDefault();
+        toast.dismiss();
         setLoading(true);
         try {
+            if (email === '' && password === '' && chatID === '') {
+                toast.error("Please enter field you want to change");
+                setLoading(false);
+                return;
+            }
+            if (email === userEmail && chatID === userChatID.toString()) {
+                toast.error("Please enter new email and chat ID");
+                setLoading(false);
+                return;
+            }
+            if (email === userEmail) {
+                toast.error("Please enter a new email");
+                setLoading(false);
+                return;
+            }
+            if (chatID === userChatID.toString()) {
+                toast.error("Please enter a new chat ID");
+                setLoading(false);
+                return;
+            }
             const jwtToken = localStorage.getItem('jwtToken');
             await axios.put(`${process.env.REACT_APP_API_URL}/api/update/user/${userID}`, { email, password, chat_id: chatID }, {
                 headers: {

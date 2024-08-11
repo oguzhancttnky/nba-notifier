@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"nba-backend/models"
 	"nba-backend/utils"
 	"net/http"
@@ -61,29 +60,40 @@ func UpdateUserByID(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
 		return
 	}
+
 	if err := c.ShouldBindJSON(&updates); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if updates.Email == "" {
+	// Check if the email already exists in another user
+	if updates.Email != "" {
+		var existingUser models.User
+		if err := db.Where("email = ? AND id != ?", updates.Email, userID).First(&existingUser).Error; err == nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Email already exists"})
+			return
+		}
+	} else {
 		updates.Email = user.Email
 	}
+
+	// Hash password if provided
 	if updates.Password != "" {
 		updates.Password, _ = utils.HashPassword(updates.Password)
-	}
-	if updates.Password == "" {
+	} else {
 		updates.Password = user.Password
 	}
 
+	// Check if the chat ID already exists in another user
 	if updates.ChatID != "" {
 		var err error
 		chatID, err = strconv.ParseInt(updates.ChatID, 10, 64)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"Chat ID must be number": err.Error()})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Chat ID must be a number"})
 			return
 		}
-		if err := db.Where("chat_id = ?", chatID).First(&user).Error; err == nil {
+		var existingUser models.User
+		if err := db.Where("chat_id = ? AND id != ?", chatID, userID).First(&existingUser).Error; err == nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Chat ID already exists"})
 			return
 		}
@@ -91,12 +101,11 @@ func UpdateUserByID(c *gin.Context) {
 		chatID = user.ChatID
 	}
 
-	if err := db.Model(&models.Subscription{}).Where("user_id = ?", userID).Update("chat_id", chatID).Error; err != nil {
-		fmt.Printf("Error updating Subscription: %s\n", err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// Update the user's information
+	if err := db.Model(&user).Updates(models.User{Email: updates.Email, Password: updates.Password, ChatID: chatID}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
 		return
 	}
 
-	db.Model(&user).Updates(models.User{Email: updates.Email, Password: updates.Password, ChatID: chatID, Subscriptions: user.Subscriptions})
 	c.JSON(http.StatusOK, gin.H{"success": true})
 }

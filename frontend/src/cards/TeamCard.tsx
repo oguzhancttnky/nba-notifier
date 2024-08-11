@@ -25,6 +25,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ teamID, subscriptions, size = '100'
     const dispatch = useDispatch();
 
     const handleSubscribe = async (team: number) => {
+        toast.dismiss();
         try {
             const jwtToken = localStorage.getItem('jwtToken');
             await axios.post(`${process.env.REACT_APP_API_URL}/api/subscribe`, { user_id: userID, team_id: team }, {
@@ -33,7 +34,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ teamID, subscriptions, size = '100'
                 }
             });
             dispatch(subscribe(team));
-            toast.success("Subscribed successfully");
+            toast.success("Subscribed successfully", );
         } catch (err: any) {
             console.log("Maximum subscriptions reached");
             console.error('Subscription failed:', err);
@@ -42,6 +43,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ teamID, subscriptions, size = '100'
     };
 
     const handleUnsubscribe = async (team: number) => {
+        toast.dismiss();
         try {
             const jwtToken = localStorage.getItem('jwtToken');
             await axios.post(`${process.env.REACT_APP_API_URL}/api/unsubscribe`, { user_id: userID, team_id: team }, {
@@ -53,6 +55,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ teamID, subscriptions, size = '100'
             toast.success("Unsubscribed successfully");
         } catch (err) {
             console.error('Unsubscription failed:', err);
+            toast.error("Unsubscription failed");
         }
     };
 

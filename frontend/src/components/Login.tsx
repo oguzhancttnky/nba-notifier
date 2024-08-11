@@ -33,6 +33,7 @@ const Login: React.FC = () => {
                 .required('Password is required'),
         }),
         onSubmit: async (values) => {
+            toast.dismiss();
             setLoading(true);
             try {
                 const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`, {
