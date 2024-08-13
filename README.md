@@ -2,10 +2,11 @@
 
 ## Introduction
 
-NBA Notifier is a notifies users daily NBA match results of subscribed teams via Telegram. 
-User can subscribe, unsubscribe teams in website or Telegram bot @nbanotifier_bot. 
-With telegram bot, user can see current season games and player statistics of games of subscribed teams.
-User can subscribe 5 teams for free, 10 teams for $1 monthly (Premium) and 20 teams for $2 monthly (Deluxe).
+NBA Notifier provides users daily NBA match results for their subscribed teams via Telegram. User can subscribe, unsubscribe teams in our website or Telegram bot @nbanotifier_bot.
+
+With telegram bot, user can see current season games and player statistics for games of subscribed teams.
+
+User can subscribe 5 teams for free, 10 teams for $1/monthly (Premium) and 20 teams for $2/monthly (Deluxe).
 
 Used technologies are Typescript React(frontend), Golang(backend) and Postgresql(database).
 
