@@ -5,6 +5,7 @@ import (
 	"nba-backend/controllers"
 	"nba-backend/middleware"
 	"nba-backend/utils"
+	"os"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -33,25 +34,54 @@ func main() {
 		AllowCredentials: true,
 	}))
 
+	api_version := os.Getenv("REACT_APP_API_VERSION")
+
+	login_api := api_version + os.Getenv("REACT_APP_LOGIN_API")
+	register_api := api_version + os.Getenv("REACT_APP_REGISTER_API")
+	forgot_password_send_email_api := api_version + os.Getenv("REACT_APP_FORGOT_PASSWORD_SEND_EMAIL_API")
+	reset_password_api := api_version + os.Getenv("RESET_PASSWORD_API")
+	verify_jwt_token_api := api_version + os.Getenv("REACT_APP_VERIFY_JWT_TOKEN_API")
+
+	telegram_message_send_api := api_version + os.Getenv("REACT_APP_TELEGRAM_MESSAGE_SEND_API")
+	telegram_message_received_api := api_version + os.Getenv("REACT_APP_TELEGRAM_MESSAGE_RECEIVED_API")
+
+	get_user_by_user_id_api := api_version + os.Getenv("GET_USER_BY_USER_ID_API")
+	update_user_by_user_id_api := api_version + os.Getenv("UPDATE_USER_BY_USER_ID_API")
+	get_subscriptions_by_user_id_api := api_version + os.Getenv("GET_SUBSCRIPTIONS_BY_USER_ID_API")
+
+	payizone_payment_api := api_version + os.Getenv("REACT_APP_PAYIZONE_PAYMENT_API")
+	payizone_callback_api := api_version + os.Getenv("REACT_APP_PAYIZONE_CALLBACK_API")
+
+	subscribe_nba_team_api := api_version + os.Getenv("REACT_APP_SUBSCRIBE_NBA_TEAM_API")
+	unsubscribe_nba_team_api := api_version + os.Getenv("REACT_APP_UNSUBSCRIBE_NBA_TEAM_API")
+
 	// Public routes
-	router.POST("/api/v1/login", controllers.Login)
-	router.POST("/api/v1/register", controllers.Register)
-	router.GET("/api/v1/verifytoken", controllers.VerifyToken)
-	router.POST("/api/v1/telegram/message/send", controllers.TelegramMessageSend)
-	router.POST("/api/v1/telegram/message/received", controllers.TelegramMessageReceived)
-	router.GET("/api/v1/user/:userID", controllers.GetUserByID)
-	router.POST("/api/v1/resetpassword/sendemail", controllers.SendResetPasswordEmail)
-	router.POST("/api/v1/resetpassword/:token", controllers.ResetPassword)
-	router.POST("/api/v1/payizone/payment", controllers.CreatePayment)
-	router.POST("/api/v1/payizone/callback", controllers.VerifyPayment)
+	// auth
+	router.POST(login_api, controllers.Login)
+	router.POST(register_api, controllers.Register)
+	router.GET(verify_jwt_token_api, controllers.VerifyToken)
+	router.POST(forgot_password_send_email_api, controllers.SendResetPasswordEmail)
+	router.POST(reset_password_api, controllers.ResetPassword)
+
+	// telegram
+	router.POST(telegram_message_send_api, controllers.TelegramMessageSend)
+	router.POST(telegram_message_received_api, controllers.TelegramMessageReceived)
+
+	// payizone
+	router.POST(payizone_payment_api, controllers.CreatePayment)
+	router.POST(payizone_callback_api, controllers.VerifyPayment)
 
 	// Protected routes
 	protected := router.Group("/")
 	protected.Use(middleware.JWTMiddleware())
-	protected.POST("/api/v1/subscribe", controllers.Subscribe)
-	protected.POST("/api/v1/unsubscribe", controllers.Unsubscribe)
-	protected.GET("/api/v1/subscriptions/:userID", controllers.GetSubscriptions)
-	protected.PUT("/api/v1/update/user/:userID", controllers.UpdateUserByID)
+	// user
+	protected.GET(get_user_by_user_id_api, controllers.GetUserByID)
+	protected.PUT(update_user_by_user_id_api, controllers.UpdateUserByID)
+	protected.GET(get_subscriptions_by_user_id_api, controllers.GetSubscriptions)
+
+	// nba team subscription
+	protected.POST(subscribe_nba_team_api, controllers.Subscribe)
+	protected.POST(unsubscribe_nba_team_api, controllers.Unsubscribe)
 
 	go utils.SchedulerJob(10*time.Minute, controllers.FetchTodayGames)
 	go utils.SchedulerJob(5*time.Minute, controllers.ClearOldCommandLogs)

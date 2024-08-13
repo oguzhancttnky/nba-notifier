@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -8,6 +8,7 @@ import EmailIcon from "../assets/icons/email-icon.svg";
 import PasswordIcon from "../assets/icons/password-icon.svg";
 import { toast } from "react-toastify";
 import Spinner from "./Spinner";
+import { apiEndpoints } from "../constants";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const Register: React.FC = () => {
       setLoading(true);
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/register`,
+          apiEndpoints.register_api_endpoint,
           {
             email: values.email,
             password: values.password,
@@ -57,7 +58,13 @@ const Register: React.FC = () => {
 
   return (
     <section>
-      <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
+      <Link
+        to={"/features"}
+        className="flex justify-center items-center text-4xl font-extrabold text-gray-800 text-center my-36"
+      >
+        Explore Our Features
+      </Link>
+      <div className="container flex items-center justify-center px-6 mx-auto">
         <form onSubmit={formik.handleSubmit} className="w-full max-w-md">
           <div className="flex items-center justify-center">
             <img

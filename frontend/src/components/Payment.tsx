@@ -7,6 +7,7 @@ import Spinner from "./Spinner";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import Layout from "./Layout";
+import { apiEndpoints } from "../constants";
 
 interface PaymentFormValues {
   name: string;
@@ -57,7 +58,7 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
       toast.dismiss();
       setLoading(true);
       const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/payizone/payment`,
+        apiEndpoints.payizone_payment_api_endpoint,
         {
           user_id: userID,
           card_holder: values.name,

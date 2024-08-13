@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   subscribe,
@@ -14,6 +14,7 @@ import EmailIcon from "../assets/icons/email-icon.svg";
 import PasswordIcon from "../assets/icons/password-icon.svg";
 import Spinner from "./Spinner";
 import { toast } from "react-toastify";
+import { apiEndpoints } from "../constants";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -38,13 +39,10 @@ const Login: React.FC = () => {
       setLoading(true);
       dispatch(toInital());
       try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/login`,
-          {
-            email: values.email,
-            password: values.password,
-          }
-        );
+        const response = await axios.post(apiEndpoints.login_api_endpoint, {
+          email: values.email,
+          password: values.password,
+        });
 
         if (response.data.success) {
           const userID = response.data.userID;
@@ -53,7 +51,7 @@ const Login: React.FC = () => {
           dispatch(login(userID));
           axios
             .get(
-              `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/subscriptions/${userID}`,
+              apiEndpoints.get_subscriptions_by_user_id_api_endpoint + userID,
               {
                 headers: {
                   Authorization: `Bearer ${jwtToken}`,
@@ -86,7 +84,13 @@ const Login: React.FC = () => {
 
   return (
     <section>
-      <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
+      <Link
+        to={"/features"}
+        className="flex justify-center items-center text-4xl font-extrabold text-gray-800 text-center my-36"
+      >
+        Explore Our Features
+      </Link>
+      <div className="container flex items-center justify-center px-6 mx-auto">
         <form onSubmit={formik.handleSubmit} className="w-full max-w-md">
           <div className="flex items-center justify-center">
             <img

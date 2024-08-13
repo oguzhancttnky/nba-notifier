@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Spinner from "./Spinner";
+import { apiEndpoints } from "../constants";
 
 const GiveEmail: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -21,7 +22,7 @@ const GiveEmail: React.FC = () => {
       setLoading(true);
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/resetpassword/sendemail`,
+          apiEndpoints.forgot_password_send_email_api_endpoint,
           {
             email: values.email,
           }

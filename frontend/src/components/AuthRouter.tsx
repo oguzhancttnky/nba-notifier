@@ -15,6 +15,8 @@ import ResetPassword from "./ResetPassword";
 import Payment from "./Payment";
 import Upgrade from "./Upgrade";
 import PaymentResult from "./PaymentResult";
+import { apiEndpoints } from "../constants";
+import Features from "./Features";
 
 const AuthRouter: React.FC = () => {
   const dispatch = useDispatch();
@@ -30,7 +32,7 @@ const AuthRouter: React.FC = () => {
     const jwtToken = localStorage.getItem("jwtToken");
     if (jwtToken) {
       axios
-        .get(`${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/verifytoken`, {
+        .get(apiEndpoints.verify_jwt_api_endpoint, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
           },
@@ -38,9 +40,12 @@ const AuthRouter: React.FC = () => {
         .then((response) => {
           dispatch(login(response.data.userID));
           const userID = response.data.userID;
+          console.log(
+            apiEndpoints.get_subscriptions_by_user_id_api_endpoint + userID
+          );
           axios
             .get(
-              `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/subscriptions/${userID}`,
+              apiEndpoints.get_subscriptions_by_user_id_api_endpoint + userID,
               {
                 headers: {
                   Authorization: `Bearer ${jwtToken}`,
@@ -195,6 +200,7 @@ const AuthRouter: React.FC = () => {
           )
         }
       />
+      <Route path="/features" element={<Features />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

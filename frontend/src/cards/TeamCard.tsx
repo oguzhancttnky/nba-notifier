@@ -9,7 +9,7 @@ import axios from "axios";
 import NotificationOnIcon from "../assets/icons/notifications-on.svg";
 import NotificationOffIcon from "../assets/icons/notifications-off.svg";
 import { teamIcons } from "../assets/icons/nbaicons";
-import { teamsDictionary } from "../constants";
+import { teamsDictionary, apiEndpoints } from "../constants";
 import { toast } from "react-toastify";
 
 interface TeamCardProps {
@@ -36,7 +36,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
     try {
       const jwtToken = localStorage.getItem("jwtToken");
       await axios.post(
-        `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/subscribe`,
+        apiEndpoints.subscribe_nba_team_api_endpoint,
         { user_id: userID, team_id: team },
         {
           headers: {
@@ -57,7 +57,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
     try {
       const jwtToken = localStorage.getItem("jwtToken");
       await axios.post(
-        `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/unsubscribe`,
+        apiEndpoints.unsubscribe_nba_team_api_endpoint,
         { user_id: userID, team_id: team },
         {
           headers: {

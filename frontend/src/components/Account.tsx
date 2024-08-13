@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import Spinner from "./Spinner";
 import { Link } from "react-router-dom";
 import Layout from "./Layout";
+import { apiEndpoints } from "../constants";
 
 const Account: React.FC = () => {
   const userID = useSelector((state: RootState) => state.auth.userID);
@@ -23,7 +24,7 @@ const Account: React.FC = () => {
       try {
         const jwtToken = localStorage.getItem("jwtToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/user/${userID}`,
+          apiEndpoints.get_user_by_user_id_api_endpoint + userID,
           {
             headers: {
               Authorization: `Bearer ${jwtToken}`,
@@ -59,7 +60,7 @@ const Account: React.FC = () => {
       try {
         const jwtToken = localStorage.getItem("jwtToken");
         await axios.put(
-          `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/update/user/${userID}`,
+          apiEndpoints.update_user_by_user_id_api_endpoint + userID,
           {
             email: values.email,
             password: values.password,

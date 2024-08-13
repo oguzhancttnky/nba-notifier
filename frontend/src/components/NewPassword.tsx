@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Spinner from "./Spinner";
+import { apiEndpoints } from "../constants";
 
 interface NewPasswordProps {
   token: string;
@@ -32,7 +33,7 @@ const NewPassword: React.FC<NewPasswordProps> = ({ token }) => {
       setLoading(true);
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/resetpassword/${token}`,
+          apiEndpoints.reset_password_api_endpoint + token,
           {
             new_password: values.password,
           }
