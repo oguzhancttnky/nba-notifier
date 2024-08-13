@@ -16,7 +16,7 @@ ngrok http 8080
 ```
 Copy ngrok url and setup tunneling
 ```console
-curl https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/setWebhook?url=<ngrok_url>/telegram/message/received
+curl https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/setWebhook?url=<ngrok_url>/api/v1/telegram/message/received
 ```
 
 ## Running with Docker
@@ -24,7 +24,7 @@ curl https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/setWebhook?url=<ngrok_url>
 1. Set environment files:
 nba-notifier/frontend/.env
 ```
-REACT_APP_API_URL=http://localhost:8080
+REACT_APP_SERVER_HOST_URL=http://localhost:8080
 ```
 nba-notifier/backend/.env
 ```
@@ -69,7 +69,7 @@ go mod tidy
 3. Setup and run Postgresql database and configure connection settings in backend environment file.
 nba-notifier/frontend/.env
 ```
-REACT_APP_API_URL=http://localhost:8080
+REACT_APP_SERVER_HOST_URL=http://localhost:8080
 ```
 Example setting up backend environment and running Postgresql database
 nba-notifier/backend/.env

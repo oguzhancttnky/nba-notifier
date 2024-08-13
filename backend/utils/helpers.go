@@ -175,7 +175,7 @@ func SendResetPasswordEmail(email, token string) error {
 	from := os.Getenv("SMTP_EMAIL")
 	to := []string{email}
 	subject := "Password Reset Request"
-	host := os.Getenv("HOST")
+	host := os.Getenv("HOST_URL")
 	resetLink := fmt.Sprintf("%s/resetpassword?token=%s", host, token)
 	body := fmt.Sprintf("Hi,\n\nYou requested to reset your password. Please click the link below to reset your password:\n\n%s\n\nIf you didn't request this, please ignore this email.\n\nThanks.", resetLink)
 

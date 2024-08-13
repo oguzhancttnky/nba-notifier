@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"nba-backend/models"
 	"nba-backend/utils"
 	"net/http"
@@ -36,13 +37,20 @@ func Login(c *gin.Context) {
 }
 
 func Register(c *gin.Context) {
+
+	db := utils.GetDB()
+	if db == nil {
+		log.Println("Database connection is nil")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database connection error"})
+		return
+	}
+
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	db := utils.GetDB()
 	var existingUser models.User
 	if err := db.Where("email = ?", user.Email).First(&existingUser).Error; err == nil {
 		c.JSON(http.StatusConflict, gin.H{"error": "Email already registered"})

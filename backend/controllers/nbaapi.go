@@ -12,8 +12,31 @@ import (
 	"time"
 )
 
+type TeamInfo struct {
+	ID           int    `json:"id"`
+	Conference   string `json:"conference"`
+	Division     string `json:"division"`
+	City         string `json:"city"`
+	Name         string `json:"name"`
+	FullName     string `json:"full_name"`
+	Abbreviation string `json:"abbreviation"`
+}
+
+type GameInfo struct {
+	ID               int64    `json:"id"`
+	Date             string   `json:"date"`
+	Season           int      `json:"season"`
+	Status           string   `json:"status"`
+	Period           int      `json:"period"`
+	Time             string   `json:"time"`
+	Postseason       bool     `json:"postseason"`
+	HomeTeamScore    int      `json:"home_team_score"`
+	VisitorTeamScore int      `json:"visitor_team_score"`
+	HomeTeam         TeamInfo `json:"home_team"`
+	VisitorTeam      TeamInfo `json:"visitor_team"`
+}
 type ApiResponse struct {
-	Data []models.GameInfo `json:"data"`
+	Data []GameInfo `json:"data"`
 	Meta struct {
 		PerPage int `json:"per_page"`
 	} `json:"meta"`
@@ -87,7 +110,7 @@ func FetchTodayGames() {
 						message += fmt.Sprintf("Winner: %s\n", game.VisitorTeam.Name)
 					}
 					SendTelegramMessage(subscription.ChatID, message)
-					db.Create(&models.Match{GameID: game.ID, GameInfo: game, Message: message, ChatID: subscription.ChatID})
+					db.Create(&models.Match{GameID: game.ID, Message: message, ChatID: subscription.ChatID})
 				}
 			}
 		}

@@ -67,14 +67,8 @@ func Subscribe(c *gin.Context) {
 		return
 	}
 
-	var subscriptions []models.Subscription
-	if err := db.Where("user_id = ?", subscription.UserID).Find(&subscriptions).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	if len(subscriptions) >= 5 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Maximum subscription limit reached"})
+	if err := utils.HandleSubscriptionLimit(db, user.ID); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 

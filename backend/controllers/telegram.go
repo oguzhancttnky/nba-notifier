@@ -16,40 +16,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// SaveChatID handles saving a Telegram chat ID to the database.
-func SaveChatID(c *gin.Context) {
-	var telegramChat struct {
-		UserID uint  `json:"user_id"`
-		ChatID int64 `json:"chat_id"`
-	}
-	if err := c.ShouldBindJSON(&telegramChat); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON data"})
-		return
-	}
-
-	db := utils.GetDB()
-
-	// Check if the chat ID already exists
-	var existingUser models.User
-	if err := db.Where("chat_id = ?", telegramChat.ChatID).First(&existingUser).Error; err == nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Chat ID already exists"})
-		return
-	}
-
-	// Update the User and Subscription with the new chat ID
-	if err := utils.UpdateUserChatID(db, telegramChat.UserID, telegramChat.ChatID); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	if err := utils.UpdateSubscriptionChatID(db, telegramChat.UserID, telegramChat.ChatID); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"success": true})
-}
-
 // TelegramMessageReceived handles incoming messages from the Telegram bot.
 func TelegramMessageReceived(c *gin.Context) {
 	var update struct {

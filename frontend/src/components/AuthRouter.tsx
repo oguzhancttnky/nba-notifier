@@ -12,6 +12,9 @@ import SubscribedTeams from "./SubscribedTeams";
 import { subscribe } from "../features/subscriptions/subscriptionsSlice";
 import Loading from "./Loading";
 import ResetPassword from "./ResetPassword";
+import Payment from "./Payment";
+import Upgrade from "./Upgrade";
+import PaymentResult from "./PaymentResult";
 
 const AuthRouter: React.FC = () => {
   const dispatch = useDispatch();
@@ -27,7 +30,7 @@ const AuthRouter: React.FC = () => {
     const jwtToken = localStorage.getItem("jwtToken");
     if (jwtToken) {
       axios
-        .get(`${process.env.REACT_APP_API_URL}/api/verifytoken`, {
+        .get(`${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/verifytoken`, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
           },
@@ -37,7 +40,7 @@ const AuthRouter: React.FC = () => {
           const userID = response.data.userID;
           axios
             .get(
-              `${process.env.REACT_APP_API_URL}/api/subscriptions/${userID}`,
+              `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/subscriptions/${userID}`,
               {
                 headers: {
                   Authorization: `Bearer ${jwtToken}`,
@@ -130,6 +133,68 @@ const AuthRouter: React.FC = () => {
         }
       />
       <Route path="/resetpassword" element={<ResetPassword />} />
+      <Route
+        path="/upgrade"
+        element={
+          !loading ? isAuthenticated ? <Upgrade /> : <Login /> : <Loading />
+        }
+      />
+      <Route
+        path="/payment/premium"
+        element={
+          !loading ? (
+            isAuthenticated ? (
+              <Payment planType="Premium" />
+            ) : (
+              <Login />
+            )
+          ) : (
+            <Loading />
+          )
+        }
+      />
+      <Route
+        path="/payment/deluxe"
+        element={
+          !loading ? (
+            isAuthenticated ? (
+              <Payment planType="Deluxe" />
+            ) : (
+              <Login />
+            )
+          ) : (
+            <Loading />
+          )
+        }
+      />
+      <Route
+        path="/payment/success"
+        element={
+          !loading ? (
+            isAuthenticated ? (
+              <PaymentResult status="success" />
+            ) : (
+              <Login />
+            )
+          ) : (
+            <Loading />
+          )
+        }
+      />
+      <Route
+        path="/payment/fail"
+        element={
+          !loading ? (
+            isAuthenticated ? (
+              <PaymentResult status="fail" />
+            ) : (
+              <Login />
+            )
+          ) : (
+            <Loading />
+          )
+        }
+      />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

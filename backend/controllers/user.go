@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"nba-backend/models"
 	"nba-backend/utils"
 	"net/http"
@@ -94,7 +95,8 @@ func UpdateUserByID(c *gin.Context) {
 			return
 		}
 		var existingUser models.User
-		if err := db.Where("chat_id = ? AND id != ?", chatID, userID).First(&existingUser).Error; err == nil {
+		if err := db.Where("chat_id = ?", chatID).First(&existingUser).Error; err == nil {
+			fmt.Println(existingUser)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Chat ID already exists"})
 			return
 		}
@@ -105,6 +107,12 @@ func UpdateUserByID(c *gin.Context) {
 	// Update the user's information
 	if err := db.Model(&user).Updates(models.User{Email: updates.Email, Password: updates.Password, ChatID: chatID}).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
+		return
+	}
+
+	// Update the chat ID in the subscriptions
+	if err := utils.UpdateSubscriptionChatID(db, user.ID, chatID); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update chat ID in subscriptions"})
 		return
 	}
 

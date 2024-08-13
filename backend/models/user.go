@@ -1,11 +1,19 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type User struct {
 	gorm.Model
-	Email         string         `json:"email" binding:"required" gorm:"unique"`
-	Password      string         `json:"password"`
-	Subscriptions []Subscription `json:"subscriptions"`
-	ChatID        int64          `json:"chat_id" default:"0"`
+	Email            string         `json:"email" binding:"required" gorm:"unique"`
+	Password         string         `json:"password"`
+	Subscriptions    []Subscription `json:"subscriptions" gorm:"foreignKey:UserID"`
+	ChatID           int64          `json:"chat_id" gorm:"default:0"`
+	AccountType      string         `json:"account_type" gorm:"default:'Free'"` // Free, Premium, Deluxe
+	MaxSubscriptions int            `json:"max_subscriptions" gorm:"default:5"`
+	StartsAt         time.Time      `json:"starts_at"`
+	ExpiresAt        time.Time      `json:"expires_at"`
 }

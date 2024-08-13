@@ -9,10 +9,9 @@ services:
     depends_on:
       - db
     env_file:
-      - ./backend/.env
+      - ./.env
     volumes:
-      - ./backend:/app
-      - /app/node_modules
+      - ./.env:/app/.env
       
   frontend:
     container_name: frontend-container
@@ -24,7 +23,10 @@ services:
     depends_on:
       - backend
     env_file:
-      - ./frontend/.env
+      - ./.env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
 
   db:
     image: postgres:15-alpine

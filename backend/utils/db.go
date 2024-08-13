@@ -3,33 +3,46 @@ package utils
 
 import (
 	"fmt"
+	"log"
 	"nba-backend/models"
 	"os"
 	"time"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var db *gorm.DB
 
 // InitDB initializes the database connection
-func InitDB() (*gorm.DB, error) {
+func InitDB() error {
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	dbUser := os.Getenv("DB_USER")
 	dbName := os.Getenv("DB_NAME")
 	dbPassword := os.Getenv("DB_PASSWORD")
 
+	dsn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", dbHost, dbPort, dbUser, dbName, dbPassword)
 	var err error
-	db, err = gorm.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", dbHost, dbPort, dbUser, dbName, dbPassword))
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return db, nil
-}
+	// Log connection check
+	if err := db.Raw("SELECT 1").Error; err != nil {
+		return fmt.Errorf("failed to ping database: %v", err)
+	}
 
+	// Automigrate the schema (optional)
+	if err := db.AutoMigrate(&models.User{}, &models.Subscription{}, &models.Match{}, &models.CommandLog{}, &models.ChatBan{}, &models.PasswordReset{}, &models.PlanType{}); err != nil {
+		return err
+	}
+
+	fmt.Println("Database connection and migration successful.")
+
+	return nil
+}
 func UpdateUserChatID(db *gorm.DB, userID uint, chatID int64) error {
 	return db.Model(&models.User{}).Where("id = ?", userID).Update("chat_id", chatID).Error
 }
@@ -55,13 +68,15 @@ func AddSubscription(db *gorm.DB, userID uint, teamID int) error {
 }
 
 func HandleSubscriptionLimit(db *gorm.DB, userID uint) error {
-	var subscriptions []models.Subscription
-	if err := db.Where("user_id = ?", userID).Find(&subscriptions).Error; err != nil {
-		return fmt.Errorf("Failed to fetch subscriptions")
+	var user models.User
+	if err := db.Preload("Subscriptions").Where("id = ?", userID).First(&user).Error; err != nil {
+		return fmt.Errorf("User not found")
 	}
+	subscriptions := user.Subscriptions
+	maxSubscriptions := user.MaxSubscriptions
 
-	if len(subscriptions) >= 5 {
-		return fmt.Errorf("Maximum subscription limit reached")
+	if len(subscriptions) >= maxSubscriptions {
+		return fmt.Errorf("Upgrade account to subscribe more teams.")
 	}
 
 	return nil
@@ -120,7 +135,7 @@ func ShouldBanChat(db *gorm.DB, chatID int64) (bool, error) {
 			BannedAt:  time.Now(),
 			ExpiresAt: time.Now().Add(24 * time.Hour),
 		}
-		return true, db.Model(&ban).Update(updateBan).Error
+		return true, db.Model(&ban).Updates(updateBan).Error
 	}
 
 	return false, nil
@@ -128,5 +143,8 @@ func ShouldBanChat(db *gorm.DB, chatID int64) (bool, error) {
 
 // GetDB returns the database connection
 func GetDB() *gorm.DB {
+	if db == nil {
+		log.Println("Database connection is nil")
+	}
 	return db
 }

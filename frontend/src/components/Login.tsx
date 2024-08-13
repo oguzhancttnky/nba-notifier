@@ -39,7 +39,7 @@ const Login: React.FC = () => {
       dispatch(toInital());
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/login`,
+          `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/login`,
           {
             email: values.email,
             password: values.password,
@@ -53,7 +53,7 @@ const Login: React.FC = () => {
           dispatch(login(userID));
           axios
             .get(
-              `${process.env.REACT_APP_API_URL}/api/subscriptions/${userID}`,
+              `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/subscriptions/${userID}`,
               {
                 headers: {
                   Authorization: `Bearer ${jwtToken}`,

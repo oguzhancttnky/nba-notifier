@@ -36,7 +36,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
     try {
       const jwtToken = localStorage.getItem("jwtToken");
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/subscribe`,
+        `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/subscribe`,
         { user_id: userID, team_id: team },
         {
           headers: {
@@ -47,9 +47,8 @@ const TeamCard: React.FC<TeamCardProps> = ({
       dispatch(subscribe(team));
       toast.success("Subscribed successfully");
     } catch (err: any) {
-      console.log("Maximum subscriptions reached");
       console.error("Subscription failed:", err);
-      toast.error("Maximum subscriptions reached ");
+      toast.error(err.response.data.error);
     }
   };
 
@@ -58,7 +57,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
     try {
       const jwtToken = localStorage.getItem("jwtToken");
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/unsubscribe`,
+        `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/unsubscribe`,
         { user_id: userID, team_id: team },
         {
           headers: {

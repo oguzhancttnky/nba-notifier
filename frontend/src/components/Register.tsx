@@ -35,7 +35,7 @@ const Register: React.FC = () => {
       setLoading(true);
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/register`,
+          `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/register`,
           {
             email: values.email,
             password: values.password,

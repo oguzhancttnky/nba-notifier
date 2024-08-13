@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import axios from "axios";
-import Navbar from "./Navbar";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import TelegramIcon from "../assets/icons/telegram-icon.svg";
@@ -10,6 +9,8 @@ import EmailIcon from "../assets/icons/email-icon.svg";
 import PasswordIcon from "../assets/icons/password-icon.svg";
 import { toast } from "react-toastify";
 import Spinner from "./Spinner";
+import { Link } from "react-router-dom";
+import Layout from "./Layout";
 
 const Account: React.FC = () => {
   const userID = useSelector((state: RootState) => state.auth.userID);
@@ -22,12 +23,12 @@ const Account: React.FC = () => {
       try {
         const jwtToken = localStorage.getItem("jwtToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/user/${userID}`,
+          `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/user/${userID}`,
           {
             headers: {
               Authorization: `Bearer ${jwtToken}`,
             },
-          },
+          }
         );
         setUserEmail(response.data.email);
         setUserChatID(response.data.chat_id);
@@ -58,7 +59,7 @@ const Account: React.FC = () => {
       try {
         const jwtToken = localStorage.getItem("jwtToken");
         await axios.put(
-          `${process.env.REACT_APP_API_URL}/api/update/user/${userID}`,
+          `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/update/user/${userID}`,
           {
             email: values.email,
             password: values.password,
@@ -68,7 +69,7 @@ const Account: React.FC = () => {
             headers: {
               Authorization: `Bearer ${jwtToken}`,
             },
-          },
+          }
         );
         setLoading(false);
         toast.success("Account updated successfully");
@@ -81,108 +82,132 @@ const Account: React.FC = () => {
   });
 
   return (
-    <div className="mx-auto mt-5">
-      <Navbar />
-      <section>
-        <div className="flex items-center justify-center my-8">
-          <span className="text-gray-900 text-3xl font-semibold">
-            Account Settings
-          </span>
-        </div>
-        <div className="container flex items-center justify-center my-8 px-6 mx-auto">
-          <form onSubmit={formik.handleSubmit} className="w-full max-w-md">
-            <div className="relative mt-6">
-              <div className="flex items-center">
-                <span className="absolute left-0 flex items-center pl-3">
-                  <img
-                    src={TelegramIcon.toString()}
-                    alt="Telegram Icon"
-                    className="w-6 h-6"
-                  />
-                </span>
-                <input
-                  {...formik.getFieldProps("chatID")}
-                  type="text"
-                  inputMode="numeric"
-                  className={`${formik.touched.chatID && formik.errors.chatID ? "border-red-500" : ""}
+    <Layout>
+      <div className="mx-auto mt-5">
+        <section>
+          <div className="flex items-center justify-center my-8">
+            <span className="text-gray-900 text-3xl font-semibold">
+              Account Settings
+            </span>
+          </div>
+          <div className="container flex items-center justify-center my-8 px-6 mx-auto">
+            <form onSubmit={formik.handleSubmit} className="w-full max-w-md">
+              <div className="relative mt-6">
+                <div className="flex items-center">
+                  <span className="absolute left-0 flex items-center pl-3">
+                    <img
+                      src={TelegramIcon.toString()}
+                      alt="Telegram Icon"
+                      className="w-6 h-6"
+                    />
+                  </span>
+                  <input
+                    {...formik.getFieldProps("chatID")}
+                    type="text"
+                    inputMode="numeric"
+                    className={`${
+                      formik.touched.chatID && formik.errors.chatID
+                        ? "border-red-500"
+                        : ""
+                    }
             block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
             focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
-                  placeholder={
-                    userChatID === 0
-                      ? "Please enter Telegram Chat ID"
-                      : userChatID.toString()
-                  }
-                />
-              </div>
-              {formik.touched.chatID && formik.errors.chatID ? (
-                <div className="text-red-500 text-sm mt-1">
-                  {formik.errors.chatID}
-                </div>
-              ) : null}
-            </div>
-            <div className="relative mt-6">
-              <div className="flex items-center">
-                <span className="absolute left-0 flex items-center pl-3">
-                  <img
-                    src={EmailIcon.toString()}
-                    alt="Email Icon"
-                    className="w-6 h-6"
+                    placeholder={
+                      userChatID === 0
+                        ? "Please enter Telegram Chat ID"
+                        : userChatID.toString()
+                    }
                   />
-                </span>
-                <input
-                  {...formik.getFieldProps("email")}
-                  type="email"
-                  className={`${formik.touched.email && formik.errors.email ? "border-red-500" : ""}
+                </div>
+                {formik.touched.chatID && formik.errors.chatID ? (
+                  <div className="text-red-500 text-sm mt-1">
+                    {formik.errors.chatID}
+                  </div>
+                ) : null}
+              </div>
+              <div className="relative mt-6">
+                <div className="flex items-center">
+                  <span className="absolute left-0 flex items-center pl-3">
+                    <img
+                      src={EmailIcon.toString()}
+                      alt="Email Icon"
+                      className="w-6 h-6"
+                    />
+                  </span>
+                  <input
+                    {...formik.getFieldProps("email")}
+                    type="email"
+                    className={`${
+                      formik.touched.email && formik.errors.email
+                        ? "border-red-500"
+                        : ""
+                    }
             block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
             focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
-                  placeholder={userEmail}
-                />
-              </div>
-              {formik.touched.email && formik.errors.email ? (
-                <div className="text-red-500 text-sm mt-1">
-                  {formik.errors.email}
+                    placeholder={userEmail}
+                  />
                 </div>
-              ) : null}
-            </div>
+                {formik.touched.email && formik.errors.email ? (
+                  <div className="text-red-500 text-sm mt-1">
+                    {formik.errors.email}
+                  </div>
+                ) : null}
+              </div>
 
-            <div className="relative mt-6">
-              <div className="flex items-center">
-                <span className="absolute left-0 flex items-center pl-3">
-                  <img
-                    src={PasswordIcon.toString()}
-                    alt="Password Icon"
-                    className="w-6 h-6"
-                  />
-                </span>
-                <input
-                  {...formik.getFieldProps("password")}
-                  type="password"
-                  className={`${formik.touched.password && formik.errors.password ? "border-red-500" : ""}
+              <div className="relative mt-6">
+                <div className="flex items-center">
+                  <span className="absolute left-0 flex items-center pl-3">
+                    <img
+                      src={PasswordIcon.toString()}
+                      alt="Password Icon"
+                      className="w-6 h-6"
+                    />
+                  </span>
+                  <input
+                    {...formik.getFieldProps("password")}
+                    type="password"
+                    className={`${
+                      formik.touched.password && formik.errors.password
+                        ? "border-red-500"
+                        : ""
+                    }
             block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
             focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
-                  placeholder="Password"
-                />
-              </div>
-              {formik.touched.password && formik.errors.password ? (
-                <div className="text-red-500 text-sm mt-1">
-                  {formik.errors.password}
+                    placeholder="Password"
+                  />
                 </div>
-              ) : null}
-            </div>
+                {formik.touched.password && formik.errors.password ? (
+                  <div className="text-red-500 text-sm mt-1">
+                    {formik.errors.password}
+                  </div>
+                ) : null}
+              </div>
 
-            <div className="mt-6">
-              <button
-                type="submit"
-                className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 flex items-center justify-center"
-              >
-                Save Changes
-                {loading && <Spinner />}
-              </button>
-            </div>
-          </form>
+              <div className="mt-6">
+                <button
+                  type="submit"
+                  className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 flex items-center justify-center"
+                >
+                  Save Changes
+                  {loading && <Spinner />}
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+        <div className="text-center mt-6">
+          <div className="text-pretty text-lg font-semibold">
+            Unlock exclusive features by upgrading your account!
+          </div>
+          <Link
+            to="/upgrade"
+            className="text-blue-500 hover:underline mt-4 inline-block text-lg font-medium"
+          >
+            Upgrade now to unlock more features!
+          </Link>
         </div>
-      </section>
-    </div>
+      </div>
+    </Layout>
   );
 };
 

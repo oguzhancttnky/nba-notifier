@@ -8,9 +8,9 @@ import { toast } from "react-toastify";
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const handleLogout = () => {
+    toast.dismiss();
     dispatch(logout());
     localStorage.removeItem("jwtToken");
-    toast.dismiss();
     toast.success("Logged out successfully");
   };
 
@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
         </Link>
         <div className="space-x-4">
           <Link
-            to="/"
+            to="/home"
             className="pb-5 text-gray-900 text-lg hover:text-gray-400 hover:border-b-4 hover:border-red-500 transition-colors duration-200"
           >
             Home

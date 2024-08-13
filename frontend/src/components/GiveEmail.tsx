@@ -21,7 +21,7 @@ const GiveEmail: React.FC = () => {
       setLoading(true);
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/resetpassword/sendemail`,
+          `${process.env.REACT_APP_SERVER_HOST_URL}/api/v1/resetpassword/sendemail`,
           {
             email: values.email,
           }

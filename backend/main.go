@@ -4,7 +4,6 @@ import (
 	"log"
 	"nba-backend/controllers"
 	"nba-backend/middleware"
-	"nba-backend/models"
 	"nba-backend/utils"
 	"time"
 
@@ -22,12 +21,9 @@ func main() {
 	router := gin.Default()
 
 	// Initialize database
-	db, err := utils.InitDB()
-	if err != nil {
-		log.Fatalf("failed to connect to database: %v", err)
+	if err := utils.InitDB(); err != nil {
+		log.Fatalf("Failed to initialize database: %v", err)
 	}
-	defer db.Close()
-	db.AutoMigrate(&models.User{}, &models.Subscription{}, &models.Match{}, &models.CommandLog{}, &models.ChatBan{}, &models.PasswordReset{})
 
 	// CORS configuration
 	router.Use(cors.New(cors.Config{
@@ -38,26 +34,30 @@ func main() {
 	}))
 
 	// Public routes
-	router.POST("/api/login", controllers.Login)
-	router.POST("/api/register", controllers.Register)
-	router.GET("/api/verifytoken", controllers.VerifyToken)
-	router.POST("/telegram/message/send", controllers.TelegramMessageSend)
-	router.POST("/telegram/message/received", controllers.TelegramMessageReceived)
-	router.GET("/api/user/:userID", controllers.GetUserByID)
-	router.POST("/resetpassword/sendemail", controllers.SendResetPasswordEmail)
-	router.POST("/resetpassword/:token", controllers.ResetPassword)
+	router.POST("/api/v1/login", controllers.Login)
+	router.POST("/api/v1/register", controllers.Register)
+	router.GET("/api/v1/verifytoken", controllers.VerifyToken)
+	router.POST("/api/v1/telegram/message/send", controllers.TelegramMessageSend)
+	router.POST("/api/v1/telegram/message/received", controllers.TelegramMessageReceived)
+	router.GET("/api/v1/user/:userID", controllers.GetUserByID)
+	router.POST("/api/v1/resetpassword/sendemail", controllers.SendResetPasswordEmail)
+	router.POST("/api/v1/resetpassword/:token", controllers.ResetPassword)
+	router.POST("/api/v1/payizone/payment", controllers.CreatePayment)
+	router.POST("/api/v1/payizone/callback", controllers.VerifyPayment)
 
 	// Protected routes
 	protected := router.Group("/")
 	protected.Use(middleware.JWTMiddleware())
-	protected.POST("/api/subscribe", controllers.Subscribe)
-	protected.POST("/api/unsubscribe", controllers.Unsubscribe)
-	protected.GET("/api/subscriptions/:userID", controllers.GetSubscriptions)
-	protected.PUT("/api/update/user/:userID", controllers.UpdateUserByID)
+	protected.POST("/api/v1/subscribe", controllers.Subscribe)
+	protected.POST("/api/v1/unsubscribe", controllers.Unsubscribe)
+	protected.GET("/api/v1/subscriptions/:userID", controllers.GetSubscriptions)
+	protected.PUT("/api/v1/update/user/:userID", controllers.UpdateUserByID)
 
 	go utils.SchedulerJob(10*time.Minute, controllers.FetchTodayGames)
 	go utils.SchedulerJob(5*time.Minute, controllers.ClearOldCommandLogs)
 	go utils.SchedulerJob(1*time.Hour, controllers.ClearOldTokens)
+	go utils.SchedulerJob(24*time.Hour, controllers.CheckPremiumExpired)
+	go utils.SchedulerJob(24*time.Hour, controllers.ClearPlanTypes)
 
 	router.Run(":8080")
 }
