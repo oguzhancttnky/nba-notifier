@@ -41,7 +41,7 @@ JWT_SECRET_KEY=Set a secret key for JWT
 NBA_API_TOKEN=Get your api token from https://www.balldontlie.io/
 TELEGRAM_BOT_TOKEN=Get your telegram bot token
 
-HOST_URL=
+HOST_URL=http://localhost:3000
 SMTP_EMAIL=
 SMTP_PASSWORD=
 SMTP_HOST=smtp.gmail.com
@@ -53,7 +53,7 @@ PAYIZONE_API_SECRET=secret_key
 PAYIZONE_CALLBACK_URL=
 
 # API
-REACT_APP_SERVER_HOST_URL=
+REACT_APP_SERVER_HOST_URL=http://localhost:8080
 
 RESET_PASSWORD_API=
 
@@ -113,9 +113,10 @@ go mod tidy
 ```
 3. Change .env location in main.go:
 ```
-godotenv.Load(".env") to godotenv.Load("../.env")
-3. Setup and run Postgresql database and configure connection settings in backend environment file.
-Example setting up backend environment and running Postgresql database
+godotenv.Load(".env") -> godotenv.Load("../.env")
+```
+4. Setup and run Postgresql database and configure connection settings in backend environment file.
+Example setting up environment variables and running Postgresql database
 nba-notifier/.env
 ```
 DB_HOST=localhost
@@ -127,7 +128,7 @@ DB_NAME=postgres
 ```console
 psql -U postgres
 ```
-4. Run the backend server:
+5. Run the backend server:
 ```console
 go run main.go
 ```
