@@ -57,7 +57,8 @@ const Features: React.FC = () => {
                 teams. Daily match results will be sent via Telegram bot. You
                 can also see all season games of your team and player stats of
                 game. Start chat with @nba_notifier_bot on Telegram for more
-                features and details.
+                features and details. If you send 20 commands under 1 minute,
+                you will be banned for 24 hour.
               </p>
             </div>
           </div>
