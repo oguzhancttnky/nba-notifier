@@ -39,15 +39,15 @@ func main() {
 	login_api := api_version + os.Getenv("REACT_APP_LOGIN_API")
 	register_api := api_version + os.Getenv("REACT_APP_REGISTER_API")
 	forgot_password_send_email_api := api_version + os.Getenv("REACT_APP_FORGOT_PASSWORD_SEND_EMAIL_API")
-	reset_password_api := api_version + os.Getenv("RESET_PASSWORD_API")
+	reset_password_api := api_version + os.Getenv("REACT_APP_RESET_PASSWORD_API")
 	verify_jwt_token_api := api_version + os.Getenv("REACT_APP_VERIFY_JWT_TOKEN_API")
 
 	telegram_message_send_api := api_version + os.Getenv("REACT_APP_TELEGRAM_MESSAGE_SEND_API")
 	telegram_message_received_api := api_version + os.Getenv("REACT_APP_TELEGRAM_MESSAGE_RECEIVED_API")
 
-	get_user_by_user_id_api := api_version + os.Getenv("GET_USER_BY_USER_ID_API")
-	update_user_by_user_id_api := api_version + os.Getenv("UPDATE_USER_BY_USER_ID_API")
-	get_subscriptions_by_user_id_api := api_version + os.Getenv("GET_SUBSCRIPTIONS_BY_USER_ID_API")
+	get_user_by_user_id_api := api_version + os.Getenv("REACT_APP_GET_USER_BY_USER_ID_API")
+	update_user_by_user_id_api := api_version + os.Getenv("REACT_APP_UPDATE_USER_BY_USER_ID_API")
+	get_subscriptions_by_user_id_api := api_version + os.Getenv("REACT_APP_GET_SUBSCRIPTIONS_BY_USER_ID_API")
 
 	payizone_payment_api := api_version + os.Getenv("REACT_APP_PAYIZONE_PAYMENT_API")
 	payizone_callback_api := api_version + os.Getenv("REACT_APP_PAYIZONE_CALLBACK_API")
