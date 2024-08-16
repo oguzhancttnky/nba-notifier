@@ -86,15 +86,18 @@ const Login: React.FC = () => {
       <section className="flex-grow">
         <Link
           to={"/features"}
-          className="flex justify-center items-center text-4xl font-extrabold text-gray-800 dark:text-gray-200 text-center my-36"
+          className="flex justify-center items-center text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-800 dark:text-gray-200 text-center my-24 sm:my-36"
         >
           Explore Our Features
         </Link>
-        <div className="container flex items-center justify-center px-6 mx-auto">
-          <form onSubmit={formik.handleSubmit} className="w-full max-w-md">
+        <div className="container flex items-center justify-center px-4 sm:px-6 mx-auto">
+          <form
+            onSubmit={formik.handleSubmit}
+            className="w-full max-w-sm sm:max-w-md"
+          >
             <div className="flex items-center justify-center">
-              <LogoIcon className="w-8 h-8 mr-2 text-gray-900 dark:text-gray-100" />
-              <span className="text-gray-900 dark:text-gray-100 text-3xl font-semibold">
+              <LogoIcon className="w-6 h-6 sm:w-8 sm:h-8 mr-2 text-gray-900 dark:text-gray-100" />
+              <span className="text-gray-900 dark:text-gray-100 text-2xl sm:text-3xl font-semibold">
                 NBA Notifier
               </span>
             </div>
@@ -104,20 +107,20 @@ const Login: React.FC = () => {
                 to="/login"
                 className="w-1/3 pb-4 font-medium text-center text-gray-800 dark:text-gray-200 capitalize border-b-2 border-blue-500 dark:border-blue-400"
               >
-                sign in
+                Sign In
               </Link>
               <Link
                 to="/register"
                 className="w-1/3 pb-4 font-medium text-center text-gray-600 dark:text-gray-400 capitalize border-b dark:border-gray-400"
               >
-                sign up
+                Sign Up
               </Link>
             </div>
 
             <div className="relative mt-6">
               <div className="flex items-center">
                 <span className="absolute left-0 flex items-center pl-3">
-                  <EmailIcon className="w-6 h-6 text-gray-800 dark:text-gray-200" />
+                  <EmailIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800 dark:text-gray-200" />
                 </span>
                 <input
                   {...formik.getFieldProps("email")}
@@ -127,7 +130,7 @@ const Login: React.FC = () => {
                       ? "border-red-500"
                       : ""
                   } 
-                    block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600
+                    block w-full py-2 sm:py-3 pl-10 sm:pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600
                     focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
                   placeholder="Email address"
                 />
@@ -142,7 +145,7 @@ const Login: React.FC = () => {
             <div className="relative mt-6">
               <div className="flex items-center">
                 <span className="absolute left-0 flex items-center pl-3">
-                  <PasswordIcon className="w-6 h-6 text-gray-800 dark:text-gray-200" />
+                  <PasswordIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-800 dark:text-gray-200" />
                 </span>
                 <input
                   {...formik.getFieldProps("password")}
@@ -152,7 +155,7 @@ const Login: React.FC = () => {
                       ? "border-red-500"
                       : ""
                   } 
-                  block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
+                  block w-full py-2 sm:py-3 pl-10 sm:pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
                   focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
                   placeholder="Password"
                 />
@@ -165,14 +168,14 @@ const Login: React.FC = () => {
             </div>
             <Link
               to="/resetpassword"
-              className="flex justify-end text-sm text-blue-500 dark:text-blue-400 hover:underline mt-4"
+              className="flex justify-end text-sm sm:text-base text-blue-500 dark:text-blue-400 hover:underline mt-4"
             >
               Forgot password?
             </Link>
             <div className="mt-6">
               <button
                 type="submit"
-                className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+                className="w-full px-6 py-2 sm:py-3 text-sm sm:text-base font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
               >
                 Sign In
                 {loading && <Spinner />}
@@ -182,7 +185,7 @@ const Login: React.FC = () => {
                 Don't you have an account?
                 <Link
                   to="/register"
-                  className="ml-1 text-sm text-blue-500 dark:text-blue-400 hover:underline"
+                  className="ml-1 text-sm sm:text-base text-blue-500 dark:text-blue-400 hover:underline"
                 >
                   Sign up
                 </Link>
