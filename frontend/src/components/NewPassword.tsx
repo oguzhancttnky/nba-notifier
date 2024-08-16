@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Spinner from "./Spinner";
 import { apiEndpoints } from "../constants";
+import { PasswordIcon } from "../assets/icons/others";
 
 interface NewPasswordProps {
   token: string;
@@ -59,23 +60,28 @@ const NewPassword: React.FC<NewPasswordProps> = ({ token }) => {
     <section>
       <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
         <form onSubmit={formik.handleSubmit} className="w-full max-w-md">
-          <h2 className="text-2xl font-semibold text-center text-gray-900">
+          <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-gray-100">
             Set New Password
           </h2>
 
           <div className="relative mt-6">
-            <input
-              {...formik.getFieldProps("password")}
-              type="password"
-              className={`${
-                formik.touched.password && formik.errors.password
-                  ? "border-red-500"
-                  : ""
-              } 
-            block w-full py-3 pl-4 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
-            focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
-              placeholder="New Password"
-            />
+            <div className="flex items-center">
+              <span className="absolute left-0 flex items-center pl-3">
+                <PasswordIcon className="w-6 h-6 text-gray-800 dark:text-gray-200" />
+              </span>
+              <input
+                {...formik.getFieldProps("password")}
+                type="password"
+                className={`${
+                  formik.touched.password && formik.errors.password
+                    ? "border-red-500"
+                    : ""
+                } 
+                block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
+                focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
+                placeholder="Password"
+              />
+            </div>
             {formik.touched.password && formik.errors.password ? (
               <div className="text-red-500 text-sm mt-1">
                 {formik.errors.password}
@@ -84,18 +90,24 @@ const NewPassword: React.FC<NewPasswordProps> = ({ token }) => {
           </div>
 
           <div className="relative mt-6">
-            <input
-              {...formik.getFieldProps("confirmPassword")}
-              type="password"
-              className={`${
-                formik.touched.confirmPassword && formik.errors.confirmPassword
-                  ? "border-red-500"
-                  : ""
-              } 
-            block w-full py-3 pl-4 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
+            <div className="flex items-center">
+              <span className="absolute left-0 flex items-center pl-3">
+                <PasswordIcon className="w-6 h-6 text-gray-800 dark:text-gray-200" />
+              </span>
+              <input
+                {...formik.getFieldProps("confirmPassword")}
+                type="password"
+                className={`${
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                    ? "border-red-500"
+                    : ""
+                } 
+            block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
             focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
-              placeholder="Confirm New Password"
-            />
+                placeholder="Confirm Password"
+              />
+            </div>
             {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
               <div className="text-red-500 text-sm mt-1">
                 {formik.errors.confirmPassword}

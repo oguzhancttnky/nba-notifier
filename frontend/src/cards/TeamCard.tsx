@@ -5,9 +5,11 @@ import {
   subscribe,
   unsubscribe,
 } from "../features/subscriptions/subscriptionsSlice";
+import {
+  NotificationsOnIcon,
+  NotificationsOffIcon,
+} from "../assets/icons/others";
 import axios from "axios";
-import NotificationOnIcon from "../assets/icons/notifications-on.svg";
-import NotificationOffIcon from "../assets/icons/notifications-off.svg";
 import { teamIcons } from "../assets/icons/nbaicons";
 import { teamsDictionary, apiEndpoints } from "../constants";
 import { toast } from "react-toastify";
@@ -42,7 +44,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
           headers: {
             Authorization: `Bearer ${jwtToken}`,
           },
-        },
+        }
       );
       dispatch(subscribe(team));
       toast.success("Subscribed successfully");
@@ -63,7 +65,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
           headers: {
             Authorization: `Bearer ${jwtToken}`,
           },
-        },
+        }
       );
       dispatch(unsubscribe(team));
       toast.success("Unsubscribed successfully");
@@ -76,7 +78,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
   return (
     <div className="flex flex-col items-center p-4 border rounded-lg shadow-lg w-48 h-56">
       <TeamIcon width={size} height={size} />
-      <span className="text-gray-900 text-lg font-semibold">
+      <span className="text-gray-900 text-lg font-semibold dark:text-gray-100">
         {teamName.split(" ").slice(-1).join(" ")}
       </span>
       <div className="mt-2">
@@ -85,23 +87,16 @@ const TeamCard: React.FC<TeamCardProps> = ({
             onClick={() => handleUnsubscribe(teamID)}
             className="bg-red-300 hover:bg-red-500 font-bold py-2 px-4 rounded inline-flex items-center transition-colors ease-out duration-300"
           >
-            <img
-              src={NotificationOffIcon.toString()}
-              alt="Notification Off"
-              className="w-4 h-4"
-            />
+            <NotificationsOffIcon className="w-4 h-4 text-gray-800" />
           </button>
         ) : (
           <button
             onClick={() => handleSubscribe(teamID)}
-            className="bg-gray-200 hover:bg-gray-300 font-bold py-2 px-4 rounded inline-flex items-center transition-all ease-in-out duration-300"
+            className="bg-gray-200 hover:bg-gray-300 font-bold py-2 px-4 rounded inline-flex items-center transition-all ease-in-out duration-300
+            dark:bg-gray-800 dark:hover:bg-gray-600"
           >
-            <img
-              src={NotificationOnIcon.toString()}
-              alt="Notification On"
-              className="w-4 h-4 mr-2"
-            />
-            <span>Subscribe</span>
+            <NotificationsOnIcon className="w-4 h-4 text-gray-800 dark:text-gray-200" />
+            <span className="ml-2 dark:text-gray-200">Subscribe</span>
           </button>
         )}
       </div>

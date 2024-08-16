@@ -13,7 +13,7 @@ const SubscribedTeams: React.FC = () => {
     <Layout>
       <div className="mx-auto mt-5">
         <div className="flex items-center justify-center my-8">
-          <span className="text-gray-900 text-3xl font-semibold">
+          <span className="text-gray-900 text-3xl font-semibold dark:text-gray-100">
             Subscribed NBA Teams
           </span>
         </div>

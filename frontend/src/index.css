@@ -1,14 +1,38 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 body {
-    background-color: #f7fafc; /* Example: Light gray background */
+  background-color: #f7fafc;
+  font-family: "Poppins", sans-serif;
+}
+
+.dark body {
+  background-color: #374151;
+}
+
+input:-webkit-autofill {
+  background-color: #ffffff !important;
+  color: #333333 !important;
+  transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
+}
+
+input:-webkit-autofill::first-line {
+  color: #333333 !important;
+}
+
+.dark input:-webkit-autofill {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+  transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
+}
+.dark input:-webkit-autofill::first-line {
+  color: #e5e7eb !important;
 }
 
 @layer base {
-    @font-face {
-      font-family: "Poppins";
-      src: url(../src/fonts/Poppins-Light.ttf) format("ttf");
-    }
+  @font-face {
+    font-family: "Poppins";
+    src: url(../src/fonts/Poppins-Light.ttf) format("ttf");
+  }
 }

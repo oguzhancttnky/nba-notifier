@@ -137,14 +137,15 @@ func VerifyPayment(c *gin.Context) {
 
 	// Convert resultCode and saleID to integer
 	var resultCodeInt, saleIDInt int
+	host_url := os.Getenv("HOST_URL")
 	if _, err := fmt.Sscanf(resultCode, "%d", &resultCodeInt); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid resultCode"})
-		c.Redirect(http.StatusFound, "http://localhost:3000/payment/fail")
+		c.Redirect(http.StatusFound, host_url+"/payment/fail")
 		return
 	}
 	if _, err := fmt.Sscanf(saleID, "%d", &saleIDInt); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid saleID"})
-		c.Redirect(http.StatusFound, "http://localhost:3000/payment/fail")
+		c.Redirect(http.StatusFound, host_url+"/payment/fail")
 		return
 	}
 
@@ -162,7 +163,7 @@ func VerifyPayment(c *gin.Context) {
 		status = false
 	}
 	if !status {
-		c.Redirect(http.StatusFound, "http://localhost:3000/payment/fail")
+		c.Redirect(http.StatusFound, host_url+"/payment/fail")
 		return
 	}
 
@@ -170,13 +171,13 @@ func VerifyPayment(c *gin.Context) {
 
 	var planType models.PlanType
 	if err := db.Where("other_code = ?", otherCode).First(&planType).Error; err != nil {
-		c.Redirect(http.StatusFound, "http://localhost:3000/payment/fail")
+		c.Redirect(http.StatusFound, host_url+"/payment/fail")
 		return
 	}
 
 	var user models.User
 	if err := db.Where("id = ?", planType.UserID).First(&user).Error; err != nil {
-		c.Redirect(http.StatusFound, "http://localhost:3000/payment/fail")
+		c.Redirect(http.StatusFound, host_url+"/payment/fail")
 		return
 	}
 
@@ -186,11 +187,11 @@ func VerifyPayment(c *gin.Context) {
 	user.ExpiresAt = time.Now().AddDate(0, 1, 0)
 
 	if err := db.Save(&user).Error; err != nil {
-		c.Redirect(http.StatusFound, "http://localhost:3000/payment/fail")
+		c.Redirect(http.StatusFound, host_url+"/payment/fail")
 		return
 	}
 
-	c.Redirect(http.StatusFound, "http://localhost:3000/payment/success")
+	c.Redirect(http.StatusFound, host_url+"/payment/success")
 }
 
 func CreatePayment(c *gin.Context) {

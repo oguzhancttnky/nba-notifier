@@ -28,7 +28,20 @@ const AuthRouter: React.FC = () => {
   );
   const [loading, setLoading] = useState(true);
 
+  const isDarkMode = localStorage.getItem("theme") === "dark"
+
   useEffect(() => {
+    
+  }, [isDarkMode]);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
     const jwtToken = localStorage.getItem("jwtToken");
     if (jwtToken) {
       axios
@@ -70,7 +83,7 @@ const AuthRouter: React.FC = () => {
     } else {
       setLoading(false);
     }
-  }, [dispatch, subscriptions]);
+  }, [dispatch, subscriptions, isDarkMode]);
 
   return (
     <Routes>

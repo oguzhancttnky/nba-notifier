@@ -4,9 +4,7 @@ import { RootState } from "../app/store";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import TelegramIcon from "../assets/icons/telegram-icon.svg";
-import EmailIcon from "../assets/icons/email-icon.svg";
-import PasswordIcon from "../assets/icons/password-icon.svg";
+import { TelegramIcon, EmailIcon, PasswordIcon } from "../assets/icons/others";
 import { toast } from "react-toastify";
 import Spinner from "./Spinner";
 import { Link } from "react-router-dom";
@@ -87,7 +85,7 @@ const Account: React.FC = () => {
       <div className="mx-auto mt-5">
         <section>
           <div className="flex items-center justify-center my-8">
-            <span className="text-gray-900 text-3xl font-semibold">
+            <span className="text-gray-900 text-3xl font-semibold dark:text-gray-100">
               Account Settings
             </span>
           </div>
@@ -96,11 +94,7 @@ const Account: React.FC = () => {
               <div className="relative mt-6">
                 <div className="flex items-center">
                   <span className="absolute left-0 flex items-center pl-3">
-                    <img
-                      src={TelegramIcon.toString()}
-                      alt="Telegram Icon"
-                      className="w-6 h-6"
-                    />
+                    <TelegramIcon className="w-6 h-6 text-gray-800 dark:text-gray-200" />
                   </span>
                   <input
                     {...formik.getFieldProps("chatID")}
@@ -129,11 +123,7 @@ const Account: React.FC = () => {
               <div className="relative mt-6">
                 <div className="flex items-center">
                   <span className="absolute left-0 flex items-center pl-3">
-                    <img
-                      src={EmailIcon.toString()}
-                      alt="Email Icon"
-                      className="w-6 h-6"
-                    />
+                    <EmailIcon className="w-6 h-6 text-gray-800 dark:text-gray-200" />
                   </span>
                   <input
                     {...formik.getFieldProps("email")}
@@ -158,11 +148,7 @@ const Account: React.FC = () => {
               <div className="relative mt-6">
                 <div className="flex items-center">
                   <span className="absolute left-0 flex items-center pl-3">
-                    <img
-                      src={PasswordIcon.toString()}
-                      alt="Password Icon"
-                      className="w-6 h-6"
-                    />
+                    <PasswordIcon className="w-6 h-6 text-gray-800 dark:text-gray-200" />
                   </span>
                   <input
                     {...formik.getFieldProps("password")}
@@ -197,7 +183,7 @@ const Account: React.FC = () => {
           </div>
         </section>
         <div className="text-center mt-6">
-          <div className="text-pretty text-lg font-semibold">
+          <div className="text-pretty text-lg font-semibold dark:text-gray-200">
             Unlock exclusive features by upgrading your account!
           </div>
           <Link

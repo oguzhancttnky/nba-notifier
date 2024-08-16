@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Spinner from "./Spinner";
 import { apiEndpoints } from "../constants";
+import { EmailIcon } from "../assets/icons/others";
 
 const GiveEmail: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -42,12 +43,14 @@ const GiveEmail: React.FC = () => {
     <section>
       <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
         <form onSubmit={formik.handleSubmit} className="w-full max-w-md">
-          <h2 className="text-2xl font-semibold text-center text-gray-900">
+          <h2 className="text-2xl font-semibold text-center text-gray-900 dark:text-gray-100">
             Enter your email address
           </h2>
-
           <div className="relative mt-6">
             <div className="flex items-center">
+              <span className="absolute left-0 flex items-center pl-3">
+                <EmailIcon className="w-6 h-6 text-gray-800 dark:text-gray-200" />
+              </span>
               <input
                 {...formik.getFieldProps("email")}
                 type="email"
@@ -56,8 +59,8 @@ const GiveEmail: React.FC = () => {
                     ? "border-red-500"
                     : ""
                 } 
-              block w-full py-3 pl-4 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
-              focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
+                  block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600
+                  focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
                 placeholder="Email address"
               />
             </div>

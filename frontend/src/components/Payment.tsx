@@ -85,8 +85,8 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
     <Layout>
       <div className="mx-auto mt-12">
         <div className="flex justify-center items-center">
-          <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-semibold text-center mb-6">
+          <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg dark:bg-gray-900">
+            <h2 className="text-2xl font-semibold text-center mb-6 dark:text-gray-100">
               ${amount}/monthly {planType} Subscription Payment
             </h2>
             <Formik
@@ -98,14 +98,14 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
                 <div>
                   <label
                     htmlFor="name"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                   >
                     Cardholder Name
                   </label>
                   <Field
                     type="text"
                     name="name"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                   <ErrorMessage
                     name="name"
@@ -117,14 +117,14 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
                 <div>
                   <label
                     htmlFor="number"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                   >
                     Card Number
                   </label>
                   <Field
                     type="text"
                     name="number"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                   <ErrorMessage
                     name="number"
@@ -137,14 +137,14 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
                   <div>
                     <label
                       htmlFor="expiry_month"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                     >
                       Expiry Month
                     </label>
                     <Field
                       type="text"
                       name="expiry_month"
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     />
                     <ErrorMessage
                       name="expiry_month"
@@ -155,14 +155,14 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
                   <div>
                     <label
                       htmlFor="expiry_year"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                     >
                       Expiry Year
                     </label>
                     <Field
                       type="text"
                       name="expiry_year"
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     />
                     <ErrorMessage
                       name="expiry_year"
@@ -173,14 +173,14 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
                   <div>
                     <label
                       htmlFor="cvv"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                     >
                       CVV
                     </label>
                     <Field
                       type="text"
                       name="cvv"
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     />
                     <ErrorMessage
                       name="cvv"

@@ -9,9 +9,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { login } from "../features/auth/authSlice";
 import axios from "axios";
-import Logo from "../assets/icons/basketball-ball.svg";
-import EmailIcon from "../assets/icons/email-icon.svg";
-import PasswordIcon from "../assets/icons/password-icon.svg";
+import { LogoIcon, EmailIcon, PasswordIcon } from "../assets/icons/others";
 import Spinner from "./Spinner";
 import { toast } from "react-toastify";
 import { apiEndpoints } from "../constants";
@@ -86,46 +84,38 @@ const Login: React.FC = () => {
     <section>
       <Link
         to={"/features"}
-        className="flex justify-center items-center text-4xl font-extrabold text-gray-800 text-center my-36"
+        className="flex justify-center items-center text-4xl font-extrabold text-gray-800 dark:text-gray-200 text-center my-36"
       >
         Explore Our Features
       </Link>
       <div className="container flex items-center justify-center px-6 mx-auto">
         <form onSubmit={formik.handleSubmit} className="w-full max-w-md">
           <div className="flex items-center justify-center">
-            <img
-              src={Logo.toString()}
-              alt="NBA Logo"
-              className="w-8 h-8 mr-2"
-            />
-            <span className="text-gray-900 text-3xl font-semibold">
+            <LogoIcon className="w-8 h-8 mr-2 text-gray-900 dark:text-gray-100" />
+            <span className="text-gray-900 dark:text-gray-100 text-3xl font-semibold">
               NBA Notifier
             </span>
           </div>
 
           <div className="flex items-center justify-center mt-6">
-            <a
-              href="/login"
-              className="w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-blue-500 dark:border-blue-400 dark:text-white"
+            <Link
+              to="/login"
+              className="w-1/3 pb-4 font-medium text-center text-gray-800 dark:text-gray-200 capitalize border-b-2 border-blue-500 dark:border-blue-400"
             >
               sign in
-            </a>
-            <a
-              href="/register"
-              className="w-1/3 pb-4 font-medium text-center text-gray-500 capitalize border-b dark:border-gray-400 dark:text-gray-300"
+            </Link>
+            <Link
+              to="/register"
+              className="w-1/3 pb-4 font-medium text-center text-gray-600 dark:text-gray-400 capitalize border-b dark:border-gray-400"
             >
               sign up
-            </a>
+            </Link>
           </div>
 
           <div className="relative mt-6">
             <div className="flex items-center">
               <span className="absolute left-0 flex items-center pl-3">
-                <img
-                  src={EmailIcon.toString()}
-                  alt="Email Icon"
-                  className="w-6 h-6"
-                />
+                <EmailIcon className="w-6 h-6 text-gray-800 dark:text-gray-200" />
               </span>
               <input
                 {...formik.getFieldProps("email")}
@@ -135,8 +125,8 @@ const Login: React.FC = () => {
                     ? "border-red-500"
                     : ""
                 } 
-            block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
-            focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
+                  block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600
+                  focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
                 placeholder="Email address"
               />
             </div>
@@ -150,11 +140,7 @@ const Login: React.FC = () => {
           <div className="relative mt-6">
             <div className="flex items-center">
               <span className="absolute left-0 flex items-center pl-3">
-                <img
-                  src={PasswordIcon.toString()}
-                  alt="Password Icon"
-                  className="w-6 h-6"
-                />
+                <PasswordIcon className="w-6 h-6 text-gray-800 dark:text-gray-200" />
               </span>
               <input
                 {...formik.getFieldProps("password")}
@@ -164,8 +150,8 @@ const Login: React.FC = () => {
                     ? "border-red-500"
                     : ""
                 } 
-            block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
-            focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
+                block w-full py-3 pl-12 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 
+                focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40`}
                 placeholder="Password"
               />
             </div>
@@ -175,12 +161,12 @@ const Login: React.FC = () => {
               </div>
             ) : null}
           </div>
-          <a
-            href="/resetpassword"
-            className="flex justify-end text-sm text-blue-500 hover:underline dark:text-blue-400 mt-4"
+          <Link
+            to="/resetpassword"
+            className="flex justify-end text-sm text-blue-500 dark:text-blue-400 hover:underline mt-4"
           >
             Forgot password?
-          </a>
+          </Link>
           <div className="mt-6">
             <button
               type="submit"
@@ -190,11 +176,11 @@ const Login: React.FC = () => {
               {loading && <Spinner />}
             </button>
 
-            <div className="mt-6 text-center ">
+            <div className="mt-6 text-center dark:text-gray-200">
               Don't you have an account?
               <a
                 href="/register"
-                className="ml-1 text-sm text-blue-500 hover:underline dark:text-blue-400"
+                className="ml-1 text-sm text-blue-500 dark:text-blue-400 hover:underline"
               >
                 Sign up
               </a>
