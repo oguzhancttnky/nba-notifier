@@ -22,7 +22,7 @@ const Help: React.FC = () => {
           </p>
           <ul className="list-disc pl-6 text-lg mb-4">
             <li>Subscribe to teams you are interested in.</li>
-            <li>Start chat with Telegram @nba_notifier_bot.</li>
+            <li>Start chat with Telegram @nbanotifier_bot.</li>
             <li>Get your chat id with /chatid command.</li>
             <li>
               In account page fill the Telegram chat id field
@@ -30,7 +30,7 @@ const Help: React.FC = () => {
             </li>
             <li>Now you will receive daily notifications for match results of your subscribed teams.</li>
             <li>
-              Also you can use other commands in @nba_notifier_bot with different functionalities. 
+              Also you can use other commands in @nbanotifier_bot with different functionalities. 
             </li>
             <li>
               If you send 20 commands under 1 minute you will be banned for 24
@@ -51,7 +51,7 @@ const Help: React.FC = () => {
               </h3>
               <p className="text-lg">
                 {/* Provide answer here */}
-                To start chat with Telegram bot, search for @nba_notifier_bot in
+                To start chat with Telegram bot, search for @nbanotifier_bot in
                 Telegram and use /help command to see all available commands.
               </p>
             </div>
