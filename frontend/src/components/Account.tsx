@@ -82,14 +82,14 @@ const Account: React.FC = () => {
 
   return (
     <Layout>
-      <div className="mx-auto mt-5">
+      <div className="mx-auto my-5 px-4 sm:px-6 lg:px-8">
         <section>
           <div className="flex items-center justify-center my-8">
-            <span className="text-gray-900 text-3xl font-semibold dark:text-gray-100">
+            <span className="text-gray-900 text-2xl sm:text-3xl font-semibold dark:text-gray-100">
               Account Settings
             </span>
           </div>
-          <div className="container flex items-center justify-center my-8 px-6 mx-auto">
+          <div className="container flex items-center justify-center my-8 mx-auto">
             <form onSubmit={formik.handleSubmit} className="w-full max-w-md">
               <div className="relative mt-6">
                 <div className="flex items-center">

@@ -13,14 +13,14 @@ const Home: React.FC = () => {
 
   return (
     <Layout>
-      <div className="mx-auto mt-5">
+      <div className="mx-auto mt-5 px-4 md:px-8">
         <section>
           <div className="flex items-center justify-center my-8">
-            <span className="text-gray-900 text-3xl font-semibold dark:text-gray-100">
+            <span className="text-gray-900 text-2xl md:text-3xl font-semibold dark:text-gray-100">
               Subscribe to NBA Teams
             </span>
           </div>
-          <div className="flex flex-wrap justify-center gap-4 p-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
             {teams.map((teamID, index) => (
               <div key={index} className="flex-none">
                 <TeamCard teamID={teamID} subscriptions={subscriptions} />

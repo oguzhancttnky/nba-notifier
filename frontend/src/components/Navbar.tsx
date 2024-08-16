@@ -1,16 +1,25 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 import { Link } from "react-router-dom";
-import { LogoIcon, LogoutIcon } from "../assets/icons/others";
+import {
+  LogoIcon,
+  LogoutIcon,
+  SunIcon,
+  MoonIcon,
+} from "../assets/icons/others";
 import { toast } from "react-toastify";
+import { RootState } from "../app/store";
 
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
-
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
   const [isDarkMode, setIsDarkMode] = useState<boolean>(
     () => localStorage.getItem("theme") === "dark"
   );
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   const ToggleTheme = () => {
     document.documentElement.classList.toggle("dark");
@@ -27,68 +36,177 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="p-4 bg-gray-200 dark:bg-gray-600 rounded-2xl">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link to="/home" className="flex items-center">
+      <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap">
+        <Link to="/home" className="flex items-center mb-2 sm:mb-0">
           <LogoIcon className="w-8 h-8 mr-2 text-gray-900 dark:text-gray-100" />
-          <span className="text-gray-900 dark:text-gray-100 text-3xl font-semibold">
+          <span className="text-gray-900 dark:text-gray-100 text-xl sm:text-3xl font-semibold">
             NBA Notifier
           </span>
         </Link>
 
-        <div className="space-x-4">
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center space-x-4">
+          {isAuthenticated && (
+            <>
+              <Link
+                to="/home"
+                className="text-gray-800 dark:text-gray-200 hover:underline"
+              >
+                Home
+              </Link>
+              <Link
+                to="/account/subscribed"
+                className="text-gray-800 dark:text-gray-200 hover:underline"
+              >
+                Subscribed
+              </Link>
+              <Link
+                to="/account"
+                className="text-gray-800 dark:text-gray-200 hover:underline"
+              >
+                Account
+              </Link>
+            </>
+          )}
+
           <button
             onClick={ToggleTheme}
             type="button"
             className="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2.5"
           >
             {isDarkMode ? (
-              <svg
-                className="w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
+              <SunIcon className="w-5 h-5" />
             ) : (
-              <svg
-                className="w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-              </svg>
+              <MoonIcon className="w-5 h-5" />
             )}
           </button>
-          <Link
-            to="/features"
-            className="pb-5 text-gray-900 dark:text-gray-100 text-lg hover:text-gray-400 dark:hover:text-gray-300 hover:border-b-4 hover:border-red-400 dark:hover:border-red-500 transition-colors duration-200"
-          >
-            Features
-          </Link>
-          <Link
-            to="/account/subscribed"
-            className="pb-5 text-gray-900 dark:text-gray-100 text-lg hover:text-gray-400 dark:hover:text-gray-300 hover:border-b-4 hover:border-red-400 dark:hover:border-red-500 transition-colors duration-200"
-          >
-            Subscribed
-          </Link>
-          <Link
-            to="/account"
-            className="pb-5 text-gray-900 dark:text-gray-100 text-lg hover:text-gray-400 dark:hover:text-gray-300 hover:border-b-4 hover:border-red-400 dark:hover:border-red-500 transition-colors duration-200"
-          >
-            Account
-          </Link>
+
+          {isAuthenticated ? (
+            <button
+              onClick={handleLogout}
+              className="flex items-center justify-center bg-transparent hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 text-gray-800 dark:text-gray-200 py-1 px-2 rounded"
+            >
+              <LogoutIcon className="w-5 h-5 mr-2" />
+              <span className="hidden sm:inline">Logout</span>
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="flex items-center justify-center bg-transparent hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 text-gray-800 dark:text-gray-200 py-1 px-2 rounded"
+            >
+              <LogoutIcon className="w-5 h-5 mr-2" />
+              <span className="hidden sm:inline">Login</span>
+            </Link>
+          )}
+        </div>
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden flex items-center">
           <button
-            onClick={handleLogout}
-            className="p-2 bg-transparent hover:bg-gray-300 dark:hover:bg-gray-700 rounded transition-colors duration-200"
+            onClick={ToggleTheme}
+            type="button"
+            className="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2.5"
           >
-            <LogoutIcon className="w-4 h-4 text-gray-900 dark:text-gray-100" />
+            {isDarkMode ? (
+              <SunIcon className="w-5 h-5" />
+            ) : (
+              <MoonIcon className="w-5 h-5" />
+            )}
           </button>
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700 p-2 rounded"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <div
+        className={`md:hidden fixed inset-0 z-40 bg-gray-900 bg-opacity-75 transition-transform transform ${
+          isMenuOpen ? "translate-x-0" : "translate-x-full"
+        } ease-in-out duration-300`}
+      >
+        <div className="relative p-4 bg-gray-200 dark:bg-gray-600 h-full">
+          <button
+            onClick={() => setIsMenuOpen(false)}
+            className="absolute top-4 right-4 text-gray-800 dark:text-gray-200"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+
+          <div className="flex flex-col space-y-4 mt-10">
+            {isAuthenticated && (
+              <>
+                <Link
+                  to="/home"
+                  className="text-gray-800 dark:text-gray-200 hover:underline"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/account/subscribed"
+                  className="text-gray-800 dark:text-gray-200 hover:underline"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Subscribed
+                </Link>
+                <Link
+                  to="/account"
+                  className="text-gray-800 dark:text-gray-200 hover:underline"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Account
+                </Link>
+              </>
+            )}
+            {isAuthenticated ? (
+              <button
+                onClick={handleLogout}
+                className="flex items-center justify-center bg-transparent hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 text-gray-800 dark:text-gray-200 py-1 px-2 rounded"
+              >
+                <LogoutIcon className="w-5 h-5 mr-2" />
+                <span className="hidden sm:inline">Logout</span>
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                className="flex items-center justify-center bg-transparent hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 text-gray-800 dark:text-gray-200 py-1 px-2 rounded"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <LogoutIcon className="w-5 h-5 mr-2" />
+                <span className="hidden sm:inline">Login</span>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </nav>

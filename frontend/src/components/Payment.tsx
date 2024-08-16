@@ -53,6 +53,7 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
   const [loading, setLoading] = useState(false);
   const userID = useSelector((state: RootState) => state.auth.userID);
   const amount = planType === "Deluxe" ? 2 : 1;
+  
   const handleSubmit = async (values: PaymentFormValues) => {
     try {
       toast.dismiss();
@@ -83,7 +84,7 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
 
   return (
     <Layout>
-      <div className="mx-auto mt-12">
+      <div className="mx-auto mt-12 px-4 sm:px-6 lg:px-8">
         <div className="flex justify-center items-center">
           <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg dark:bg-gray-900">
             <h2 className="text-2xl font-semibold text-center mb-6 dark:text-gray-100">
@@ -133,8 +134,8 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
                   />
                 </div>
 
-                <div className="flex space-x-4">
-                  <div>
+                <div className="flex flex-col sm:flex-row sm:space-x-4">
+                  <div className="flex-1">
                     <label
                       htmlFor="expiry_month"
                       className="block text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -152,7 +153,7 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
                       className="text-red-500 text-sm mt-1"
                     />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <label
                       htmlFor="expiry_year"
                       className="block text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -170,7 +171,7 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
                       className="text-red-500 text-sm mt-1"
                     />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <label
                       htmlFor="cvv"
                       className="block text-sm font-medium text-gray-700 dark:text-gray-300"

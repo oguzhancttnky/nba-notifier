@@ -17,6 +17,8 @@ import Upgrade from "./Upgrade";
 import PaymentResult from "./PaymentResult";
 import { apiEndpoints } from "../constants";
 import Features from "./Features";
+import Contact from "./Contact";
+import Help from "./Help";
 
 const AuthRouter: React.FC = () => {
   const dispatch = useDispatch();
@@ -214,6 +216,8 @@ const AuthRouter: React.FC = () => {
         }
       />
       <Route path="/features" element={<Features />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/help" element={<Help />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

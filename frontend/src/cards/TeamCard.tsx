@@ -76,27 +76,27 @@ const TeamCard: React.FC<TeamCardProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center p-4 border rounded-lg shadow-lg w-48 h-56">
+    <div className="flex flex-col items-center p-2 sm:p-4 border rounded-lg shadow-lg w-36 sm:w-48 h-48 sm:h-56">
       <TeamIcon width={size} height={size} />
-      <span className="text-gray-900 text-lg font-semibold dark:text-gray-100">
+      <span className="text-gray-900 text-sm sm:text-lg font-semibold dark:text-gray-100">
         {teamName.split(" ").slice(-1).join(" ")}
       </span>
       <div className="mt-2">
         {isSubscribed ? (
           <button
             onClick={() => handleUnsubscribe(teamID)}
-            className="bg-red-300 hover:bg-red-500 font-bold py-2 px-4 rounded inline-flex items-center transition-colors ease-out duration-300"
+            className="bg-red-300 hover:bg-red-500 font-bold py-1 px-2 sm:py-2 sm:px-4 rounded inline-flex items-center transition-colors ease-out duration-300"
           >
             <NotificationsOffIcon className="w-4 h-4 text-gray-800" />
           </button>
         ) : (
           <button
             onClick={() => handleSubscribe(teamID)}
-            className="bg-gray-200 hover:bg-gray-300 font-bold py-2 px-4 rounded inline-flex items-center transition-all ease-in-out duration-300
+            className="bg-gray-200 hover:bg-gray-300 font-bold py-1 px-2 sm:py-2 sm:px-4 rounded inline-flex items-center transition-all ease-in-out duration-300
             dark:bg-gray-800 dark:hover:bg-gray-600"
           >
             <NotificationsOnIcon className="w-4 h-4 text-gray-800 dark:text-gray-200" />
-            <span className="ml-2 dark:text-gray-200">Subscribe</span>
+            <span className="ml-2 dark:text-gray-200 hidden sm:inline">Subscribe</span>
           </button>
         )}
       </div>
