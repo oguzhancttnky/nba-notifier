@@ -101,15 +101,15 @@ const Help: React.FC = () => {
         <div className="bg-white p-6 rounded-lg shadow-md dark:bg-gray-900 w-full max-w-4xl mx-4 mt-8">
           <h2 className="text-2xl font-semibold mb-4">Need More Help?</h2>
           <p className="text-lg mb-4">
-            If you have any other questions or need further assistance, feel
-            free to reach out to our support team.
+            If you have any other questions or need further assistance feel
+            free to reach us.
           </p>
           <p className="text-lg">
             <Link
               to="/contact"
               className="text-blue-500 dark:text-blue-400 hover:underline"
             >
-              Email Us
+              Contact Us
             </Link>
           </p>
         </div>

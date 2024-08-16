@@ -180,12 +180,12 @@ const Login: React.FC = () => {
 
               <div className="mt-6 text-center dark:text-gray-200">
                 Don't you have an account?
-                <a
-                  href="/register"
+                <Link
+                  to="/register"
                   className="ml-1 text-sm text-blue-500 dark:text-blue-400 hover:underline"
                 >
                   Sign up
-                </a>
+                </Link>
               </div>
             </div>
           </form>

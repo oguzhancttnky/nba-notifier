@@ -66,6 +66,12 @@ const Navbar: React.FC = () => {
               >
                 Account
               </Link>
+              <Link
+                to="/help"
+                className="text-gray-800 dark:text-gray-200 hover:underline"
+              >
+                Help
+              </Link>
             </>
           )}
 
@@ -185,6 +191,13 @@ const Navbar: React.FC = () => {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Account
+                </Link>
+                <Link
+                  to="/help"
+                  className="text-gray-800 dark:text-gray-200 hover:underline"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Help
                 </Link>
               </>
             )}
