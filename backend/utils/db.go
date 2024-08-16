@@ -39,8 +39,6 @@ func InitDB() error {
 		return err
 	}
 
-	fmt.Println("Database connection and migration successful.")
-
 	return nil
 }
 func UpdateUserChatID(db *gorm.DB, userID uint, chatID int64) error {

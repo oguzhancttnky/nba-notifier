@@ -6,11 +6,11 @@ import (
 	"nba-backend/middleware"
 	"nba-backend/utils"
 	"os"
-	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/robfig/cron/v3"
 )
 
 func main() {
@@ -83,11 +83,18 @@ func main() {
 	protected.POST(subscribe_nba_team_api, controllers.Subscribe)
 	protected.POST(unsubscribe_nba_team_api, controllers.Unsubscribe)
 
-	go utils.SchedulerJob(10*time.Minute, controllers.FetchTodayGames)
-	go utils.SchedulerJob(5*time.Minute, controllers.ClearOldCommandLogs)
-	go utils.SchedulerJob(1*time.Hour, controllers.ClearOldTokens)
-	go utils.SchedulerJob(24*time.Hour, controllers.CheckPremiumExpired)
-	go utils.SchedulerJob(24*time.Hour, controllers.ClearPlanTypes)
+	c := cron.New()
+
+	// schedule jobs
+	c.AddFunc("@every 10m", controllers.ClearOldCommandLogs)
+	c.AddFunc("@every 15m", controllers.FetchTodayGames)
+	c.AddFunc("@hourly", controllers.ClearOldTokens)
+	c.AddFunc("@daily", controllers.CheckPremiumExpired)
+	c.AddFunc("@daily", controllers.ClearPlanTypes)
+
+	c.Start()
+
+	defer c.Stop()
 
 	router.Run(":8080")
 }

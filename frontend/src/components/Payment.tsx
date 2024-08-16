@@ -72,7 +72,6 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
         }
       );
       setLoading(false);
-      console.log("Redirect:", response);
       const redirect_url = response.data.redirect_url;
       window.location.href = redirect_url;
     } catch (error: any) {

@@ -4,7 +4,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"math/rand"
 	"nba-backend/models"
 	"net/smtp"
@@ -94,7 +94,7 @@ func GetTeamNameByID(teamID int64) string {
 }
 
 func ParseJSON(c *gin.Context, v interface{}) error {
-	data, err := ioutil.ReadAll(c.Request.Body)
+	data, err := io.ReadAll(c.Request.Body)
 	if err != nil {
 		return err
 	}
@@ -140,15 +140,6 @@ func ExtractTeamID(text string) (int, error) {
 	}
 
 	return teamID, nil
-}
-
-func SchedulerJob(interval time.Duration, job func()) {
-	ticker := time.NewTicker(interval)
-	defer ticker.Stop()
-
-	for range ticker.C {
-		job()
-	}
 }
 
 func GenerateToken(length int) string {

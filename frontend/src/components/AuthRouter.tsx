@@ -55,9 +55,6 @@ const AuthRouter: React.FC = () => {
         .then((response) => {
           dispatch(login(response.data.userID));
           const userID = response.data.userID;
-          console.log(
-            apiEndpoints.get_subscriptions_by_user_id_api_endpoint + userID
-          );
           axios
             .get(
               apiEndpoints.get_subscriptions_by_user_id_api_endpoint + userID,

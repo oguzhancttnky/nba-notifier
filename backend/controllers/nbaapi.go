@@ -46,7 +46,6 @@ func FetchTodayGames() {
 	date := strings.Split(time.Now().String(), " ")[0]
 	db := utils.GetDB()
 	url := fmt.Sprintf("https://api.balldontlie.io/v1/games?dates[]=%s", date)
-	fmt.Println("Fetching data from:", url)
 	client := http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -67,8 +66,6 @@ func FetchTodayGames() {
 	defer res.Body.Close()
 
 	if res.StatusCode == http.StatusOK {
-		fmt.Println("Data fetched successfully")
-
 		// Read the response body
 		bodyBytes, err := io.ReadAll(res.Body)
 		if err != nil {

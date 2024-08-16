@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"nba-backend/models"
 	"nba-backend/utils"
 	"net/http"
@@ -96,7 +95,6 @@ func UpdateUserByID(c *gin.Context) {
 		}
 		var existingUser models.User
 		if err := db.Where("chat_id = ?", chatID).First(&existingUser).Error; err == nil {
-			fmt.Println(existingUser)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Chat ID already exists"})
 			return
 		}
