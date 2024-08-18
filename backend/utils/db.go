@@ -35,7 +35,8 @@ func InitDB() error {
 	}
 
 	// Automigrate the schema (optional)
-	if err := db.AutoMigrate(&models.User{}, &models.Subscription{}, &models.Match{}, &models.CommandLog{}, &models.ChatBan{}, &models.PasswordReset{}, &models.PlanType{}); err != nil {
+	if err := db.AutoMigrate(&models.User{}, &models.Subscription{}, &models.Match{}, &models.CommandLog{},
+		&models.ChatBan{}, &models.PasswordReset{}, &models.PlanType{}, &models.LoginAttempt{}); err != nil {
 		return err
 	}
 
@@ -145,4 +146,25 @@ func GetDB() *gorm.DB {
 		log.Println("Database connection is nil")
 	}
 	return db
+}
+
+func TrackFailedLogin(attempt *models.LoginAttempt, db *gorm.DB) {
+	const MaxLoginAttempts = 3
+	const BanDuration = 1 * time.Minute
+	attempt.Attempts++
+	attempt.LastAttempt = time.Now()
+
+	if attempt.Attempts >= MaxLoginAttempts {
+		banUntil := time.Now().Add(BanDuration)
+		attempt.BannedUntil = &banUntil
+		attempt.Attempts = 0 // Reset attempts after banning
+	}
+
+	db.Save(attempt)
+}
+
+func ResetLoginAttempts(attempt *models.LoginAttempt, db *gorm.DB) {
+	attempt.Attempts = 0
+	attempt.BannedUntil = nil
+	db.Save(attempt)
 }

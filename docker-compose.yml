@@ -11,7 +11,7 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./.env:/app/.env
+      - ./.env:/.env
       
   frontend:
     container_name: frontend-container
@@ -42,6 +42,7 @@ services:
 
     ports:
       - "5432:5432"
+      
 
 volumes:
     db_data:

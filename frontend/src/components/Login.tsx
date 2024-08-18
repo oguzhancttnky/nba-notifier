@@ -73,10 +73,9 @@ const Login: React.FC = () => {
           navigate("/home");
           toast.success("Login successful");
         }
-      } catch (error) {
-        console.error("Login failed", error);
+      } catch (error: any) {
         setLoading(false);
-        toast.error("Login failed");
+        toast.error(error.response.data.error);
       }
     },
   });

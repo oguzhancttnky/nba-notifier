@@ -15,7 +15,7 @@ import (
 
 func main() {
 	// Load .env file
-	err := godotenv.Load(".env")
+	err := godotenv.Load("../.env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -89,8 +89,9 @@ func main() {
 	c.AddFunc("@every 10m", controllers.ClearOldCommandLogs)
 	c.AddFunc("@every 15m", controllers.FetchTodayGames)
 	c.AddFunc("@hourly", controllers.ClearOldTokens)
-	c.AddFunc("@daily", controllers.CheckPremiumExpired)
-	c.AddFunc("@daily", controllers.ClearPlanTypes)
+	c.AddFunc("@every 30m", controllers.CheckPremiumExpired)
+	c.AddFunc("@every 40m", controllers.ClearPlanTypes)
+	c.AddFunc("@every 50m", controllers.ClearLoginAttempts)
 
 	c.Start()
 

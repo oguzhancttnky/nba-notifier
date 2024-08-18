@@ -310,16 +310,8 @@ func CreatePayment(c *gin.Context) {
 
 func CheckPremiumExpired() {
 	db := utils.GetDB()
-	var users []models.User
-	if err := db.Find(&users).Error; err != nil {
-		return
-	}
-	for _, user := range users {
-		if user.AccountType != "Free" && user.ExpiresAt.Before(time.Now()) {
-			user.AccountType = "Free"
-			user.MaxSubscriptions = 5
-			db.Save(&user)
-		}
+	if err := db.Where("account_type != ? AND expires_at < ?", "Free", time.Now()).Model(&models.User{}).Updates(map[string]interface{}{"account_type": "Free", "max_subscriptions": 5}).Error; err != nil {
+		fmt.Println("Error updating users:", err)
 	}
 }
 
