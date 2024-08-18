@@ -106,11 +106,7 @@ cd nba-notifier/backend
 ```console
 go mod tidy
 ```
-3. Change .env location in main.go:
-```
-godotenv.Load(".env") -> godotenv.Load("../.env")
-```
-4. Setup and run Postgresql database and configure connection settings in backend environment file.
+3. Setup and run Postgresql database and configure connection settings in backend environment file.
 Example setting up environment variables and running Postgresql database
 nba-notifier/.env
 ```
@@ -123,7 +119,7 @@ DB_NAME=postgres
 ```console
 psql -U postgres
 ```
-5. Run the backend server:
+4. Run the backend server:
 ```console
 go run main.go
 ```

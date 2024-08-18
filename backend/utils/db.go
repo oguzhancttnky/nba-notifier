@@ -154,7 +154,7 @@ func TrackFailedLogin(attempt *models.LoginAttempt, db *gorm.DB) {
 	attempt.Attempts++
 	attempt.LastAttempt = time.Now()
 
-	if attempt.Attempts >= MaxLoginAttempts {
+	if attempt.Attempts > MaxLoginAttempts {
 		banUntil := time.Now().Add(BanDuration)
 		attempt.BannedUntil = &banUntil
 		attempt.Attempts = 0 // Reset attempts after banning
