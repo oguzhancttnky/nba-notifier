@@ -32,7 +32,7 @@ func Login(c *gin.Context) {
 	}
 
 	if loginAttempt.BannedUntil != nil && time.Now().Before(*loginAttempt.BannedUntil) {
-		c.JSON(http.StatusTooManyRequests, gin.H{"error": "Too many failed attempts. Try again later."})
+		c.JSON(http.StatusTooManyRequests, gin.H{"error": "Too many failed attempts. Try again 10 minutes later."})
 		return
 	}
 

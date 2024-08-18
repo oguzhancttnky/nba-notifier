@@ -150,14 +150,14 @@ func GetDB() *gorm.DB {
 
 func TrackFailedLogin(attempt *models.LoginAttempt, db *gorm.DB) {
 	const MaxLoginAttempts = 3
-	const BanDuration = 1 * time.Minute
+	const BanDuration = 10 * time.Minute
 	attempt.Attempts++
 	attempt.LastAttempt = time.Now()
 
 	if attempt.Attempts > MaxLoginAttempts {
 		banUntil := time.Now().Add(BanDuration)
 		attempt.BannedUntil = &banUntil
-		attempt.Attempts = 0 // Reset attempts after banning
+		attempt.Attempts = 0
 	}
 
 	db.Save(attempt)
