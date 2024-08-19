@@ -35,8 +35,8 @@ services:
     restart: always
     environment:
       POSTGRES_DB: nba_notifier
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: top_user
+      POSTGRES_PASSWORD: password
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql

@@ -5,6 +5,21 @@ WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'nba_notifier')\gexec
 -- Connect to the database
 \c nba_notifier;
 
+-- Create a user with a password
+DO
+$$
+BEGIN
+    IF NOT EXISTS (
+        SELECT FROM pg_catalog.pg_roles 
+        WHERE rolname = 'top_user') THEN
+        CREATE ROLE top_user WITH LOGIN PASSWORD 'password';
+    END IF;
+END
+$$;
+
+-- Grant all privileges on the database to the new user
+GRANT ALL PRIVILEGES ON DATABASE nba_notifier TO top_user;
+
 -- Create the 'users' table
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
