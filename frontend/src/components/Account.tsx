@@ -9,7 +9,8 @@ import { toast } from "react-toastify";
 import Spinner from "./Spinner";
 import { Link } from "react-router-dom";
 import Layout from "./Layout";
-import { apiEndpoints } from "../constants";
+import { apiEndpoints } from "../helpers/constants";
+import { sha256 } from "js-sha256";
 
 const Account: React.FC = () => {
   const userID = useSelector((state: RootState) => state.auth.userID);
@@ -57,11 +58,12 @@ const Account: React.FC = () => {
       setLoading(true);
       try {
         const jwtToken = localStorage.getItem("jwtToken");
+        const hashedPassword = sha256(values.password);
         await axios.put(
           apiEndpoints.update_user_by_user_id_api_endpoint + userID,
           {
             email: values.email,
-            password: values.password,
+            password: hashedPassword,
             chat_id: values.chatID,
           },
           {

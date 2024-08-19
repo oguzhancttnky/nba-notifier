@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Spinner from "./Spinner";
-import { apiEndpoints } from "../constants";
+import { apiEndpoints } from "../helpers/constants";
 import { EmailIcon } from "../assets/icons/others";
 
 const GiveEmail: React.FC = () => {

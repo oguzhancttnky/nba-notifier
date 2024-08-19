@@ -5,7 +5,7 @@ import { RootState } from "../app/store";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
-import { apiEndpoints } from "../constants";
+import { apiEndpoints } from "../helpers/constants";
 
 const Upgrade: React.FC = () => {
   const navigate = useNavigate();

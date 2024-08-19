@@ -1,13 +1,14 @@
+import { useFormik } from "formik";
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { LogoIcon, EmailIcon, PasswordIcon } from "../assets/icons/others";
 import { toast } from "react-toastify";
 import Spinner from "./Spinner";
-import { apiEndpoints } from "../constants";
+import { apiEndpoints } from "../helpers/constants";
 import Footer from "./Footer";
+import { sha256 } from "js-sha256";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -33,10 +34,11 @@ const Register: React.FC = () => {
     onSubmit: async (values) => {
       toast.dismiss();
       setLoading(true);
+      const hashedPassword = sha256(values.password);
       try {
         const response = await axios.post(apiEndpoints.register_api_endpoint, {
           email: values.email,
-          password: values.password,
+          password: hashedPassword,
         });
 
         if (response.data.success) {

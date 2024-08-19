@@ -15,7 +15,7 @@ import ResetPassword from "./ResetPassword";
 import Payment from "./Payment";
 import Upgrade from "./Upgrade";
 import PaymentResult from "./PaymentResult";
-import { apiEndpoints } from "../constants";
+import { apiEndpoints } from "../helpers/constants";
 import Features from "./Features";
 import Contact from "./Contact";
 import Help from "./Help";

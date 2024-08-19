@@ -7,7 +7,7 @@ import Spinner from "./Spinner";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import Layout from "./Layout";
-import { apiEndpoints } from "../constants";
+import { apiEndpoints } from "../helpers/constants";
 
 interface PaymentFormValues {
   name: string;

@@ -11,7 +11,7 @@ import {
 } from "../assets/icons/others";
 import axios from "axios";
 import { teamIcons } from "../assets/icons/nbaicons";
-import { teamsDictionary, apiEndpoints } from "../constants";
+import { teamsDictionary, apiEndpoints } from "../helpers/constants";
 import { toast } from "react-toastify";
 
 interface TeamCardProps {

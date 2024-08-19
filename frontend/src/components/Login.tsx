@@ -12,8 +12,9 @@ import axios from "axios";
 import { LogoIcon, EmailIcon, PasswordIcon } from "../assets/icons/others";
 import Spinner from "./Spinner";
 import { toast } from "react-toastify";
-import { apiEndpoints } from "../constants";
+import { apiEndpoints } from "../helpers/constants";
 import Footer from "./Footer";
+import { sha256 } from "js-sha256";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -37,10 +38,11 @@ const Login: React.FC = () => {
       toast.dismiss();
       setLoading(true);
       dispatch(toInital());
+      const hashedPassword = sha256(values.password);
       try {
         const response = await axios.post(apiEndpoints.login_api_endpoint, {
           email: values.email,
-          password: values.password,
+          password: hashedPassword,
         });
 
         if (response.data.success) {
