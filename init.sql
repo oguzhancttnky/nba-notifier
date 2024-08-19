@@ -1,5 +1,6 @@
 -- Create the database if it doesn't exist
-CREATE DATABASE IF NOT EXISTS nba_notifier;
+SELECT 'CREATE DATABASE nba_notifier'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'nba_notifier')\gexec
 
 -- Connect to the database
 \c nba_notifier;
