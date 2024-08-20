@@ -22,6 +22,9 @@ import Help from "./Help";
 
 const AuthRouter: React.FC = () => {
   const dispatch = useDispatch();
+  const [untilDate, setUntilDate] = useState("00.00.0000");
+  const [showNotification, setShowNotification] = useState(false);
+  const [isExtendedPeriod, setIsExtendedPeriod] = useState(false);
   const subscriptions = useSelector(
     (state: RootState) => state.subscriptions.subscribedTeams
   );
@@ -30,193 +33,247 @@ const AuthRouter: React.FC = () => {
   );
   const [loading, setLoading] = useState(true);
 
-  const isDarkMode = localStorage.getItem("theme") === "dark"
+  const isDarkMode = localStorage.getItem("theme") === "dark";
 
   useEffect(() => {
-    
-  }, [isDarkMode]);
+    const fetchData = async () => {
+      try {
+        if (isDarkMode) {
+          document.documentElement.classList.add("dark");
+          localStorage.setItem("theme", "dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+          localStorage.setItem("theme", "light");
+        }
 
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-    const jwtToken = localStorage.getItem("jwtToken");
-    if (jwtToken) {
-      axios
-        .get(apiEndpoints.verify_jwt_api_endpoint, {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        })
-        .then((response) => {
-          dispatch(login(response.data.userID));
-          const userID = response.data.userID;
-          axios
-            .get(
-              apiEndpoints.get_subscriptions_by_user_id_api_endpoint + userID,
-              {
-                headers: {
-                  Authorization: `Bearer ${jwtToken}`,
-                },
+        const jwtToken = localStorage.getItem("jwtToken");
+
+        if (jwtToken) {
+          const verifyResponse = await axios.get(
+            apiEndpoints.verify_jwt_api_endpoint,
+            {
+              headers: {
+                Authorization: `Bearer ${jwtToken}`,
+              },
+            }
+          );
+
+          const userID = verifyResponse.data.userID;
+          dispatch(login(userID));
+
+          const userResponse = await axios.get(
+            apiEndpoints.get_user_by_user_id_api_endpoint + userID,
+            {
+              headers: {
+                Authorization: `Bearer ${jwtToken}`,
+              },
+            }
+          );
+
+          const expiresAt = new Date(userResponse.data.expires_at);
+          const formattedDate = formatDate(expiresAt);
+          setUntilDate(formattedDate);
+
+          const extended = userResponse.data.extended;
+
+          const subsResponse = await axios.get(
+            apiEndpoints.get_subscriptions_by_user_id_api_endpoint + userID,
+            {
+              headers: {
+                Authorization: `Bearer ${jwtToken}`,
+              },
+            }
+          );
+
+          const dbsubs = subsResponse.data.subscriptions;
+
+          if (extended) {
+            setIsExtendedPeriod(true);
+            setShowNotification(true);
+          }
+
+          if (dbsubs !== null) {
+            for (const team of dbsubs) {
+              if (!subscriptions.includes(team)) {
+                dispatch(subscribe(team));
               }
-            )
-            .then((response) => {
-              const dbsubs = response.data.subscriptions;
-              if (dbsubs !== null) {
-                for (let i = 0; i < dbsubs.length; i++) {
-                  const team = dbsubs[i];
-                  if (!subscriptions.includes(team)) dispatch(subscribe(team));
-                }
-              }
-            })
-            .catch((error) =>
-              console.error("Error fetching subscriptions:", error)
-            );
-        })
-        .catch((error) => console.error("Error authenticating:", error))
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+            }
+          }
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [dispatch, subscriptions, isDarkMode]);
 
+  const formatDate = (date: Date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+  };
+
+  const handleNotificationClose = () => {
+    setShowNotification(false);
+  };
+
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          !loading ? (
-            isAuthenticated ? (
-              <Navigate to="/home" />
+    <>
+      {isExtendedPeriod && showNotification && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-yellow-500 text-white p-4 rounded-lg shadow-lg w-full max-w-md text-center">
+            <div className="flex justify-between items-center">
+              <span>
+                Your Premium subscription has expired. You have to renew your
+                subscription until {untilDate}
+              </span>
+              <button
+                onClick={handleNotificationClose}
+                className="ml-4 bg-white text-yellow-500 px-2 py-1 rounded"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            !loading ? (
+              isAuthenticated ? (
+                <Navigate to="/home" />
+              ) : (
+                <Login />
+              )
             ) : (
-              <Login />
+              <Loading />
             )
-          ) : (
-            <Loading />
-          )
-        }
-      />
-      <Route
-        path="/login"
-        element={
-          !loading ? (
-            isAuthenticated ? (
-              <Navigate to="/home" />
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            !loading ? (
+              isAuthenticated ? (
+                <Navigate to="/home" />
+              ) : (
+                <Login />
+              )
             ) : (
-              <Login />
+              <Loading />
             )
-          ) : (
-            <Loading />
-          )
-        }
-      />
-      <Route path="/register" element={<Register />} />
-      <Route
-        path="/home"
-        element={
-          !loading ? (
-            isAuthenticated ? (
-              <Home />
+          }
+        />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/home"
+          element={
+            !loading ? (
+              isAuthenticated ? (
+                <Home />
+              ) : (
+                <Navigate to="/login" />
+              )
             ) : (
-              <Navigate to="/login" />
+              <Loading />
             )
-          ) : (
-            <Loading />
-          )
-        }
-      />
-      <Route
-        path="/account"
-        element={
-          !loading ? isAuthenticated ? <Account /> : <Login /> : <Loading />
-        }
-      />
-      <Route
-        path="/account/subscribed"
-        element={
-          !loading ? (
-            isAuthenticated ? (
-              <SubscribedTeams />
+          }
+        />
+        <Route
+          path="/account"
+          element={
+            !loading ? isAuthenticated ? <Account /> : <Login /> : <Loading />
+          }
+        />
+        <Route
+          path="/account/subscribed"
+          element={
+            !loading ? (
+              isAuthenticated ? (
+                <SubscribedTeams />
+              ) : (
+                <Login />
+              )
             ) : (
-              <Login />
+              <Loading />
             )
-          ) : (
-            <Loading />
-          )
-        }
-      />
-      <Route path="/resetpassword" element={<ResetPassword />} />
-      <Route
-        path="/upgrade"
-        element={
-          !loading ? isAuthenticated ? <Upgrade /> : <Login /> : <Loading />
-        }
-      />
-      <Route
-        path="/payment/premium"
-        element={
-          !loading ? (
-            isAuthenticated ? (
-              <Payment planType="Premium" />
+          }
+        />
+        <Route path="/resetpassword" element={<ResetPassword />} />
+        <Route
+          path="/upgrade"
+          element={
+            !loading ? isAuthenticated ? <Upgrade /> : <Login /> : <Loading />
+          }
+        />
+        <Route
+          path="/payment/premium"
+          element={
+            !loading ? (
+              isAuthenticated ? (
+                <Payment planType="Premium" />
+              ) : (
+                <Login />
+              )
             ) : (
-              <Login />
+              <Loading />
             )
-          ) : (
-            <Loading />
-          )
-        }
-      />
-      <Route
-        path="/payment/deluxe"
-        element={
-          !loading ? (
-            isAuthenticated ? (
-              <Payment planType="Deluxe" />
+          }
+        />
+        <Route
+          path="/payment/deluxe"
+          element={
+            !loading ? (
+              isAuthenticated ? (
+                <Payment planType="Deluxe" />
+              ) : (
+                <Login />
+              )
             ) : (
-              <Login />
+              <Loading />
             )
-          ) : (
-            <Loading />
-          )
-        }
-      />
-      <Route
-        path="/payment/success"
-        element={
-          !loading ? (
-            isAuthenticated ? (
-              <PaymentResult status="success" />
+          }
+        />
+        <Route
+          path="/payment/success"
+          element={
+            !loading ? (
+              isAuthenticated ? (
+                <PaymentResult status="success" />
+              ) : (
+                <Login />
+              )
             ) : (
-              <Login />
+              <Loading />
             )
-          ) : (
-            <Loading />
-          )
-        }
-      />
-      <Route
-        path="/payment/fail"
-        element={
-          !loading ? (
-            isAuthenticated ? (
-              <PaymentResult status="fail" />
+          }
+        />
+        <Route
+          path="/payment/fail"
+          element={
+            !loading ? (
+              isAuthenticated ? (
+                <PaymentResult status="fail" />
+              ) : (
+                <Login />
+              )
             ) : (
-              <Login />
+              <Loading />
             )
-          ) : (
-            <Loading />
-          )
-        }
-      />
-      <Route path="/features" element={<Features />} />
-      <Route path="/contact" element={<Contact />} />
-      <Route path="/help" element={<Help />} />
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
+          }
+        />
+        <Route path="/features" element={<Features />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </>
   );
 };
 

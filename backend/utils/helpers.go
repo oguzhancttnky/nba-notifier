@@ -186,3 +186,38 @@ func SendResetPasswordEmail(email, token string) error {
 
 	return nil
 }
+
+func SendSubscriptionExpiryEmail(email string, accountType string) error {
+	// Set up authentication information.
+	auth := smtp.PlainAuth(
+		"",
+		os.Getenv("SMTP_EMAIL"),
+		os.Getenv("SMTP_PASSWORD"),
+		os.Getenv("SMTP_HOST"),
+	)
+
+	// Email message details
+	from := os.Getenv("SMTP_EMAIL")
+	to := []string{email}
+	subject := fmt.Sprintf("Your %s Subscription is Expiring Soon!", accountType)
+	body := fmt.Sprintf("Dear user,\r\n\r\n"+
+		"Your %s subscription has expired. We have extended your subscription for 1 more week. Please renew to continue enjoying premium benefits.\r\n\r\n"+
+		"Best regards,\r\nNBA Notifier Team", accountType)
+
+	// Combine headers and body
+	message := []byte(fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s", from, email, subject, body))
+
+	// Send the email
+	err := smtp.SendMail(
+		fmt.Sprintf("%s:%s", os.Getenv("SMTP_HOST"), os.Getenv("SMTP_PORT")),
+		auth,
+		from,
+		to,
+		message,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to send email: %w", err)
+	}
+
+	return nil
+}

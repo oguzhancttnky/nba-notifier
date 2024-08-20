@@ -86,12 +86,12 @@ func main() {
 	c := cron.New()
 
 	// schedule jobs
-	c.AddFunc("@every 10m", controllers.ClearOldCommandLogs)
-	c.AddFunc("@every 15m", controllers.FetchTodayGames)
-	c.AddFunc("@hourly", controllers.ClearOldTokens)
-	c.AddFunc("@every 30m", controllers.CheckPremiumExpired)
-	c.AddFunc("@every 40m", controllers.ClearPlanTypes)
-	c.AddFunc("@every 50m", controllers.ClearLoginAttempts)
+	c.AddFunc("@every 1h", controllers.ClearOldCommandLogs)
+	c.AddFunc("@every 20m", controllers.FetchTodayGames)
+	c.AddFunc("@every 24h", controllers.ClearOldTokens)
+	c.AddFunc("@every 6h", controllers.CheckPremiumExpired)
+	c.AddFunc("@every 12h", controllers.ClearPlanTypes)
+	c.AddFunc("@every 24h", controllers.ClearLoginAttempts)
 
 	c.Start()
 

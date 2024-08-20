@@ -16,4 +16,5 @@ type User struct {
 	MaxSubscriptions int            `json:"max_subscriptions" gorm:"default:5"`
 	StartsAt         time.Time      `json:"starts_at"`
 	ExpiresAt        time.Time      `json:"expires_at"`
+	Extended         bool           `json:"extended" gorm:"default:false"` // New field to track if the extension has been applied
 }

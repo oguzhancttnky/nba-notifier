@@ -15,6 +15,7 @@ import (
 	"nba-backend/utils"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func GetAuthToken() (string, error) {
@@ -176,19 +177,37 @@ func VerifyPayment(c *gin.Context) {
 	}
 
 	var user models.User
-	if err := db.Where("id = ?", planType.UserID).First(&user).Error; err != nil {
+	if err := db.Preload("Subscriptions").Where("id = ?", planType.UserID).First(&user).Error; err != nil {
 		c.Redirect(http.StatusFound, host_url+"/payment/fail")
 		return
 	}
 
+	var maxSubscriptions int = planType.MaxSubscriptions
 	user.AccountType = planType.Plan
-	user.MaxSubscriptions = planType.MaxSubscriptions
+	user.MaxSubscriptions = maxSubscriptions
+	user.Extended = false
 	user.StartsAt = time.Now()
 	user.ExpiresAt = time.Now().AddDate(0, 1, 0)
+
+	if len(user.Subscriptions) > maxSubscriptions {
+		user.Subscriptions = user.Subscriptions[:maxSubscriptions]
+	}
 
 	if err := db.Save(&user).Error; err != nil {
 		c.Redirect(http.StatusFound, host_url+"/payment/fail")
 		return
+	}
+
+	var subscriptionTeamIDs []int
+	for _, sub := range user.Subscriptions {
+		subscriptionTeamIDs = append(subscriptionTeamIDs, sub.TeamID)
+	}
+
+	if len(subscriptionTeamIDs) > 0 {
+		if err := db.Where("user_id = ? AND team_id NOT IN (?)", user.ID, subscriptionTeamIDs).Unscoped().Delete(&models.Subscription{}).Error; err != nil {
+			fmt.Printf("Error deleting subscription: %v", err)
+			return
+		}
 	}
 
 	c.Redirect(http.StatusFound, host_url+"/payment/success")
@@ -235,7 +254,6 @@ func CreatePayment(c *gin.Context) {
 	// Initial authentication to get authToken
 	authToken, err := GetAuthToken()
 	if err != nil {
-		fmt.Println(err)
 		fmt.Println("authToken could not be received:")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Authorization token not received"})
 		return
@@ -287,7 +305,7 @@ func CreatePayment(c *gin.Context) {
 		plan = "Premium"
 		maxSubscriptions = 10
 	} else if amount == 2 {
-		plan = "Deluxe Premium"
+		plan = "Deluxe"
 		maxSubscriptions = 20
 	}
 
@@ -299,8 +317,6 @@ func CreatePayment(c *gin.Context) {
 		OtherCode:        otherCode,
 	}
 
-	fmt.Println("planType:", planType)
-
 	if err := db.Create(&planType).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -311,8 +327,72 @@ func CreatePayment(c *gin.Context) {
 
 func CheckPremiumExpired() {
 	db := utils.GetDB()
-	if err := db.Where("account_type != ? AND expires_at < ?", "Free", time.Now()).Model(&models.User{}).Updates(map[string]interface{}{"account_type": "Free", "max_subscriptions": 5}).Error; err != nil {
-		fmt.Println("Error updating users:", err)
+
+	var users []models.User
+	// Find users whose deluxe and premium subscriptions have expired
+	err := db.Where("max_subscriptions != ? AND expires_at < ?", 5, time.Now()).Find(&users).Error
+	if err != nil {
+		fmt.Printf("Error fetching users: %v", err)
+		return
+	}
+
+	for _, user := range users {
+		if user.Extended {
+			HandleExpiredSubscription(&user, db)
+		} else {
+			ExtendSubscription(&user, db)
+		}
+	}
+}
+
+func ExtendSubscription(user *models.User, db *gorm.DB) {
+	// Extend the subscription by 1 week
+	user.AccountType = "Free"
+	user.StartsAt = time.Now()
+	user.ExpiresAt = time.Now().AddDate(0, 0, 7)
+	user.Extended = true
+
+	// Save the updated user data
+	if err := db.Save(user).Error; err != nil {
+		fmt.Printf("Error updating user %s: %v", user.Email, err)
+		return
+	}
+
+	// Send an email notification to the user
+	if err := utils.SendSubscriptionExpiryEmail(user.Email, user.AccountType); err != nil {
+		fmt.Printf("Error sending email to %s: %v", user.Email, err)
+	}
+}
+
+func HandleExpiredSubscription(user *models.User, db *gorm.DB) {
+	db.Preload("Subscriptions").Where("id = ?", user.ID).First(user)
+
+	user.MaxSubscriptions = 5
+	user.StartsAt = time.Now()
+	user.ExpiresAt = time.Now()
+	user.Extended = false
+
+	// Trim subscriptions to fit the free account limit
+	if len(user.Subscriptions) > 5 {
+		user.Subscriptions = user.Subscriptions[:5]
+	}
+
+	// Save the updated user data
+	if err := db.Save(user).Error; err != nil {
+		fmt.Printf("Error updating user %s: %v", user.Email, err)
+		return
+	}
+
+	var subscriptionTeamIDs []int
+	for _, sub := range user.Subscriptions {
+		subscriptionTeamIDs = append(subscriptionTeamIDs, sub.TeamID)
+	}
+
+	if len(subscriptionTeamIDs) > 0 {
+		if err := db.Where("user_id = ? AND team_id NOT IN (?)", user.ID, subscriptionTeamIDs).Unscoped().Delete(&models.Subscription{}).Error; err != nil {
+			fmt.Printf("Error deleting subscription: %v", err)
+			return
+		}
 	}
 }
 

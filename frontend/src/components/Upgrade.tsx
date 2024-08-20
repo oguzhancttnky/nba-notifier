@@ -42,6 +42,17 @@ const Upgrade: React.FC = () => {
     );
   };
 
+  const SubscribeButton = ({ onClick }: { onClick: () => void }) => {
+    return (
+      <button
+        onClick={onClick}
+        className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-400"
+      >
+        Subscribe
+      </button>
+    );
+  };
+
   return (
     <Layout>
       <div className="mx-auto mt-5 px-6">
@@ -58,59 +69,70 @@ const Upgrade: React.FC = () => {
           </div>
           <div className="container mx-auto px-6">
             <div className="flex flex-wrap justify-center gap-6">
-              <div className="w-full sm:w-80 bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:bg-gray-900 dark:border-gray-600">
-                <h3 className="text-2xl font-semibold mb-4 dark:text-gray-100">
-                  Free Account
-                </h3>
-                <p className="text-gray-700 mb-4 dark:text-gray-300">
-                  Subscribe to up to 5 teams and access player stats for these teams only.
-                </p>
-                <p className="text-gray-500 mb-4">No cost</p>
-                {accountType === "Free" ? <CurrentPlanButton /> : <></>}
+              <div className="w-full sm:w-80 bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:bg-gray-900 dark:border-gray-600 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-2xl font-semibold mb-4 dark:text-gray-100">
+                    Free Account
+                  </h3>
+                  <p className="text-gray-700 mb-4 dark:text-gray-300">
+                    Subscribe to up to 5 teams and access player stats for these
+                    teams only.
+                  </p>
+                </div>
+                <div className="flex flex-col items-center">
+                  <p className="text-gray-500 mb-4">No cost</p>
+                  {accountType === "Free" ? <CurrentPlanButton /> : <></>}
+                </div>
               </div>
 
-              <div className="w-full sm:w-80 bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:bg-gray-900 dark:border-gray-600">
-                <h3 className="text-2xl font-semibold mb-4 dark:text-gray-100">
-                  Premium Account
-                </h3>
-                <p className="text-gray-700 mb-4 dark:text-gray-300">
-                  Subscribe to 10 teams and get detailed stats for both players on your subscribed teams and players of opponent teams.
-                </p>
-                <p className="text-gray-500 mb-4">$1/month</p>
-                {accountType === "Premium" ? (
-                  <CurrentPlanButton />
-                ) : (
-                  <button
-                    onClick={() => {
-                      navigate("/payment/premium");
-                    }}
-                    className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-400"
-                  >
-                    Subscribe
-                  </button>
-                )}
+              <div className="w-full sm:w-80 bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:bg-gray-900 dark:border-gray-600 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-2xl font-semibold mb-4 dark:text-gray-100">
+                    Premium Account
+                  </h3>
+                  <p className="text-gray-700 mb-4 dark:text-gray-300">
+                    Subscribe to 10 teams and get detailed stats for both
+                    players on your subscribed teams and players of opponent
+                    teams.
+                  </p>
+                </div>
+                <div className="flex flex-col items-center">
+                  <p className="text-gray-500 mb-4">$1/month</p>
+                  {accountType === "Premium" ? (
+                    <CurrentPlanButton />
+                  ) : (
+                    <SubscribeButton
+                      onClick={() => {
+                        navigate("/payment/premium");
+                      }}
+                    />
+                  )}
+                </div>
               </div>
 
-              <div className="w-full sm:w-80 bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:bg-gray-900 dark:border-gray-600">
-                <h3 className="text-2xl font-semibold mb-4 dark:text-gray-100">
-                  Deluxe Account
-                </h3>
-                <p className="text-gray-700 mb-4 dark:text-gray-300">
-                  Subscribe to 20 teams and get detailed stats for both players on your subscribed teams and players of opponent teams.
-                </p>
-                <p className="text-gray-500 mb-4">$2/month</p>
-                {accountType === "Deluxe" ? (
-                  <CurrentPlanButton />
-                ) : (
-                  <button
-                    onClick={() => {
-                      navigate("/payment/deluxe");
-                    }}
-                    className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-400"
-                  >
-                    Subscribe
-                  </button>
-                )}
+              <div className="w-full sm:w-80 bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:bg-gray-900 dark:border-gray-600 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-2xl font-semibold mb-4 dark:text-gray-100">
+                    Deluxe Account
+                  </h3>
+                  <p className="text-gray-700 mb-4 dark:text-gray-300">
+                    Subscribe to 20 teams and get detailed stats for both
+                    players on your subscribed teams and players of opponent
+                    teams.
+                  </p>
+                </div>
+                <div className="flex flex-col items-center">
+                  <p className="text-gray-500 mb-4">$2/month</p>
+                  {accountType === "Deluxe" ? (
+                    <CurrentPlanButton />
+                  ) : (
+                    <SubscribeButton
+                      onClick={() => {
+                        navigate("/payment/deluxe");
+                      }}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
