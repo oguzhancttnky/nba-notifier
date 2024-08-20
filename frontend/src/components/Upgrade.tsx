@@ -53,7 +53,7 @@ const Upgrade: React.FC = () => {
           </div>
           <div className="flex items-center justify-center">
             <p className="text-gray-700 mt-6 mb-12 text-center text-lg dark:text-gray-300">
-              Choose the plan that best suits for you.
+              Choose the plan that best suits your needs.
             </p>
           </div>
           <div className="container mx-auto px-6">
@@ -63,9 +63,9 @@ const Upgrade: React.FC = () => {
                   Free Account
                 </h3>
                 <p className="text-gray-700 mb-4 dark:text-gray-300">
-                  You can subscribe to only 5 teams.
+                  Subscribe to up to 5 teams and access player stats for these teams only.
                 </p>
-                <p className="text-gray-500 mb-4">No cost.</p>
+                <p className="text-gray-500 mb-4">No cost</p>
                 {accountType === "Free" ? <CurrentPlanButton /> : <></>}
               </div>
 
@@ -74,7 +74,7 @@ const Upgrade: React.FC = () => {
                   Premium Account
                 </h3>
                 <p className="text-gray-700 mb-4 dark:text-gray-300">
-                  You can subscribe to 10 teams.
+                  Subscribe to 10 teams and get detailed stats for both players on your subscribed teams and players of opponent teams.
                 </p>
                 <p className="text-gray-500 mb-4">$1/month</p>
                 {accountType === "Premium" ? (
@@ -94,9 +94,9 @@ const Upgrade: React.FC = () => {
               <div className="w-full sm:w-80 bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:bg-gray-900 dark:border-gray-600">
                 <h3 className="text-2xl font-semibold mb-4 dark:text-gray-100">
                   Deluxe Account
-                </h3>{" "}
+                </h3>
                 <p className="text-gray-700 mb-4 dark:text-gray-300">
-                  You can subscribe to 20 teams.
+                  Subscribe to 20 teams and get detailed stats for both players on your subscribed teams and players of opponent teams.
                 </p>
                 <p className="text-gray-500 mb-4">$2/month</p>
                 {accountType === "Deluxe" ? (

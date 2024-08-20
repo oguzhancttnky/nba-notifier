@@ -90,7 +90,7 @@ func SendHelpMessage(chatID int64) {
 		"/subscribe <team_id> - Subscribe to a team\n" +
 		"/unsubscribe <team_id> - Unsubscribe from a team\n" +
 		"/games <team_id> - List current season games for a team\n" +
-		"/playerstats <team_id> <game_id> - Show player stats for a game\n"
+		"/playerstats <game_id> - Show player stats for a game\n"
 	SendTelegramMessage(chatID, message)
 }
 
@@ -231,7 +231,7 @@ func SendGames(chatID int64, text string) {
 }
 
 func SendPlayerStats(chatID int64, text string) {
-	teamID, gameID, err := utils.ExtractTeamAndGameID(text)
+	gameID, err := utils.ExtractGameID(text)
 	if err != nil {
 		SendTelegramMessage(chatID, "Invalid command. Type /help for a list of available commands.")
 		return
@@ -244,18 +244,25 @@ func SendPlayerStats(chatID int64, text string) {
 		return
 	}
 
-	if !utils.IsSubscribedToTeam(db, user.ID, teamID) {
-		SendTelegramMessage(chatID, "You are not subscribed to this team.")
-		return
-	}
-
 	game, err := utils.GetGame(strconv.Itoa(gameID))
 	if err != nil {
 		SendTelegramMessage(chatID, "Failed to fetch game.")
 		return
 	}
 
-	stats, err := utils.GetPlayerStats(strconv.Itoa(gameID))
+	if !utils.IsSubscribedToTeam(db, user.ID, int(game["home_team_id"].(float64))) && !utils.IsSubscribedToTeam(db, user.ID, int(game["visitor_team_id"].(float64))) {
+		SendTelegramMessage(chatID, "Game does not involve any of your subscribed teams.")
+		return
+	}
+
+	var teamID int
+	if utils.IsSubscribedToTeam(db, user.ID, int(game["home_team_id"].(float64))) {
+		teamID = int(game["home_team_id"].(float64))
+	} else {
+		teamID = int(game["visitor_team_id"].(float64))
+	}
+
+	stats, err := utils.GetPlayerStats(db, user.ID, teamID, strconv.Itoa(gameID))
 	if err != nil {
 		SendTelegramMessage(chatID, "Failed to fetch player stats.")
 		return
@@ -270,12 +277,11 @@ func SendPlayerStats(chatID int64, text string) {
 	for _, stat := range stats {
 		field_goal_percentage := stat["fg_pct"].(float64) * 100
 
-		formatted_fg_pct := fmt.Sprintf("%0.2f%%", field_goal_percentage)
+		formatted_fg_pct := fmt.Sprintf("%0.2f", field_goal_percentage)
 		if field_goal_percentage == float64(int(field_goal_percentage)) {
-			formatted_fg_pct = fmt.Sprintf("%d%%", int(field_goal_percentage))
+			formatted_fg_pct = fmt.Sprintf("%d", int(field_goal_percentage))
 		}
-
-		message.WriteString(fmt.Sprintf("\n%s %s\nPoints: %d\nRebounds: %d\nAssists: %d\nSteals: %d\nBlocks: %d\nTurnovers: %d\nFouls: %d\nMinutes: %s\nField Goal Percentage: %s\n",
+		message.WriteString(fmt.Sprintf("\n%s %s\nPts: %d\nReb: %d\nAst: %d\nStl: %d\nBlk: %d\nTurnover: %d\nFouls: %d\nMin: %s\nFG%%: %s\n",
 			stat["first_name"], stat["last_name"],
 			int(stat["pts"].(float64)),
 			int(stat["reb"].(float64)),

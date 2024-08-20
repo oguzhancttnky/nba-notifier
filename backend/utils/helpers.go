@@ -101,27 +101,18 @@ func ParseJSON(c *gin.Context, v interface{}) error {
 	return json.Unmarshal(data, v)
 }
 
-func ExtractTeamAndGameID(text string) (int, int, error) {
+func ExtractGameID(text string) (int, error) {
 	parts := strings.Split(text, " ")
-	if len(parts) != 3 {
-		return 0, 0, fmt.Errorf("Invalid number of arguments")
+	if len(parts) != 2 {
+		return 0, fmt.Errorf("Invalid number of arguments")
 	}
 
-	teamID, err := strconv.Atoi(parts[1])
+	gameID, err := strconv.Atoi(parts[1])
 	if err != nil {
-		return 0, 0, fmt.Errorf("Invalid team ID")
+		return 0, fmt.Errorf("Invalid game ID")
 	}
 
-	if teamID < 1 || teamID > 30 {
-		return 0, 0, fmt.Errorf("Invalid team ID")
-	}
-
-	gameID, err := strconv.Atoi(parts[2])
-	if err != nil {
-		return 0, 0, fmt.Errorf("Invalid game ID")
-	}
-
-	return teamID, gameID, nil
+	return gameID, nil
 }
 
 func ExtractTeamID(text string) (int, error) {

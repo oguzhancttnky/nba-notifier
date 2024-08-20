@@ -3,15 +3,18 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"nba-backend/models"
 	"net/http"
 	"os"
+
+	"gorm.io/gorm"
 )
 
 // GetGames retrieves games for a specific team ID for the current season
 func GetGames(teamID string) ([]map[string]interface{}, error) {
-	start_date := "2023-10-24"
+	start_date := "2024-01-01"
 	end_date := "2024-04-16"
-	apiURL := fmt.Sprintf("https://api.balldontlie.io/v1/games?team_ids[]=%s&start_date=%s&end_date=%s", teamID, start_date, end_date)
+	apiURL := fmt.Sprintf("https://api.balldontlie.io/v1/games?team_ids[]=%s&start_date=%s&end_date=%s&per_page=100", teamID, start_date, end_date)
 	req, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
 		return nil, err
@@ -80,7 +83,9 @@ func GetGame(gameID string) (map[string]interface{}, error) {
 
 	gameInfo := map[string]interface{}{
 		"date":               result.Data["date"],
+		"home_team_id":       result.Data["home_team"].(map[string]interface{})["id"],
 		"home_team_name":     result.Data["home_team"].(map[string]interface{})["full_name"],
+		"visitor_team_id":    result.Data["visitor_team"].(map[string]interface{})["id"],
 		"visitor_team_name":  result.Data["visitor_team"].(map[string]interface{})["full_name"],
 		"home_team_score":    result.Data["home_team_score"],
 		"visitor_team_score": result.Data["visitor_team_score"],
@@ -89,8 +94,8 @@ func GetGame(gameID string) (map[string]interface{}, error) {
 	return gameInfo, nil
 }
 
-func GetPlayerStats(gameID string) ([]map[string]interface{}, error) {
-	apiURL := fmt.Sprintf("https://api.balldontlie.io/v1/stats?game_ids[]=%s", gameID)
+func GetPlayerStats(db *gorm.DB, userID uint, teamID int, gameID string) ([]map[string]interface{}, error) {
+	apiURL := fmt.Sprintf("https://api.balldontlie.io/v1/stats?game_ids[]=%s&per_page=100", gameID)
 	req, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
 		return nil, err
@@ -106,6 +111,11 @@ func GetPlayerStats(gameID string) ([]map[string]interface{}, error) {
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("Failed to fetch game info: %s", resp.Status)
+	}
+
+	var user models.User
+	if err := db.Where("id = ?", userID).First(&user).Error; err != nil {
+		return nil, err
 	}
 
 	var result struct {
@@ -141,8 +151,15 @@ func GetPlayerStats(gameID string) ([]map[string]interface{}, error) {
 			"last_name":  player["player"].(map[string]interface{})["last_name"],
 			"position":   player["player"].(map[string]interface{})["position"],
 		}
-		playerStats = append(playerStats, playerInfo)
-	}
 
+		// For free accounts filter by team ID
+		if user.AccountType == "Free" {
+			if int(player["player"].(map[string]interface{})["team_id"].(float64)) == teamID {
+				playerStats = append(playerStats, playerInfo)
+			}
+		} else {
+			playerStats = append(playerStats, playerInfo)
+		}
+	}
 	return playerStats, nil
 }

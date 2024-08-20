@@ -235,6 +235,7 @@ func CreatePayment(c *gin.Context) {
 	// Initial authentication to get authToken
 	authToken, err := GetAuthToken()
 	if err != nil {
+		fmt.Println(err)
 		fmt.Println("authToken could not be received:")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Authorization token not received"})
 		return
