@@ -11,7 +11,7 @@ import {
 } from "../assets/icons/others";
 import axios from "axios";
 import { teamIcons } from "../assets/icons/nbaicons";
-import { teamsDictionary, apiEndpoints } from "../helpers/constants";
+import { teamsDictionary, APIs } from "../helpers/constants";
 import { toast } from "react-toastify";
 
 interface TeamCardProps {
@@ -38,7 +38,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
     try {
       const jwtToken = localStorage.getItem("jwtToken");
       await axios.post(
-        apiEndpoints.subscribe_nba_team_api_endpoint,
+        APIs.subscribe_nba_team_api,
         { user_id: userID, team_id: team },
         {
           headers: {
@@ -59,7 +59,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
     try {
       const jwtToken = localStorage.getItem("jwtToken");
       await axios.post(
-        apiEndpoints.unsubscribe_nba_team_api_endpoint,
+        APIs.unsubscribe_nba_team_api,
         { user_id: userID, team_id: team },
         {
           headers: {

@@ -17,14 +17,14 @@ Used technologies are Typescript React(frontend), Golang(backend) and Postgresql
 git clone https://github.com/oguzhancttnky/nba-notifier.git
 cd nba-notifier
 ```
-2. I created a Telegram bot to receive messages from user (@nbanotifier_bot). User need to start chat with my Telegram bot and take chat id.
+2. Create a Telegram bot to receive messages from user (@nbanotifier_bot). User need to start chat with Telegram bot and take chat id.
 3. ngrok tunneling for Telegram webhook
 ```console
 ngrok http 8080
 ```
 Copy ngrok url and setup tunneling
 ```console
-curl https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/setWebhook?url=<ngrok_url>/REACT_APP_TELEGRAM_MESSAGE_RECEIVED_API
+curl https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/setWebhook?url=<ngrok_url>/REACT_APP_TELEGRAM_MESSAGE_RECEIVED_ENDP
 ```
 
 ## Running with Docker
@@ -33,48 +33,48 @@ curl https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/setWebhook?url=<ngrok_url>
 nba-notifier/.env
 
 ```
-DB_HOST=db-container
+DB_HOST=db
 DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=postgres
+DB_USER=top_user
+DB_PASSWORD=password
 DB_NAME=nba_notifier
-JWT_SECRET_KEY=Set a secret key for JWT
-NBA_API_TOKEN=Get your api token from https://www.balldontlie.io/
-TELEGRAM_BOT_TOKEN=Get your telegram bot token
+
+JWT_SECRET_KEY=jwt_secret_key
+
+NBA_API_TOKEN=ball_dont_lie_api_token
+TELEGRAM_BOT_TOKEN=telegram_bot_token
 
 HOST_URL=http://localhost:3000
-SMTP_EMAIL=
-SMTP_PASSWORD=
+SMTP_EMAIL=smtp_email
+SMTP_PASSWORD=smtp_password
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 
-Get api key and secret key from Payizone
-PAYIZONE_API_KEY=api_key
-PAYIZONE_API_SECRET=secret_key
-PAYIZONE_CALLBACK_URL=
+PAYIZONE_API_KEY=payizone_api_key
+PAYIZONE_API_SECRET=payizone_api_secret
+PAYIZONE_CALLBACK_URL=http://localhost:8080/api/v1/payizone/callback
 
-# API
 REACT_APP_SERVER_HOST_URL=http://localhost:8080
+REACT_APP_API_VERSION=/api/v1
 
-REACT_APP_API_VERSION=
-REACT_APP_LOGIN_API=
-REACT_APP_REGISTER_API=
-REACT_APP_FORGOT_PASSWORD_SEND_EMAIL_API=
-REACT_APP_RESET_PASSWORD_API=
-REACT_APP_VERIFY_JWT_TOKEN_API=
+REACT_APP_LOGIN_ENDP=/auth/login
+REACT_APP_REGISTER_ENDP=/auth/register
+REACT_APP_FORGOT_PASSWORD_SEND_EMAIL_ENDP=/auth/forgot-password/send-email
+REACT_APP_RESET_PASSWORD_ENDP=/auth/reset-password/:token 
+REACT_APP_VERIFY_JWT_TOKEN_ENDP=/auth/verify-jwt-token
 
-REACT_APP_TELEGRAM_MESSAGE_SEND_API=
-REACT_APP_TELEGRAM_MESSAGE_RECEIVED_API=
+REACT_APP_TELEGRAM_MESSAGE_SEND_ENDP=/telegram/send-message
+REACT_APP_TELEGRAM_MESSAGE_RECEIVED_ENDP=/telegram/received-message
 
-REACT_APP_GET_USER_BY_USER_ID_API=                      
-REACT_APP_UPDATE_USER_BY_USER_ID_API=
-REACT_APP_GET_SUBSCRIPTIONS_BY_USER_ID_API=
+REACT_APP_GET_USER_BY_USER_ID_ENDP=/user/:userID                         # /user/:userId
+REACT_APP_UPDATE_USER_BY_USER_ID_ENDP=/user/:userID                      # /user/:userId
+REACT_APP_GET_SUBSCRIPTIONS_BY_USER_ID_ENDP=/user/subscriptions/:userID  # /user/subscriptions/:userId
 
-REACT_APP_PAYIZONE_PAYMENT_API=
-REACT_APP_PAYIZONE_CALLBACK_API=
+REACT_APP_PAYIZONE_PAYMENT_ENDP=/payizone/payment
+REACT_APP_PAYIZONE_CALLBACK_ENDP=/payizone/callback
 
-REACT_APP_SUBSCRIBE_NBA_TEAM_API=
-REACT_APP_UNSUBSCRIBE_NBA_TEAM_API=
+REACT_APP_SUBSCRIBE_NBA_TEAM_ENDP=/subscription/subscribe
+REACT_APP_UNSUBSCRIBE_NBA_TEAM_ENDP=/subscription/unsubscribe
 
 ```
 2. Build and run three containers (db-container, frontend-container and backend-container):
@@ -90,11 +90,11 @@ cd nba-notifier/frontend
 ```
 2. Install dependencies:
 ```console
-npm install
+pnpm install
 ```
 3. Start the frontend server:
 ```console
-npm run start
+pnpm start
 ```
 ### Backend
 
@@ -106,12 +106,10 @@ cd nba-notifier/backend
 ```console
 go mod tidy
 ```
-3. Setup and run Postgresql database and configure connection settings in backend environment file.
-Example setting up environment variables and running Postgresql database
+3. Configure connection settings in environment file and run Postgresql database.
 nba-notifier/.env
 ```
 DB_HOST=localhost
-DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=postgres
 DB_NAME=postgres
@@ -129,30 +127,30 @@ Frontend running at `http://localhost:3000` and backend api running at `http://l
 ## Screenshots
 
 Login Page
-![Login Page](https://github.com/user-attachments/assets/f1fbc7cb-c592-4454-b51f-32257ac4407f)
+![Login Page](https://github.com/user-attachments/assets/cebbb753-0115-4a54-89ea-eb5d2ba185ac)
 
 Home Page
-![Home Page](https://github.com/user-attachments/assets/bef4521e-8b06-44d6-8cdf-b71fd773eb60)
+![Home Page](https://github.com/user-attachments/assets/1a0d8635-2bd0-4529-99ed-83db25831b05)
 
 Account Page
-![Account Page](https://github.com/user-attachments/assets/47d7657e-71e5-4ac1-947a-f6113189df3f)
+![Account Page](https://github.com/user-attachments/assets/6d9d8219-d52a-47cc-a941-d799cea4f1a5)
 
-Features Page
-![Features Page](https://github.com/user-attachments/assets/6013da1a-3484-4c2c-bb53-ba9ed8155c0a)
+Help Page
+![Help Page](https://github.com/user-attachments/assets/bfff2379-e82b-4174-aaa9-ecfee36dd5ad)
 
 Upgrade Page
-![Upgrade Page](https://github.com/user-attachments/assets/3e51f9a5-6a73-4a13-8d89-01a17736ef12)
+![Upgrade Page](https://github.com/user-attachments/assets/4649f068-2bb0-46d1-bef2-8a6039f4e46a)
 
 Payment Page
-![Payment Page](https://github.com/user-attachments/assets/5dce2710-39be-4f55-ba58-0a434b1a2e61)
+![Payment Page](https://github.com/user-attachments/assets/dd5d7fcd-a910-47e6-8af9-3631890b27d3)
 
 Telegram Bot(@nbanotifier_bot)
-![Telegram Bot](https://github.com/user-attachments/assets/bd8568b5-3c6b-45eb-b31a-5f666fc659a0)
+![Telegram Bot](https://github.com/user-attachments/assets/2e576d68-9457-4ebc-a9e0-50688a2b29b7)
 
-![Telegram Bot](https://github.com/user-attachments/assets/7d487194-04f6-4af6-b110-b7a3fcee3f06)
+![Telegram Bot](https://github.com/user-attachments/assets/2ab0cbe9-0491-4e2a-a099-aa94ee9b20b3)
 
-![Telegram Bot](https://github.com/user-attachments/assets/329813cf-a14e-41bb-b06d-019151c6317d)
+![Telegram Bot](https://github.com/user-attachments/assets/82f21271-5fcf-4830-9c94-7baafc34f83a)
 
-![Telegram Bot](https://github.com/user-attachments/assets/4308d44f-d0cd-4500-8c51-78ce7a40bf97)
+![Telegram Bot](https://github.com/user-attachments/assets/3117837c-8e8c-4bcb-9bee-2941efdddf0b)
 
 

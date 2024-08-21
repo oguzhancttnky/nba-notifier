@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Spinner from "./Spinner";
-import { apiEndpoints } from "../helpers/constants";
+import { APIs } from "../helpers/constants";
 import { EmailIcon } from "../assets/icons/others";
 
 const GiveEmail: React.FC = () => {
@@ -23,7 +23,7 @@ const GiveEmail: React.FC = () => {
       setLoading(true);
       try {
         const response = await axios.post(
-          apiEndpoints.forgot_password_send_email_api_endpoint,
+          APIs.forgot_password_send_email_api,
           {
             email: values.email,
           }

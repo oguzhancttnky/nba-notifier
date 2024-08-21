@@ -15,7 +15,7 @@ import ResetPassword from "./ResetPassword";
 import Payment from "./Payment";
 import Upgrade from "./Upgrade";
 import PaymentResult from "./PaymentResult";
-import { apiEndpoints } from "../helpers/constants";
+import { APIs } from "../helpers/constants";
 import Features from "./Features";
 import Contact from "./Contact";
 import Help from "./Help";
@@ -50,7 +50,7 @@ const AuthRouter: React.FC = () => {
 
         if (jwtToken) {
           const verifyResponse = await axios.get(
-            apiEndpoints.verify_jwt_api_endpoint,
+            APIs.verify_jwt_api,
             {
               headers: {
                 Authorization: `Bearer ${jwtToken}`,
@@ -62,7 +62,7 @@ const AuthRouter: React.FC = () => {
           dispatch(login(userID));
 
           const userResponse = await axios.get(
-            apiEndpoints.get_user_by_user_id_api_endpoint + userID,
+            APIs.get_user_by_user_id_api + userID,
             {
               headers: {
                 Authorization: `Bearer ${jwtToken}`,
@@ -77,7 +77,7 @@ const AuthRouter: React.FC = () => {
           const extended = userResponse.data.extended;
 
           const subsResponse = await axios.get(
-            apiEndpoints.get_subscriptions_by_user_id_api_endpoint + userID,
+            APIs.get_subscriptions_by_user_id_api + userID,
             {
               headers: {
                 Authorization: `Bearer ${jwtToken}`,

@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import Spinner from "./Spinner";
 import { Link } from "react-router-dom";
 import Layout from "./Layout";
-import { apiEndpoints } from "../helpers/constants";
+import { APIs } from "../helpers/constants";
 import { sha256 } from "js-sha256";
 
 const Account: React.FC = () => {
@@ -23,7 +23,7 @@ const Account: React.FC = () => {
       try {
         const jwtToken = localStorage.getItem("jwtToken");
         const response = await axios.get(
-          apiEndpoints.get_user_by_user_id_api_endpoint + userID,
+          APIs.get_user_by_user_id_api + userID,
           {
             headers: {
               Authorization: `Bearer ${jwtToken}`,
@@ -60,7 +60,7 @@ const Account: React.FC = () => {
         const jwtToken = localStorage.getItem("jwtToken");
         const hashedPassword = sha256(values.password);
         await axios.put(
-          apiEndpoints.update_user_by_user_id_api_endpoint + userID,
+          APIs.update_user_by_user_id_api + userID,
           {
             email: values.email,
             password: hashedPassword,

@@ -5,7 +5,7 @@ import { RootState } from "../app/store";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
-import { apiEndpoints } from "../helpers/constants";
+import { APIs } from "../helpers/constants";
 
 const Upgrade: React.FC = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Upgrade: React.FC = () => {
     const GetUserType = async () => {
       try {
         const response = await axios.get(
-          apiEndpoints.get_user_by_user_id_api_endpoint + userID,
+          APIs.get_user_by_user_id_api + userID,
           {
             headers: {
               Authorization: `Bearer ${jwtToken}`,

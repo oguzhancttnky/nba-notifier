@@ -12,7 +12,7 @@ import axios from "axios";
 import { LogoIcon, EmailIcon, PasswordIcon } from "../assets/icons/others";
 import Spinner from "./Spinner";
 import { toast } from "react-toastify";
-import { apiEndpoints } from "../helpers/constants";
+import { APIs } from "../helpers/constants";
 import Footer from "./Footer";
 import { sha256 } from "js-sha256";
 
@@ -40,7 +40,7 @@ const Login: React.FC = () => {
       dispatch(toInital());
       const hashedPassword = sha256(values.password);
       try {
-        const response = await axios.post(apiEndpoints.login_api_endpoint, {
+        const response = await axios.post(APIs.login_api, {
           email: values.email,
           password: hashedPassword,
         });
@@ -52,7 +52,7 @@ const Login: React.FC = () => {
           dispatch(login(userID));
           axios
             .get(
-              apiEndpoints.get_subscriptions_by_user_id_api_endpoint + userID,
+              APIs.get_subscriptions_by_user_id_api + userID,
               {
                 headers: {
                   Authorization: `Bearer ${jwtToken}`,

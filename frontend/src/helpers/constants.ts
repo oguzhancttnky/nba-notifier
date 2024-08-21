@@ -35,23 +35,23 @@ const server_host_url = process.env.REACT_APP_SERVER_HOST_URL;
 const api_version = process.env.REACT_APP_API_VERSION;
 const api_gateway_url = `${server_host_url}${api_version}`;
 
-export const apiEndpoints = {
-  login_api_endpoint: api_gateway_url + process.env.REACT_APP_LOGIN_API,
-  register_api_endpoint: api_gateway_url + process.env.REACT_APP_REGISTER_API,
-  forgot_password_send_email_api_endpoint: api_gateway_url + process.env.REACT_APP_FORGOT_PASSWORD_SEND_EMAIL_API,
-  reset_password_api_endpoint: api_gateway_url + process.env.REACT_APP_RESET_PASSWORD_API?.split(":")[0],
-  verify_jwt_api_endpoint: api_gateway_url + process.env.REACT_APP_VERIFY_JWT_TOKEN_API,
+export const APIs = {
+  login_api: api_gateway_url + process.env.REACT_APP_LOGIN_ENDP,
+  register_api: api_gateway_url + process.env.REACT_APP_REGISTER_ENDP,
+  forgot_password_send_email_api: api_gateway_url + process.env.REACT_APP_FORGOT_PASSWORD_SEND_EMAIL_ENDP,
+  reset_password_api: api_gateway_url + process.env.REACT_APP_RESET_PASSWORD_ENDP?.split(":")[0],
+  verify_jwt_api: api_gateway_url + process.env.REACT_APP_VERIFY_JWT_TOKEN_ENDP,
 
-  telegram_message_send_api_endpoint: api_gateway_url + process.env.REACT_APP_TELEGRAM_MESSAGE_SEND_API,
-  telegram_message_received_api_endpoint: api_gateway_url + process.env.REACT_APP_TELEGRAM_MESSAGE_RECEIVED_API,
+  telegram_message_send_api: api_gateway_url + process.env.REACT_APP_TELEGRAM_MESSAGE_SEND_ENDP,
+  telegram_message_received_api: api_gateway_url + process.env.REACT_APP_TELEGRAM_MESSAGE_RECEIVED_ENDP,
 
-  get_user_by_user_id_api_endpoint: api_gateway_url + process.env.REACT_APP_GET_USER_BY_USER_ID_API?.split(":")[0],
-  update_user_by_user_id_api_endpoint: api_gateway_url + process.env.REACT_APP_UPDATE_USER_BY_USER_ID_API?.split(":")[0],
-  get_subscriptions_by_user_id_api_endpoint: api_gateway_url + process.env.REACT_APP_GET_SUBSCRIPTIONS_BY_USER_ID_API?.split(":")[0],
+  get_user_by_user_id_api: api_gateway_url + process.env.REACT_APP_GET_USER_BY_USER_ID_ENDP?.split(":")[0],
+  update_user_by_user_id_api: api_gateway_url + process.env.REACT_APP_UPDATE_USER_BY_USER_ID_ENDP?.split(":")[0],
+  get_subscriptions_by_user_id_api: api_gateway_url + process.env.REACT_APP_GET_SUBSCRIPTIONS_BY_USER_ID_ENDP?.split(":")[0],
 
-  payizone_payment_api_endpoint: api_gateway_url + process.env.REACT_APP_PAYIZONE_PAYMENT_API,
-  payizone_callback_api_endpoint: api_gateway_url + process.env.REACT_APP_PAYIZONE_CALLBACK_API,
+  payizone_payment_api: api_gateway_url + process.env.REACT_APP_PAYIZONE_PAYMENT_ENDP,
+  payizone_callback_api: api_gateway_url + process.env.REACT_APP_PAYIZONE_CALLBACK_ENDP,
 
-  subscribe_nba_team_api_endpoint: api_gateway_url + process.env.REACT_APP_SUBSCRIBE_NBA_TEAM_API,
-  unsubscribe_nba_team_api_endpoint: api_gateway_url + process.env.REACT_APP_UNSUBSCRIBE_NBA_TEAM_API,
+  subscribe_nba_team_api: api_gateway_url + process.env.REACT_APP_SUBSCRIBE_NBA_TEAM_ENDP,
+  unsubscribe_nba_team_api: api_gateway_url + process.env.REACT_APP_UNSUBSCRIBE_NBA_TEAM_ENDP,
 };

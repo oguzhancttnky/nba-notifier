@@ -36,24 +36,24 @@ func main() {
 
 	api_version := os.Getenv("REACT_APP_API_VERSION")
 
-	login_api := api_version + os.Getenv("REACT_APP_LOGIN_API")
-	register_api := api_version + os.Getenv("REACT_APP_REGISTER_API")
-	forgot_password_send_email_api := api_version + os.Getenv("REACT_APP_FORGOT_PASSWORD_SEND_EMAIL_API")
-	reset_password_api := api_version + os.Getenv("REACT_APP_RESET_PASSWORD_API")
-	verify_jwt_token_api := api_version + os.Getenv("REACT_APP_VERIFY_JWT_TOKEN_API")
+	login_api := api_version + os.Getenv("REACT_APP_LOGIN_ENDP")
+	register_api := api_version + os.Getenv("REACT_APP_REGISTER_ENDP")
+	forgot_password_send_email_api := api_version + os.Getenv("REACT_APP_FORGOT_PASSWORD_SEND_EMAIL_ENDP")
+	reset_password_api := api_version + os.Getenv("REACT_APP_RESET_PASSWORD_ENDP")
+	verify_jwt_token_api := api_version + os.Getenv("REACT_APP_VERIFY_JWT_TOKEN_ENDP")
 
-	telegram_message_send_api := api_version + os.Getenv("REACT_APP_TELEGRAM_MESSAGE_SEND_API")
-	telegram_message_received_api := api_version + os.Getenv("REACT_APP_TELEGRAM_MESSAGE_RECEIVED_API")
+	telegram_message_send_api := api_version + os.Getenv("REACT_APP_TELEGRAM_MESSAGE_SEND_ENDP")
+	telegram_message_received_api := api_version + os.Getenv("REACT_APP_TELEGRAM_MESSAGE_RECEIVED_ENDP")
 
-	get_user_by_user_id_api := api_version + os.Getenv("REACT_APP_GET_USER_BY_USER_ID_API")
-	update_user_by_user_id_api := api_version + os.Getenv("REACT_APP_UPDATE_USER_BY_USER_ID_API")
-	get_subscriptions_by_user_id_api := api_version + os.Getenv("REACT_APP_GET_SUBSCRIPTIONS_BY_USER_ID_API")
+	get_user_by_user_id_api := api_version + os.Getenv("REACT_APP_GET_USER_BY_USER_ID_ENDP")
+	update_user_by_user_id_api := api_version + os.Getenv("REACT_APP_UPDATE_USER_BY_USER_ID_ENDP")
+	get_subscriptions_by_user_id_api := api_version + os.Getenv("REACT_APP_GET_SUBSCRIPTIONS_BY_USER_ID_ENDP")
 
-	payizone_payment_api := api_version + os.Getenv("REACT_APP_PAYIZONE_PAYMENT_API")
-	payizone_callback_api := api_version + os.Getenv("REACT_APP_PAYIZONE_CALLBACK_API")
+	payizone_payment_api := api_version + os.Getenv("REACT_APP_PAYIZONE_PAYMENT_ENDP")
+	payizone_callback_api := api_version + os.Getenv("REACT_APP_PAYIZONE_CALLBACK_ENDP")
 
-	subscribe_nba_team_api := api_version + os.Getenv("REACT_APP_SUBSCRIBE_NBA_TEAM_API")
-	unsubscribe_nba_team_api := api_version + os.Getenv("REACT_APP_UNSUBSCRIBE_NBA_TEAM_API")
+	subscribe_nba_team_api := api_version + os.Getenv("REACT_APP_SUBSCRIBE_NBA_TEAM_ENDP")
+	unsubscribe_nba_team_api := api_version + os.Getenv("REACT_APP_UNSUBSCRIBE_NBA_TEAM_ENDP")
 
 	// Public routes
 	// auth

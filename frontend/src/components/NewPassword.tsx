@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Spinner from "./Spinner";
-import { apiEndpoints } from "../helpers/constants";
+import { APIs } from "../helpers/constants";
 import { PasswordIcon } from "../assets/icons/others";
 import { sha256 } from "js-sha256";
 
@@ -36,7 +36,7 @@ const NewPassword: React.FC<NewPasswordProps> = ({ token }) => {
       const hashedPassword = sha256(values.password);
       try {
         const response = await axios.post(
-          apiEndpoints.reset_password_api_endpoint + token,
+          APIs.reset_password_api + token,
           {
             new_password: hashedPassword,
           }

@@ -6,7 +6,7 @@ import axios from "axios";
 import { LogoIcon, EmailIcon, PasswordIcon } from "../assets/icons/others";
 import { toast } from "react-toastify";
 import Spinner from "./Spinner";
-import { apiEndpoints } from "../helpers/constants";
+import { APIs } from "../helpers/constants";
 import Footer from "./Footer";
 import { sha256 } from "js-sha256";
 
@@ -36,7 +36,7 @@ const Register: React.FC = () => {
       setLoading(true);
       const hashedPassword = sha256(values.password);
       try {
-        const response = await axios.post(apiEndpoints.register_api_endpoint, {
+        const response = await axios.post(APIs.register_api, {
           email: values.email,
           password: hashedPassword,
         });
