@@ -221,11 +221,12 @@ func SendGames(chatID int64, text string) {
 	var message strings.Builder
 	message.WriteString("Current seasons games:\n")
 	for _, game := range games {
-		message.WriteString(fmt.Sprintf("\nGame ID: %d\nDate: %s\n%s-%d\n%s-%d\n",
-			int(game["game_id"].(float64)),
+		message.WriteString(fmt.Sprintf("\n%s\n%s-%d %s-%d\nGame ID: %d\n",
 			game["date"],
-			game["home_team_name"], int(game["home_team_score"].(float64)),
-			game["visitor_team_name"], int(game["visitor_team_score"].(float64))))
+			game["home_team_abbr"], int(game["home_team_score"].(float64)),
+			game["visitor_team_abbr"], int(game["visitor_team_score"].(float64)),
+			int(game["game_id"].(float64)),
+		))
 	}
 	SendTelegramMessage(chatID, message.String())
 }
@@ -269,10 +270,10 @@ func SendPlayerStats(chatID int64, text string) {
 	}
 
 	var message strings.Builder
-	message.WriteString(fmt.Sprintf("%s\n%s-%d\n%s-%d\n",
+	message.WriteString(fmt.Sprintf("%s\n%s-%d %s-%d\n",
 		game["date"],
-		game["home_team_name"], int(game["home_team_score"].(float64)),
-		game["visitor_team_name"], int(game["visitor_team_score"].(float64))))
+		game["home_team_abbr"], int(game["home_team_score"].(float64)),
+		game["visitor_team_abbr"], int(game["visitor_team_score"].(float64))))
 	message.WriteString("\nPlayer stats:")
 	for _, stat := range stats {
 		field_goal_percentage := stat["fg_pct"].(float64) * 100

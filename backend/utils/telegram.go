@@ -12,7 +12,7 @@ import (
 
 // GetGames retrieves games for a specific team ID for the current season
 func GetGames(teamID string) ([]map[string]interface{}, error) {
-	start_date := "2024-01-01"
+	start_date := "2023-10-24"
 	end_date := "2024-04-16"
 	apiURL := fmt.Sprintf("https://api.balldontlie.io/v1/games?team_ids[]=%s&start_date=%s&end_date=%s&per_page=100", teamID, start_date, end_date)
 	req, err := http.NewRequest("GET", apiURL, nil)
@@ -44,8 +44,8 @@ func GetGames(teamID string) ([]map[string]interface{}, error) {
 		gameInfo := map[string]interface{}{
 			"game_id":            game["id"],
 			"date":               game["date"],
-			"home_team_name":     game["home_team"].(map[string]interface{})["full_name"],
-			"visitor_team_name":  game["visitor_team"].(map[string]interface{})["full_name"],
+			"home_team_abbr":     game["home_team"].(map[string]interface{})["abbreviation"],
+			"visitor_team_abbr":  game["visitor_team"].(map[string]interface{})["abbreviation"],
 			"home_team_score":    game["home_team_score"],
 			"visitor_team_score": game["visitor_team_score"],
 		}
@@ -84,9 +84,9 @@ func GetGame(gameID string) (map[string]interface{}, error) {
 	gameInfo := map[string]interface{}{
 		"date":               result.Data["date"],
 		"home_team_id":       result.Data["home_team"].(map[string]interface{})["id"],
-		"home_team_name":     result.Data["home_team"].(map[string]interface{})["full_name"],
+		"home_team_abbr":     result.Data["home_team"].(map[string]interface{})["abbreviation"],
 		"visitor_team_id":    result.Data["visitor_team"].(map[string]interface{})["id"],
-		"visitor_team_name":  result.Data["visitor_team"].(map[string]interface{})["full_name"],
+		"visitor_team_abbr":  result.Data["visitor_team"].(map[string]interface{})["abbreviation"],
 		"home_team_score":    result.Data["home_team_score"],
 		"visitor_team_score": result.Data["visitor_team_score"],
 	}
