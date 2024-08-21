@@ -97,7 +97,7 @@ const Upgrade: React.FC = () => {
                   </p>
                 </div>
                 <div className="flex flex-col items-center">
-                  <p className="text-gray-500 mb-4">$1/month</p>
+                  <p className="text-gray-500 mb-4">₺5/month</p>
                   {accountType === "Premium" ? (
                     <CurrentPlanButton />
                   ) : (
@@ -122,7 +122,7 @@ const Upgrade: React.FC = () => {
                   </p>
                 </div>
                 <div className="flex flex-col items-center">
-                  <p className="text-gray-500 mb-4">$2/month</p>
+                  <p className="text-gray-500 mb-4">₺10/month</p>
                   {accountType === "Deluxe" ? (
                     <CurrentPlanButton />
                   ) : (

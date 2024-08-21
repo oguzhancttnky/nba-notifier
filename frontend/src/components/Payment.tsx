@@ -52,7 +52,7 @@ interface PaymentProps {
 const Payment: React.FC<PaymentProps> = ({ planType }) => {
   const [loading, setLoading] = useState(false);
   const userID = useSelector((state: RootState) => state.auth.userID);
-  const amount = planType === "Deluxe" ? 2 : 1;
+  const amount = planType === "Deluxe" ? 10 : 5;
   
   const handleSubmit = async (values: PaymentFormValues) => {
     try {
@@ -87,7 +87,7 @@ const Payment: React.FC<PaymentProps> = ({ planType }) => {
         <div className="flex justify-center items-center">
           <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg dark:bg-gray-900">
             <h2 className="text-2xl font-semibold text-center mb-6 dark:text-gray-100">
-              ${amount}/monthly {planType} Subscription Payment
+              ₺{amount}/monthly {planType} Subscription Payment
             </h2>
             <Formik
               initialValues={initialValues}

@@ -6,7 +6,9 @@ NBA Notifier provides users daily NBA match results for their subscribed teams v
 
 With telegram bot, user can see current season games and player statistics for games of subscribed teams.
 
-User can subscribe 5 teams for free, 10 teams for $1/monthly (Premium) and 20 teams for $2/monthly (Deluxe).
+User can subscribe 5 teams for free, 10 teams for ₺5/monthly (Premium) and 20 teams for ₺10/monthly (Deluxe).
+
+User who has Premium and Deluxe subscription can see player statistics of opponent team players too.
 
 Used technologies are Typescript React(frontend), Golang(backend) and Postgresql(database).
 

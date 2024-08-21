@@ -284,7 +284,7 @@ func CreatePayment(c *gin.Context) {
 		"exp_year":      expYear,
 		"cvv":           cvv,
 		"amount":        amount,
-		"currency":      "USD",
+		"currency":      "TRY",
 		"payment_token": payToken,
 		"installment":   "1",
 		"other_code":    otherCode,
@@ -301,10 +301,10 @@ func CreatePayment(c *gin.Context) {
 	// Save the plan type to the database
 	var plan string
 	var maxSubscriptions int
-	if amount == 1 {
+	if amount == 5 {
 		plan = "Premium"
 		maxSubscriptions = 10
-	} else if amount == 2 {
+	} else if amount == 10 {
 		plan = "Deluxe"
 		maxSubscriptions = 20
 	}
