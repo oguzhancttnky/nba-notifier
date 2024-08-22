@@ -81,6 +81,10 @@ func GetGame(gameID string) (map[string]interface{}, error) {
 		return nil, err
 	}
 
+	if len(result.Data) == 0 {
+		return nil, fmt.Errorf("Game not found")
+	}
+
 	gameInfo := map[string]interface{}{
 		"date":               result.Data["date"],
 		"home_team_id":       result.Data["home_team"].(map[string]interface{})["id"],
