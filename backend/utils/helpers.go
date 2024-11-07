@@ -200,9 +200,9 @@ func SendSubscriptionExpiryEmail(email string, accountType string) error {
 	from := os.Getenv("SMTP_EMAIL")
 	to := []string{email}
 	subject := fmt.Sprintf("Your %s Subscription is Expiring Soon!", accountType)
-	body := fmt.Sprintf("Dear user,\r\n\r\n"+
-		"Your %s subscription has expired. We have extended your subscription for 1 more week. Please renew to continue enjoying premium benefits.\r\n\r\n"+
-		"Best regards,\r\nNBA Notifier Team", accountType)
+	body := fmt.Sprintf("Dear user,\r\n\r\n" +
+		"Your subscription has expired. We have extended your subscription for 1 more week. Please renew to continue enjoying premium benefits.\r\n\r\n" +
+		"Best regards,\r\nNBA Notifier Team")
 
 	// Combine headers and body
 	message := []byte(fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s", from, email, subject, body))
