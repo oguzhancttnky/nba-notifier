@@ -1,20 +1,13 @@
-# Build stage
 FROM golang:1.20-alpine AS build
 
-# Set the working directory
 WORKDIR /app
 
-# Copy go.mod and go.sum files
 COPY go.mod go.sum ./
 
-# Download dependencies
 RUN go mod download
 
-# Copy the source code
 COPY . .
 
-# Expose the port the app runs on
 EXPOSE 8080
 
-# Command to run the Go app
 CMD ["go", "run", "main.go"]

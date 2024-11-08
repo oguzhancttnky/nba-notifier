@@ -10,9 +10,7 @@ services:
       db:
         condition: service_healthy
     env_file:
-      - ./.env
-    volumes:
-      - ./.env:/.env
+      - ./backend/.env
       
   frontend:
     container_name: frontend-container
@@ -24,10 +22,8 @@ services:
     depends_on:
       - backend
     env_file:
-      - ./.env
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - ./frontend/.env
+    command: ["serve", "-s", "/app", "-l", "3000"]
 
   db:
     image: postgres:15-alpine
