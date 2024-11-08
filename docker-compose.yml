@@ -23,7 +23,6 @@ services:
       - backend
     env_file:
       - ./frontend/.env
-    command: ["serve", "-s", "/app", "-l", "3000"]
 
   db:
     image: postgres:15-alpine

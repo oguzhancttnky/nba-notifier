@@ -31,8 +31,8 @@ curl https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/setWebhook?url=<ngrok_url>
 
 ## Running with Docker
 
-1. Set environment file:
-nba-notifier/.env
+1. Set environment file in backend and frontend:
+nba-notifier/backend/.env and nba-notifier/frontend/.env
 
 ```
 DB_HOST=db
@@ -109,7 +109,7 @@ cd nba-notifier/backend
 go mod tidy
 ```
 3. Configure connection settings in environment file and run Postgresql database.
-nba-notifier/.env
+nba-notifier/backend/.env
 ```
 DB_HOST=localhost
 DB_USER=postgres
