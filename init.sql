@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS users (
     expires_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP
-    extended BOOLEAN DEFAULT FALSE,
+    deleted_at TIMESTAMP,
+    extended BOOLEAN DEFAULT FALSE
 );
 
 -- Create the 'subscriptions' table
